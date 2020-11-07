@@ -13,17 +13,16 @@ def update():
     #movement
     keys = pg.key.get_pressed()  
     if keys [pg.K_d] and p_vel < (aken_laius - p_x - p_laius):
-        p_x += 1*dt
+        p_x += 10*dt
     if keys [pg.K_a] and p_vel < p_x:
-        p_x -= 1*dt
+        p_x -= 10*dt
     #hüppamine
     if not jump:
         if keys [pg.K_SPACE]:
             jump = True
     if jump: 
         #F = 1 / 2 * mass * velocity ^ 2
-        p_y -= (((1 / 2)*p_m*(p_v**2))/2)*dt
-           
+        p_y -= ((1 / 2)*p_m*(p_v**2))*dt
         #decreasing velocity while going up and become negative while coming down 
         p_v = p_v-1
            
@@ -37,14 +36,16 @@ def update():
             p_v = 5
             p_m = 1
     #fps
-    dt = clock.tick(60)
+    #dt = clock.tick(60)
 
 
 def draw():
     #TAUST
     bg.fill(aken_taust)
+    
     #PLAYER
-    p = pg.draw.rect(bg, p_col, (p_x, p_y, p_laius, p_kõrgus))
+    pg.draw.rect(bg, p_col, (p_x, p_y, p_laius, p_kõrgus))
+    #pg.draw.line(bg,)
 
     #UPDATE
     pg.display.flip()
@@ -69,7 +70,7 @@ p_kõrgus = 60
 p_col = (0, 255, 0)
 p_x = 200
 p_y = 400
-p_vel = 2
+p_vel = 5
 
 p_m = 1 #mass
 p_v = 5 #velocity (hüppamisele)
