@@ -21,10 +21,10 @@ def update():
     keys = pg.key.get_pressed()  
     if keys [pg.K_d] and p_vel < (aken_laius - p_x - p_laius):
         p_x += 1*dt
-        p_nägu = True
+        p_nägu = 1
     if keys [pg.K_a] and p_vel < p_x:
         p_x -= 1*dt
-        p_nägu = False
+        p_nägu = -1
     #hüppamine
     if not jump:
         if keys [pg.K_SPACE]:
@@ -47,23 +47,25 @@ def update():
 
     #kuul
     for kuul in kuulid:
-        if k_x < 500 and k_x > 0:
-
-
-def drawk_x += k_vel
+        if bullet.x < 1020 and bullet.x > 0:
+            bullet.x += k_vel
         else:
             kuulid.pop(kuulid.index(kuul))
-
-    if keys[pg.K_M]:
+    if keys[pg.K_m]:
         if len(kuulid) < 5:
-            kuulid.append(kuul(round(p_x + p_laius // 2), round(p_y + p_pikkus // 2), 6, (255,0,0), p_nägu))):
+            kuulid.append(bullet(round(p_x + p_laius // 2), round(p_y + p_kõrgus // 2), 6, (255,0,0), p_nägu))
+
+
+def draw():
     #TAUST
-    bg.fill(aken_tabust)
+    bg.fill(aken_taust)
     #PLAYER
     pg.draw.rect(bg, p_col, (p_x, p_y, p_laius, p_kõrgus))
     #KUUL
-    pg.draw.circlefor kuul in kuulid:
-        kuul.draw()E
+    for kuul in kuulid:
+        bullet.draw(bg)
+
+    #UPDATE
     pg.display.flip()
     #fps
     dt = clock.tick(60)
@@ -102,6 +104,17 @@ k_vel = 15
 k_exists = False
 kuulid = []
 
+class projectile(object):
+    def __init__(self, x, y, raadius, värv, facing):
+        self.x = x
+        self.y = y
+        self.raadius = raadius
+        self.värv = värv
+        self.facing = facing
+        self.vel = 15 * facing
+
+    def draw(self, bg):
+        pg.draw.circle(bg, self.värv, (self.x, self.y), self.raadius)
 
 
 
