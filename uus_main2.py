@@ -200,12 +200,13 @@ def main_loop():
         aken.fill((0,0,0))
         
         põrand1.draw(aken)
-        #põrand2.draw(aken)
+        plat2.draw(aken)
         plat.draw(aken)
 
         Tom.draw(aken)
         paha.draw(aken)
         paha1.draw(aken)
+        
         for kuul in kuulid:
             kuul.draw(aken)
         
@@ -255,10 +256,10 @@ def main_loop():
     if True: #et saaks collapsida
 
         põrand1 = põrand(0,laius,500)#(0,600,500)
-        #põrand2 = põrand(700,laius,500)
-        plat = põrand(600,700,400)
+        plat2 = põrand(750,800,250)
+        plat = põrand(500,600,400)
 
-        Tom = Player(900, 100, 40, 60)
+        Tom = Player(500, 100, 40, 60)
         #Tom.y = põrand1.y-Tom.pikkus
         vh = Tom.vh
         Tom.vh = 0
@@ -369,7 +370,6 @@ def main_loop():
             
         
         #TULISTAMINE
-        
         if keys[pg.K_SPACE] and kuulide_cd == 0:
             if Tom.vaatab == 1:
                 suund = 1
