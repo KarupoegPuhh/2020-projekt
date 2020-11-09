@@ -171,6 +171,7 @@ def main_loop():
                 self.health -= 1
             else:
                 self.elus = False
+                self.instances.remove(self)
             print("hit!")
 
     class põrand:
