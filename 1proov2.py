@@ -1,109 +1,56 @@
-import pygame as pg
-import sys
+ #TEGELANE SAAB PIHTA
+    #läheb main_loopi, kui vastane läheb sulle pihta saad knockback ja kaotad elud
+        if Tom.hitbox[1] < paha.hitbox[1] + paha.hitbox[3] and Tom.hitbox[1] + Tom.hitbox[3] > paha.hitbox[1] and paha.elus == True:
+            if Tom.hitbox[0] < paha.hitbox[0] + paha.hitbox[2] and Tom.hitbox[0] + Tom.hitbox[2] > paha.hitbox[0]:
+                Tom.hit()
+                
+# läheb class Player alla                
+def hit(self):
+            if self.health > 1:
+                self.health -= 1
+                self.x -= 20
+            else:
+                self.elus = False
+                surm()
+                
+ # Player muutujad               
+            self.health = 10
+            self.max_health = 10
+            self.elus = True
+            
+            
+#uus player def draw(self).   healtbari jaoks
 
-
-def update():
-    global jump
-    global p_m
-    global p_v
-    global p_x
-    global p_y
-    global dt
-    global p_speed
-    #PLAYER
-    #movement
-    keys = pg.key.get_pressed()  
-    if keys [pg.K_d] and p_vel < (aken_laius - p_x - p_laius) and (p_vel < (sein1[1][0] - p_x - p_laius) or p_y < sein1[2][1]-p_kõrgus):
-        p_x += p_speed*dt
-    if keys [pg.K_a] and p_vel < p_x:
-        p_x -= p_speed*dt
-    #hüppamine
-    if not jump:
-        if keys [pg.K_SPACE]:
-            jump = True
-    if jump: 
-        #F = 1 / 2 * mass * velocity ^ 2
-        if p_v > 0:
-            F = (0.5*p_m*(p_v**2)) #/2
-        else:
-            F = -(0.5*p_m*(p_v**2)) #/2
-        
-        p_y -= F*dt
-
-        p_v -= 1 
-        
-        if p_y >= 500:
-            p_y = 500
-            jump = False
-            p_v = 10
-    #seinad
-
-
-def draw():
-    #TAUST
-    bg.fill(aken_taust)
-
-    pg.draw.line(bg, (255, 0, 0), põrand[1],põrand[2])
-    pg.draw.line(bg, (255, 0, 0), sein1[1],sein1[2])
-    pg.draw.line(bg, (255, 0, 0), sein2[1],sein2[2])
-    
-    #PLAYER
-    pg.draw.rect(bg, p_col, (p_x, p_y, p_laius, p_kõrgus))
-    
-
-    #UPDATE
-    pg.display.flip()
-    #fps
-    dt = clock.tick(60)
-
-aken_laius = 1280
-aken_pikkus = 720
-aken_taust = (0,0,0)
-
-bg = pg.display.set_mode((aken_laius, aken_pikkus))
-pg.display.set_caption('D-day')
-
-clock = pg.time.Clock()
-dt = 1
-
-
-#TEGELANE
-p_laius = 40
-p_kõrgus = 60
-p_col = (0, 255, 0)
-p_x = 200
-p_y = 500
-p_vel = 5
-p_speed = 10
-
-p_m = 1 #mass
-p_v = 10 #velocity (hüppamisele)
-jump = False
-
-#SEINAD
-põrand = {1:(0,500+p_kõrgus),2:(aken_laius,500+p_kõrgus)}
-sein1 = {1:(600,500+p_kõrgus),2:(600,500)}
-sein2 = {1:(605,500+p_kõrgus),2:(605,500)}
-
-#KUUL
-k_raadius = 10
-k_col = (255, 0, 0)
-#_x =
-#k_y = 
-k_vel = 15
-
-
-
-
-loop = True
-while loop:
-    #AKNA SULGEMINE
-    for event in pg.event.get():
-        if event.type == pg.QUIT: #or esc
-            loop = False
-    #MAIN LOOP
-    update()
-    #DRAW LOOP
-    draw()
-    #clock
-pg.quit()
+def draw(self, aken):
+            
+            pygame.draw.rect(aken, (255,0,0),(self.x, self.y-15, self.laius, 10))
+            pygame.draw.rect(aken, (0,255,0),(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
+            self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
+            pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
+            pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
+            
+            
+            
+#algusesse, kus defineerime funktsioone, (kui tegelane saab surma) kutsutakse välja player.hit() sees
+def surm():
+        surm = True
+        while surm:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+            aken.fill((70,70,70))
+            
+            #Teksdi suurused
+            largeText = pygame.font.Font("freesansbold.ttf", 70)
+            smallText = pygame.font.Font("freesansbold.ttf", 20)
+             
+            TextSurf, TextRect = text_objects("Sa hukkusid oma rännakul...", largeText)
+            TextRect.center = ((laius // 2), (170))
+            aken.blit(TextSurf, TextRect)
+            
+            nupp("Annan alla", 400, 375, 200, 100, (100,0,0), (255,0,0), quit)
+            nupp("Proovin uuesti", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
+            
+            pygame.display.update()
+            
