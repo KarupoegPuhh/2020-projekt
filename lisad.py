@@ -3,6 +3,15 @@
         if Tom.hitbox[1] < paha.hitbox[1] + paha.hitbox[3] and Tom.hitbox[1] + Tom.hitbox[3] > paha.hitbox[1] and paha.elus == True:
             if Tom.hitbox[0] < paha.hitbox[0] + paha.hitbox[2] and Tom.hitbox[0] + Tom.hitbox[2] > paha.hitbox[0]:
                 Tom.hit()
+def põrkub(s,p=Tom):
+    #kui vastane (s) läheb sulle (Tom) pihta saad knockback ja kaotad elud
+        if Tom.hitbox[1] < s.hitbox[1] + s.hitbox[3] and Tom.hitbox[1] + Tom.hitbox[3] > s.hitbox[1] and s.elus:
+            if Tom.hitbox[0] < s.hitbox[0] + s.hitbox[2] and Tom.hitbox[0] + Tom.hitbox[2] > s.hitbox[0]:
+                Tom.hit()
+                if s.x + s.laius/2 < Tom.x + Tom.laius/2:
+                    Tom.kb = 1
+                else:
+                    Tom.kb = 1
                 
 # läheb class Player alla                
 def hit(self):

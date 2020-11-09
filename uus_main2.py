@@ -94,9 +94,25 @@ def main_loop():
             self.m = 1
             self.vel = 10
             self.vh = 10 #hüppe vel
-            #self.dt = 1
+            self.health = 10
+            self.max_health = 10
+            self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
+            self.kontr = True #kas saab kontrollida
+            self.elus = True
+        
+        def hit(self):
+            if self.health > 1:
+                self.health -= 1
+                self.x -= 20
+            else:
+                self.elus = False
+                surm()
             
         def draw(self, aken):
+            #elud
+            pg.draw.rect(aken, (255,0,0),(self.x, self.y-15, self.laius, 10))
+            pg.draw.rect(aken, (0,255,0),(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
+            #player
             self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
             pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
@@ -113,7 +129,9 @@ def main_loop():
             pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
 
     class Vastane:
+        instances = []
         def __init__(self, x, y, lõpp, vel, health):
+            self.__class__.instances.append(self)
             self.x = x
             self.y = y
             self.lõpp = lõpp
@@ -251,13 +269,50 @@ def main_loop():
             mk = eelm_mk
         else:
             mk = (min(y))
-    
+
+    def põrkub(e,t):
+        #kui vastane (s) läheb sulle (t) pihta saad knockback ja kaotad elud
+        if t.kb == 0: #knockbacki ajal surematu
+            if t.x+t.laius+(t.vel*dt) >= e.x and t.x+t.laius < e.x + e.laius/2 and not t.y < e.y - t.pikkus:
+                Tom.kb = 1
+                Tom.hit()
+                return e.vel
+            elif t.x <= e.x+e.laius+(t.vel*dt) and t.x > e.x+e.laius/2 and not t.y < e.y - t.pikkus:
+                Tom.kb = -1
+                Tom.hit()
+                return e.vel
+            else:
+                Tom.kb = 0
+                return t.vh
+
+    def surm():
+        surm = True
+        while surm:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+            aken.fill((70,70,70))
+            
+            #Teksdi suurused
+            largeText = pg.font.Font("freesansbold.ttf", 70)
+            smallText = pg.font.Font("freesansbold.ttf", 20)
+             
+            TextSurf, TextRect = text_objects("Hummid tampisid su ära...", largeText)
+            TextRect.center = ((laius // 2), (170))
+            aken.blit(TextSurf, TextRect)
+            
+            nupp("Annan alla", 400, 375, 200, 100, (100,0,0), (255,0,0), quit)
+            nupp("Proovin uuesti", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
+            
+            pg.display.update()
+
     #VARS
     if True: #et saaks collapsida
 
         põrand1 = põrand(0,laius,500)#(0,600,500)
-        plat2 = põrand(750,800,250)
-        plat = põrand(500,600,400)
+        plat2 = põrand(750+400,800+400,250)
+        plat = põrand(500+400,600+400,400)
 
         Tom = Player(500, 100, 40, 60)
         #Tom.y = põrand1.y-Tom.pikkus
@@ -326,49 +381,76 @@ def main_loop():
         
         eelmine_mk = mk
         maa_kõrgus(Tom.x,Tom.laius)
-        # TOM PAREMALE JA VASAKULE      
-        if keys [pg.K_d] and pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-            Tom.x += Tom.vel*dt
-            Tom.vaatab = 1
-        if keys [pg.K_a] and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-            Tom.x -= Tom.vel*dt
-            Tom.vaatab = -1
         
-        # TOM HÜPPAMINE
-        if not Tom.jump:
-            if keys [pg.K_w]:
-                Tom.jump = True
-        if Tom.jump:
-            #F = 1 / 2 * mass * velocity ^ 2
-            if Tom.vh > 0:
-                F = (0.5*Tom.m*(Tom.vh**2)) #/2
-            else:
-                F = -(0.5*Tom.m*(Tom.vh**2)) #/2
+        if Tom.kontr:
+            # TOM PAREMALE JA VASAKULE      
+            if keys [pg.K_d] and pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                Tom.x += Tom.vel*dt
+                Tom.vaatab = 1
+            if keys [pg.K_a] and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                Tom.x -= Tom.vel*dt
+                Tom.vaatab = -1
             
-            Tom.y -= F*dt
+            # TOM HÜPPAMINE
+            if not Tom.jump:
+                if keys [pg.K_w]:
+                    Tom.jump = True
+            if Tom.jump:
+                #F = 1 / 2 * mass * velocity ^ 2
+                if Tom.vh > 0:
+                    F = (0.5*Tom.m*(Tom.vh**2)) #/2
+                else:
+                    F = -(0.5*Tom.m*(Tom.vh**2)) #/2
+                
+                Tom.y -= F*dt
 
-            Tom.vh -= 1 
-            
-            if Tom.y+Tom.pikkus >= mk:
-                Tom.y = mk-Tom.pikkus
-                Tom.jump = False
-                Tom.vh = vh
+                Tom.vh -= 1 
+                
+                if Tom.y+Tom.pikkus >= mk:
+                    Tom.y = mk-Tom.pikkus
+                    Tom.jump = False
+                    Tom.vh = vh
         
         #tom kukkumine
         if mk > eelmine_mk and not Tom.jump:
             Tom.kukub = True
             Tom.vh = 0
         if Tom.kukub:
-            F = -(0.5*Tom.m*(Tom.vh**2)) #/2
-            Tom.y -= F*dt
+            F = 0.5*Tom.m*(Tom.vh**2) #/2
+            Tom.y += F*dt
             Tom.vh -= 1
             if Tom.y+Tom.pikkus >= mk:
                 Tom.y = mk-Tom.pikkus
                 Tom.kukub = False
                 Tom.vh = vh
-
-            
         
+        #TOM SAAB PIHTA
+        for kuri in Vastane.instances:
+            lükkaja_v = põrkub(kuri,Tom)
+        #if lükkaja_v < 0:  #lükkaja mõte oli knockback teha vastavaks vastase velocytiga aga see läks segaseks ja ei töötand
+        #    lükkaja_v = -lükkaja_v
+        lükkaja_v = Tom.vh
+        #knockback
+        if Tom.kb != 0:
+            Tom.värv = (255, 0, 0)
+            if Tom.vh > 0:
+                F = (0.5*Tom.m*(lükkaja_v**2)) #/2
+                Tom.x -= (F*dt*Tom.kb)/3
+                Tom.kontr = False
+            else:
+                F = -(0.5*Tom.m*(Tom.vh**2)) #/2
+                Tom.kontr = True
+            
+            Tom.y -= (F*dt)/2
+            
+            Tom.vh -= 1
+            lükkaja_v -= 1
+            if Tom.y+Tom.pikkus >= mk:
+                Tom.y = mk-Tom.pikkus
+                Tom.kb = 0
+                Tom.vh = vh
+                Tom.värv = (0, 255, 0)
+
         #TULISTAMINE
         if keys[pg.K_SPACE] and kuulide_cd == 0:
             if Tom.vaatab == 1:
