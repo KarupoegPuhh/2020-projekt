@@ -216,8 +216,8 @@ def main_loop():
             aken.blit(TextSurf, TextRect)
             
         
-            nupp("Jätkan!", 100, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", 400, 300, 200, 100, (100,100,0), (255,255,0), quit)
+            nupp("Jätkan!", laius/3, 300, 200, 100, (0,100,0), (0,255,0), unpause)
+            nupp("Annan alla", laius/2, 300, 200, 100, (100,100,0), (255,255,0), quit)
             
             pg.display.update()
     
