@@ -193,7 +193,13 @@ def main_loop():
 
     def unpause():
         global pause
+        global start
         pause = False
+        pos = pg.mixer.music.get_pos()
+        pg.mixer.music.stop()
+        pg.mixer.music.load("game.mp3")
+        start = start + pos/1000.0
+        pg.mixer.music.play(-1, start)
     
     def paused():
         
@@ -340,6 +346,13 @@ def main_loop():
         global eelmine_mk
         eelmine_mk = 500
     
+    pg.mixer.music.load("game.mp3")
+    pg.mixer.music.play(-1)
+    pause = False
+    pos = 0
+    global start
+    start = 0
+
     while running:
         #exit
         for event in pg.event.get():
@@ -467,6 +480,11 @@ def main_loop():
         #PAUSE MENU
         if keys[pg.K_p]:
             pause = True
+            pos = pg.mixer.music.get_pos()
+            pg.mixer.music.stop()
+            pg.mixer.music.load("game_filt.mp3")
+            start = start + pos/1000.0
+            pg.mixer.music.play(-1, start)
             paused()
                 
             
