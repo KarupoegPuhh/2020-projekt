@@ -560,7 +560,7 @@ def main_loop():
         for ir in raha.instances:
             if ir.kukkumas:
                 ir.kukub()
-            if Tom.x+Tom.laius/2 >= ir.x-1 and Tom.x+Tom.laius/2 <= ir.x+1:
+            if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x:
                 ir.instances.remove(ir)
                 Tom.raha += 1
 
