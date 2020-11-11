@@ -223,10 +223,12 @@ def main_loop():
 
     class Vastane:
         instances = []
-        def __init__(self, x, y, lõpp, vel, health):
+        def __init__(self, x, y, lõpp, vel, health, jälitaja):
             self.__class__.instances.append(self)
             self.x = x
             self.y = y
+            self.xspawn = x
+            self.yspawn = y
             self.lõpp = lõpp
             self.path = [self.x, self.lõpp]
             self.vel = vel
@@ -238,18 +240,62 @@ def main_loop():
             self.max_health = health
             self.elus = True
             self.elud_värv = (0,255,0)
+            self.jälitaja = jälitaja #choice([True,False])
+            self.jälitab = False
+            self.tagane = False
+            self.nägemiskaugus = 270
+            self.oota = 30*5
+            #self.seisab = False
             
         def move(self):
-            if self.vel > 0:
-                if self.vel + self.x < self.path[1]:
-                    self.x += self.vel*dt
+            if self.jälitaja:
+                #märkab tomi
+                if abs(self.x+self.laius/2) - abs(Tom.x+Tom.laius/2) < self.nägemiskaugus and self.y == Tom.y and not self.tagane:
+                    self.jälitab = True
+                    self.tagane = False
+                if self.jälitab:
+                    #lõpetab jälitamise
+                    if not abs(self.x+self.laius/2) - abs(Tom.x+Tom.laius/2) < self.nägemiskaugus or self.y and self.y != Tom.y: #and self.seisab:
+                        self.jälitab = False
+                        self.oota = 30*5
+                #jälitab
+                if self.jälitab:
+                    if Tom.x+Tom.laius/2 > self.x+self.laius/2:
+                        if pole_sein_p(self.vel,self.x,self.y,self.laius,self.pikkus):
+                            self.x += self.vel*dt
+                            #self.seisab = False
+                    elif pole_sein_v(self.vel,self.x,self.y,self.laius,self.pikkus):
+                        self.x -= self.vel*dt
+                        #self.seisab = False
+                    else:
+                        self.seisab = True
+                #ei jälita
                 else:
-                    self.vel = -self.vel*dt
+                    #ootab
+                    if self.oota < 0:
+                        self.tagane = True
+                    else:
+                        self.oota -= 1
+                    #taganeb
+                    if self.tagane:
+                        if self.x > self.xspawn:
+                            self.x -= self.vel*dt
+                        elif self.x < self.xspawn:
+                            self.x += self.vel*dt
+                        else:
+                            self.tagane = False
+            
             else:
-                if self.x - self.vel > self.path[0]:
-                    self.x += self.vel*dt
+                if self.vel > 0:
+                    if self.vel + self.x < self.path[1]:
+                        self.x += self.vel*dt
+                    else:
+                        self.vel = -self.vel*dt
                 else:
-                    self.vel = -self.vel*dt
+                    if self.x - self.vel > self.path[0]:
+                        self.x += self.vel*dt
+                    else:
+                        self.vel = -self.vel*dt
                     
         def draw(self, aken):
             if self.health >= self.max_health * 0.8:
@@ -276,8 +322,8 @@ def main_loop():
                     vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10))
                     raha.raha_maas += 1
                 self.elus = False
+                vastane_surm.play()
                 self.instances.remove(self)
-                pahad.pop(0)
             
     class põrand:
         instances = []
@@ -347,13 +393,12 @@ def main_loop():
     def redrawGameWindow():
         aken.fill((0,0,0))
         
-        põrand1.draw(aken)
-        plat2.draw(aken)
-        plat.draw(aken)
+        for prr in põrand.instances:
+            prr.draw(aken)
 
         Tom.draw(aken)
-        paha.draw(aken)
-        paha1.draw(aken)
+        for p1 in Vastane.instances:
+            p1.draw(aken)
         
         for rah in raha.instances:
             rah.draw(aken)
@@ -442,7 +487,7 @@ def main_loop():
             pg.display.update()
 
     def võit():
-        if len(pahad) == 0 and raha.raha_maas == 0:
+        if len(Vastane.instances) == 0 and raha.raha_maas == 0:
             while True:
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
@@ -504,10 +549,11 @@ def main_loop():
 
     #VARS ja objektid
     if True: #et saaks collapsida
-        #objektid
+        #OBJEKTID
         põrand1 = põrand(0,laius,500)#(0,600,500)
         plat2 = põrand(750+400,800+400,250)
-        plat = põrand(500+400,600+400,400)
+        plat = põrand(100,200,400)
+        plat3 = põrand(700,850,400)
         #Tomi asjad
         Tom = Player(580, 100, 40, 60)
         vh = Tom.vh
@@ -515,11 +561,10 @@ def main_loop():
         #Kuulid
         #kuul = None #Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
         #Pahad
-        paha = Vastane(400, 0, 500, 5, 10)
+        paha = Vastane(400, 0, 500, 5, 10,True)
         paha.y = põrand1.y-paha.pikkus
-        paha1 = Vastane(100, 0, 400, 15, 2)
-        paha1.y = põrand1.y-paha1.pikkus
-        pahad = [paha, paha1]
+        #paha1 = Vastane(100, 0, 400, 15, 2,False)
+        #paha1.y = põrand1.y-paha1.pikkus
         #Relvad
         ling = Relvad(2, 10, 5, (255,255,255), 10, 1)
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
@@ -612,6 +657,9 @@ def main_loop():
         eelmine_mk = mk
         maa_kõrgus(Tom.x,Tom.laius)
         
+        #if mk < Tom.y + Tom.pikkus: ÜRITUS FIXIDA KNOCKBACK KINNI JÄÄMIST
+        #    Tom.y = maa_kõrgus
+
         if Tom.kontr:
             # TOM PAREMALE JA VASAKULE      
             if keys [pg.K_d] and pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
@@ -669,6 +717,7 @@ def main_loop():
             Tom.värv = (255, 0, 0)
             if Tom.vh > 0:
                 F = (0.5*Tom.m*(lükkaja_v**2)) #/2
+                #if pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus) and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus): ÜRITUS FIXIDA SEDA KINNI JÄÄMIST KNOCKBACKIS
                 Tom.x -= (F*dt*Tom.kb)/3
             else:
                 F = -(0.5*Tom.m*(Tom.vh**2)) #/2
