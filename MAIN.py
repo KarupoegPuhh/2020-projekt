@@ -72,13 +72,9 @@ def intro():
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
         
-
-        
         nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
         nupp("Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)
         nupp("Annan alla...", laius/2-100, 550, 200, 100, (42,42,50), (72,72,89), quit)
-        
-        
         
         pg.display.update()
         
@@ -146,6 +142,10 @@ def pood():
         nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
         nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
         nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
+        
+        #veneText = pg.font.SysFont("MIROSLN.ttf", 36)
+        raha = veneText.render(str(Tom.raha)+" рубль", False, (255,215,0))
+        aken.blit(raha, (laius-100, 20))
         
         pg.display.update()
         
