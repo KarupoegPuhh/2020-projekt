@@ -27,16 +27,24 @@ nupp_klikk = pg.mixer.Sound(helidir+"\click.wav")
 def text_objects(text, font):
     textSurface = font.render(text, True, (0,0,0))
     return textSurface, textSurface.get_rect()
-        
+
+hiir_all = False
 def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
+    global hiir_all
     mouse = pg.mouse.get_pos()
     click = pg.mouse.get_pressed()
-    
+        
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
-        if click[0] == 1 and action != None:
+        hiir_vabastatud = False
+        if hiir_all and not click[0]:
+            hiir_vabastatud = True
+        hiir_all = click[0]
+        if hiir_vabastatud:
+            nupp_klikk.play()
             action()
+
     else:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
     textSurf, textRect = text_objects(text, smallText)
@@ -50,45 +58,23 @@ def intro():
             if event.type == pg.QUIT:
                 pg.quit()
                 quit()
-        aken.fill((70,70,70))
+        aken.fill((119,81,87))
         
         #Teksdi suurused
         global largeText
-        largeText = pg.font.Font("Pixel.ttf", 155)
+        largeText = pg.font.Font("RL.ttf", 150)
         global mediumText
-        mediumText = pg.font.Font("Pixel.ttf", 70)
+        mediumText = pg.font.Font("RM.ttf", 70)
         global smallText
-        smallText = pg.font.Font("Pixel.ttf", 20)
+        smallText = pg.font.Font("RM.ttf", 22)
          
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
         
-       
-        
-        def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
-            mouse = pg.mouse.get_pos()
-            click = pg.mouse.get_pressed()
-            
-            
-            
-            if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
-                pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
-                pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
-                if click[0] == 1 and action != None:
-                    action()
-            else:
-                pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
-
-            textSurf, textRect = text_objects(text, smallText)
-            textRect.center = ((x+x+laius)//2, (y+y+kõrgus)//2)
-            aken.blit(textSurf, textRect)
-        
-        nupp("minek",laius/3-100, 300, 200, 100, (0,100,0), (0,255,0), main_loop)
-        nupp("Vali oma sõdalane", laius/2-100, 300, 200, 100, (100,100,0), (255,255,0), vali_sõdalane)
-        nupp("annan alla", laius-laius/3-100, 300, 200, 100, (100,0,0), (255,0,0), quit)
-        
-        
+        nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
+        nupp("Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)
+        nupp("Annan alla...", laius/2-100, 550, 200, 100, (42,42,50), (72,72,89), quit)
         
         pg.display.update()
         
@@ -131,8 +117,62 @@ def teine_sõdalane():
 def kolmas_sõdalane():
     global kangelane_värv
     kangelane_värv = (80,5,94)
+    
+def pood():
+    global Tom
+    global hernepüss
+    global poes
+    poes = True
+    while poes:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+                
+        aken.fill((70,70,70))
+        TextSurf, TextRect = text_objects("Mida teile?", largeText)
+        TextRect.center = ((laius // 2), (100))
+        aken.blit(TextSurf, TextRect)
+        #Registreerime kus on kursor
+        mouse = pg.mouse.get_pos()
+        click = pg.mouse.get_pressed()
+                    
+        nupp("Ostud tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), pood_done)
+        #Relva valik
+        nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
+        nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
+        nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
+        
+        #veneText = pg.font.SysFont("MIROSLN.ttf", 36)
+        raha = veneText.render(str(Tom.raha)+" рубль", False, (255,215,0))
+        aken.blit(raha, (laius-100, 20))
+        
+        pg.display.update()
+        
+kangelane_värv = (113,16,15)
+
+def pood_done():
+    global poes
+    poes = False
+    
+def jõujook_ost():
+    if Tom.raha >= 1 and Tom.health < Tom.max_health:
+        Tom.raha -= 1
+        Tom.health += 1
+        
+def hernepüss_ost():
+    if Tom.raha >= 5 and not hernepüss.unlocked:
+        hernepüss.unlocked = True
+        Tom.raha -= 5
+        
+def ritaliin_ost():
+    if Tom.raha >= 1 and Tom.vel <= 20:
+        Tom.vel *= 1.5
+        Tom.raha -= 1
 
 def main_loop():
+    global Tom
+    global hernepüss
     global pause
     
     class Player:
@@ -344,15 +384,17 @@ def main_loop():
     class Relvad:
         instance = None
         
-        def __init__(self, dmg, cd, r, värv, vel, equipped):
+        def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked):
             self.dmg = dmg
             self.cd = cd
             self.r = r
             self.värv = värv
             self.vel = vel
+            self.unlocked = unlocked
             
         def equip(self):
-            Relvad.instance = self
+            if self.unlocked:
+                Relvad.instance = self
                 
     
     def unpause():
@@ -385,8 +427,9 @@ def main_loop():
             
         
             nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
+            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), quit)
             nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
+            nupp("Konsum", 540, 450, 200, 100, (0,100,0), (0,255,0), pood)
             
             pg.display.update()
     
@@ -566,10 +609,10 @@ def main_loop():
         #paha1 = Vastane(100, 0, 400, 15, 2,False)
         #paha1.y = põrand1.y-paha1.pikkus
         #Relvad
-        ling = Relvad(2, 10, 5, (255,255,255), 10, 1)
-        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
-        kartulikahur = Relvad(10, 30, 10, (161,127,27), 10, 0)
-        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0)
+        ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True)
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False)
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, True)
+        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True)
         #Et mängjal oleks alguses relv
         ling.equip()
 
