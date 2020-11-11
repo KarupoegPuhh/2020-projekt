@@ -138,9 +138,9 @@ def main_loop():
         def __init__(self, x, y, suund):
             self.x = x
             self.y = y
-            self.raadius = 5
-            self.värv = (255, 0, 0)
-            self.vel = 30*suund
+            self.raadius = Relvad.instance.r
+            self.värv = Relvad.instance.värv
+            self.vel = Relvad.instance.vel * suund
             
         def draw(self, aken):
             pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
@@ -166,7 +166,7 @@ def main_loop():
                 self.kukkumas = False
         
         def draw(self, aken):
-            pg.draw.circle(aken, (255,215,0), (self.x , self.y), 3)
+            pg.draw.circle(aken, (255,215,0), (self.x , self.y), 5)
 
     class Vastane:
         instances = []
@@ -217,9 +217,8 @@ def main_loop():
                 pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
 
         def hit(self):
-            if self.health > 1:
-                self.health -= 1
-            else:
+            self.health -= Relvad.instance.dmg
+            if self.health <= 0:
                 for ugu in range(randint(3,6)):
                     vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10))
                     raha.raha_maas += 1
@@ -243,6 +242,22 @@ def main_loop():
             #seinad
             pg.draw.line(aken, (255, 0, 0), (self.x1,self.y),(self.x1,kõrgus))
             pg.draw.line(aken, (255, 0, 0), (self.x2,self.y),(self.x2,kõrgus))
+            
+            
+    class Relvad:
+        instance = None
+        
+        def __init__(self, dmg, cd, r, värv, vel, equipped):
+            self.dmg = dmg
+            self.cd = cd
+            self.r = r
+            self.värv = värv
+            self.vel = vel
+            
+        def equip(self):
+            Relvad.instance = self
+                
+            
 
 
     def unpause():
@@ -396,21 +411,25 @@ def main_loop():
         põrand1 = põrand(0,laius,500)#(0,600,500)
         plat2 = põrand(750+400,800+400,250)
         plat = põrand(500+400,600+400,400)
-
+        #Tomi asjad
         Tom = Player(580, 100, 40, 60)
         vh = Tom.vh
         Tom.vh = 0
-        kuul = Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
+        #Kuulid
+        #kuul = None #Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
+        #Pahad
         paha = Vastane(400, 0, 500, 5, 10)
         paha.y = põrand1.y-paha.pikkus
         paha1 = Vastane(100, 0, 400, 15, 2)
         paha1.y = põrand1.y-paha1.pikkus
         pahad = [paha, paha1]
+        #Relvad
+        vanilla = Relvad(1, 10, 5, (255,255,255), 20, 1)
+        hernepüss = Relvad(5, 50, 10, (0,255,0), 10, 0)
 
         #vars
         kuulid = []
         kuulide_cd = 0
-        kuulide_cd_const = 10
         kuulide_maxcount = 5
 
         pause = False
@@ -446,6 +465,13 @@ def main_loop():
         #pg.mixer.Sound.set_volume(hop2,2)
 
     while running:
+        if Tom.x < 500:
+            vanilla.equip()
+        if Tom.x > 500:
+            hernepüss.equip()
+        print(Relvad.instance)
+        
+        
         #exit
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -456,7 +482,7 @@ def main_loop():
         if True: #lihtsalt et saaks collapsida seda
             if kuulide_cd > 0:
                 kuulide_cd += 1
-            if kuulide_cd > kuulide_cd_const:
+            if kuulide_cd > Relvad.instance.cd:
                 kuulide_cd = 0
             for kuul in kuulid:
                 #Pahade tulistamine
@@ -596,6 +622,7 @@ def main_loop():
                 
         võit()  
         redrawGameWindow()
+
 
 while True:
     intro()
