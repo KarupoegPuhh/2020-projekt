@@ -71,12 +71,52 @@ def intro():
             aken.blit(textSurf, textRect)
         
         nupp("minek",laius/3-100, 300, 200, 100, (0,100,0), (0,255,0), main_loop)
-        nupp("Vali oma sõdalane", laius/2-100, 300, 200, 100, (100,100,0), (255,255,0))
+        nupp("Vali oma sõdalane", laius/2-100, 300, 200, 100, (100,100,0), (255,255,0), vali_sõdalane)
         nupp("annan alla", laius-laius/3-100, 300, 200, 100, (100,0,0), (255,0,0), quit)
         
         
         
         pg.display.update()
+        
+def vali_sõdalane():
+    global valin_sõdalane
+    valin_sõdalane = True
+    while valin_sõdalane:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+                
+        aken.fill((70,70,70))
+        TextSurf, TextRect = text_objects("Vali oma sõdalane!", largeText)
+        TextRect.center = ((laius // 2), (100))
+        aken.blit(TextSurf, TextRect)
+    
+        
+        nupp("Valik tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), sõdalane_valitud)
+        #Relva valik
+        nupp("Tahan olla kuninglik!", 170, 300, 200, 100, (113,16,15), (163,66,65), esimene_sõdalane)
+        nupp("Tahan olla camo!", 540, 300, 200, 100, (112,130,56), (162,180,106), teine_sõdalane)
+        nupp("Vidi vini vici", 910 , 300, 200, 100, (80,5,94), (130,55,144), kolmas_sõdalane)
+        
+        pg.display.update()
+        
+kangelane_värv = (113,16,15)        
+def sõdalane_valitud():
+    global valin_sõdalane
+    valin_sõdalane = False
+    
+def esimene_sõdalane():
+    global kangelane_värv
+    kangelane_värv = (113,16,15)    
+        
+def teine_sõdalane():
+    global kangelane_värv
+    kangelane_värv = (112,130,56)
+
+def kolmas_sõdalane():
+    global kangelane_värv
+    kangelane_värv = (80,5,94)
 
 def main_loop():
     global pause
@@ -87,7 +127,7 @@ def main_loop():
             self.y = y
             self.laius = laius
             self.pikkus = pikkus
-            self.värv = (0, 255, 0)
+            self.värv = kangelane_värv
             self.vaatab = 1
             self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
             self.jump = False
@@ -407,7 +447,7 @@ def main_loop():
                 
             
                 
-                nupp("Aitab kah...", laius/2-100 , kõrgus/2-50 , 200, 100, (100,100,0), (255,255,0), quit)
+                nupp("Aitab kah...", laius/2-100 , 500 , 200, 100, (100,100,0), (255,255,0), intro)
                 
                 pg.display.update()
                 
@@ -432,6 +472,7 @@ def main_loop():
             nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
             nupp("Ma leidsin hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
             nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+            nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100, 100, 100), (200, 200, 200), railgun_equip)
             
             pg.display.update()
             
@@ -447,6 +488,10 @@ def main_loop():
     
     def kartulikahur_equip():
         kartulikahur.equip()
+        
+    def railgun_equip():
+        railgun.equip()
+        
 
     #VARS ja objektid
     if True: #et saaks collapsida
@@ -470,6 +515,7 @@ def main_loop():
         ling = Relvad(2, 10, 5, (255,255,255), 10, 1)
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
         kartulikahur = Relvad(10, 30, 10, (161,127,27), 10, 0)
+        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0)
 
         #vars
         kuulid = []
