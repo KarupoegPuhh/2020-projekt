@@ -607,8 +607,8 @@ def main_loop():
         #Pahad
         paha = Vastane(400, 0, 500, 5, 10,True)
         paha.y = põrand1.y-paha.pikkus
-        #paha1 = Vastane(100, 0, 400, 15, 2,False)
-        #paha1.y = põrand1.y-paha1.pikkus
+        paha1 = Vastane(100, 0, 400, 15, 2,False)
+        paha1.y = põrand1.y-paha1.pikkus
         #Relvad
         ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True)
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False)
