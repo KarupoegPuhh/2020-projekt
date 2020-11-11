@@ -352,7 +352,7 @@ def main_loop():
             pg.display.update()
 
     def võit():
-        if len(pahad) == 0:
+        if len(pahad) == 0 and raha.raha_maas == 0:
             while True:
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
@@ -562,6 +562,7 @@ def main_loop():
                 ir.kukub()
             if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x:
                 ir.instances.remove(ir)
+                raha.raha_maas -= 1
                 Tom.raha += 1
 
         #PAUSE MENU
