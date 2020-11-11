@@ -71,12 +71,52 @@ def intro():
             aken.blit(textSurf, textRect)
         
         nupp("minek",laius/3-100, 300, 200, 100, (0,100,0), (0,255,0), main_loop)
-        nupp("Vali oma sõdalane", laius/2-100, 300, 200, 100, (100,100,0), (255,255,0))
+        nupp("Vali oma sõdalane", laius/2-100, 300, 200, 100, (100,100,0), (255,255,0), vali_sõdalane)
         nupp("annan alla", laius-laius/3-100, 300, 200, 100, (100,0,0), (255,0,0), quit)
         
         
         
         pg.display.update()
+        
+def vali_sõdalane():
+    global valin_sõdalane
+    valin_sõdalane = True
+    while valin_sõdalane:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+                
+        aken.fill((70,70,70))
+        TextSurf, TextRect = text_objects("Vali oma sõdalane!", largeText)
+        TextRect.center = ((laius // 2), (100))
+        aken.blit(TextSurf, TextRect)
+    
+        
+        nupp("Valik tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), sõdalane_valitud)
+        #Relva valik
+        nupp("Tahan olla kuninglik!", 170, 300, 200, 100, (113,16,15), (163,66,65), esimene_sõdalane)
+        nupp("Tahan olla camo!", 540, 300, 200, 100, (112,130,56), (162,180,106), teine_sõdalane)
+        nupp("Vidi vini vici", 910 , 300, 200, 100, (80,5,94), (130,55,144), kolmas_sõdalane)
+        
+        pg.display.update()
+        
+kangelane_värv = (113,16,15)        
+def sõdalane_valitud():
+    global valin_sõdalane
+    valin_sõdalane = False
+    
+def esimene_sõdalane():
+    global kangelane_värv
+    kangelane_värv = (113,16,15)    
+        
+def teine_sõdalane():
+    global kangelane_värv
+    kangelane_värv = (112,130,56)
+
+def kolmas_sõdalane():
+    global kangelane_värv
+    kangelane_värv = (80,5,94)
 
 def main_loop():
     global pause
@@ -87,7 +127,7 @@ def main_loop():
             self.y = y
             self.laius = laius
             self.pikkus = pikkus
-            self.värv = (0, 255, 0)
+            self.värv = kangelane_värv
             self.vaatab = 1
             self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
             self.jump = False
@@ -138,9 +178,9 @@ def main_loop():
         def __init__(self, x, y, suund):
             self.x = x
             self.y = y
-            self.raadius = 5
-            self.värv = (255, 0, 0)
-            self.vel = 30*suund
+            self.raadius = Relvad.instance.r
+            self.värv = Relvad.instance.värv
+            self.vel = Relvad.instance.vel * suund
             
         def draw(self, aken):
             pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
@@ -166,7 +206,7 @@ def main_loop():
                 self.kukkumas = False
         
         def draw(self, aken):
-            pg.draw.circle(aken, (255,215,0), (self.x , self.y), 3)
+            pg.draw.circle(aken, (255,215,0), (self.x , self.y), 5)
 
     class Vastane:
         instances = []
@@ -217,9 +257,8 @@ def main_loop():
                 pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
 
         def hit(self):
-            if self.health > 1:
-                self.health -= 1
-            else:
+            self.health -= Relvad.instance.dmg
+            if self.health <= 0:
                 for ugu in range(randint(3,6)):
                     vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10))
                     raha.raha_maas += 1
@@ -243,6 +282,22 @@ def main_loop():
             #seinad
             pg.draw.line(aken, (255, 0, 0), (self.x1,self.y),(self.x1,kõrgus))
             pg.draw.line(aken, (255, 0, 0), (self.x2,self.y),(self.x2,kõrgus))
+            
+            
+    class Relvad:
+        instance = None
+        
+        def __init__(self, dmg, cd, r, värv, vel, equipped):
+            self.dmg = dmg
+            self.cd = cd
+            self.r = r
+            self.värv = värv
+            self.vel = vel
+            
+        def equip(self):
+            Relvad.instance = self
+                
+            
 
 
     def unpause():
@@ -268,9 +323,15 @@ def main_loop():
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
+            keys = pg.key.get_pressed()
+      
+            if keys [pg.K_i]:
+                inventory()
+            
         
-            nupp("Jätkan!", laius/3, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", laius/2, 300, 200, 100, (100,100,0), (255,255,0), intro)
+            nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
+            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
+            nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
             
             pg.display.update()
     
@@ -380,15 +441,57 @@ def main_loop():
                         quit()
                         
                 aken.fill((70,70,70))
-                TextSurf, TextRect = text_objects("Sa tegid seda!", largeText)
+                TextSurf, TextRect = text_objects("Sa said hakkama!", largeText)
                 TextRect.center = ((laius // 2), (170))
                 aken.blit(TextSurf, TextRect)
                 
             
                 
-                nupp("Aitab kah...", laius/2-100 , kõrgus/2-50 , 200, 100, (100,100,0), (255,255,0), quit)
+                nupp("Aitab kah...", laius/2-100 , 500 , 200, 100, (100,100,0), (255,255,0), intro)
                 
                 pg.display.update()
+                
+    def inventory():
+        global inventory_tab
+        inventory_tab = True
+        while inventory_tab:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+                    
+            aken.fill((70,70,70))
+            TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
+            TextRect.center = ((laius // 2), (100))
+            aken.blit(TextSurf, TextRect)
+            
+        
+            
+            nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
+            #Relva valik
+            nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+            nupp("Ma leidsin hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+            nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+            nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100, 100, 100), (200, 200, 200), railgun_equip)
+            
+            pg.display.update()
+            
+    def invent_stop():
+        global inventory_tab
+        inventory_tab = False
+        
+    def ling_equip():
+        ling.equip()
+        
+    def hernepüss_equip():
+        hernepüss.equip()
+    
+    def kartulikahur_equip():
+        kartulikahur.equip()
+        
+    def railgun_equip():
+        railgun.equip()
+        
 
     #VARS ja objektid
     if True: #et saaks collapsida
@@ -396,22 +499,28 @@ def main_loop():
         põrand1 = põrand(0,laius,500)#(0,600,500)
         plat2 = põrand(750+400,800+400,250)
         plat = põrand(500+400,600+400,400)
-
+        #Tomi asjad
         Tom = Player(580, 100, 40, 60)
         vh = Tom.vh
         Tom.vh = 0
-        kuul = Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
+        #Kuulid
+        #kuul = None #Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
+        #Pahad
         paha = Vastane(400, 0, 500, 5, 10)
         paha.y = põrand1.y-paha.pikkus
         paha1 = Vastane(100, 0, 400, 15, 2)
         paha1.y = põrand1.y-paha1.pikkus
         pahad = [paha, paha1]
+        #Relvad
+        ling = Relvad(2, 10, 5, (255,255,255), 10, 1)
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
+        kartulikahur = Relvad(10, 30, 10, (161,127,27), 10, 0)
+        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0)
 
         #vars
         kuulid = []
         kuulide_cd = 0
-        kuulide_cd_const = 10
-        kuulide_maxcount = 5
+        kuulide_maxcount = 500
 
         pause = False
         running = True
@@ -444,8 +553,11 @@ def main_loop():
         pg.mixer.Sound.set_volume(whit,0.4)
         #pg.mixer.Sound.set_volume(hop,2)
         #pg.mixer.Sound.set_volume(hop2,2)
+        #Et mängjal oleks alguses relv
+        ling.equip()
 
     while running:
+        
         #exit
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -456,7 +568,7 @@ def main_loop():
         if True: #lihtsalt et saaks collapsida seda
             if kuulide_cd > 0:
                 kuulide_cd += 1
-            if kuulide_cd > kuulide_cd_const:
+            if kuulide_cd > Relvad.instance.cd:
                 kuulide_cd = 0
             for kuul in kuulid:
                 #Pahade tulistamine
@@ -597,6 +709,7 @@ def main_loop():
                 
         võit()  
         redrawGameWindow()
+
 
 while True:
     intro()
