@@ -283,9 +283,15 @@ def main_loop():
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
+            keys = pg.key.get_pressed()
+      
+            if keys [pg.K_i]:
+                inventory()
+            
         
-            nupp("Jätkan!", laius/3, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", laius/2, 300, 200, 100, (100,100,0), (255,255,0), intro)
+            nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
+            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
+            nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
             
             pg.display.update()
     
@@ -395,7 +401,7 @@ def main_loop():
                         quit()
                         
                 aken.fill((70,70,70))
-                TextSurf, TextRect = text_objects("Sa tegid seda!", largeText)
+                TextSurf, TextRect = text_objects("Sa said hakkama!", largeText)
                 TextRect.center = ((laius // 2), (170))
                 aken.blit(TextSurf, TextRect)
                 
@@ -404,6 +410,43 @@ def main_loop():
                 nupp("Aitab kah...", laius/2-100 , kõrgus/2-50 , 200, 100, (100,100,0), (255,255,0), quit)
                 
                 pg.display.update()
+                
+    def inventory():
+        global inventory_tab
+        inventory_tab = True
+        while inventory_tab:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+                    
+            aken.fill((70,70,70))
+            TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
+            TextRect.center = ((laius // 2), (100))
+            aken.blit(TextSurf, TextRect)
+            
+        
+            
+            nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
+            #Relva valik
+            nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+            nupp("Ma leidsin hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+            nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+            
+            pg.display.update()
+            
+    def invent_stop():
+        global inventory_tab
+        inventory_tab = False
+        
+    def ling_equip():
+        ling.equip()
+        
+    def hernepüss_equip():
+        hernepüss.equip()
+    
+    def kartulikahur_equip():
+        kartulikahur.equip()
 
     #VARS ja objektid
     if True: #et saaks collapsida
@@ -424,13 +467,14 @@ def main_loop():
         paha1.y = põrand1.y-paha1.pikkus
         pahad = [paha, paha1]
         #Relvad
-        vanilla = Relvad(1, 10, 5, (255,255,255), 20, 1)
-        hernepüss = Relvad(5, 50, 10, (0,255,0), 10, 0)
+        ling = Relvad(2, 10, 5, (255,255,255), 10, 1)
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
+        kartulikahur = Relvad(10, 30, 10, (161,127,27), 10, 0)
 
         #vars
         kuulid = []
         kuulide_cd = 0
-        kuulide_maxcount = 5
+        kuulide_maxcount = 500
 
         pause = False
         running = True
@@ -463,14 +507,10 @@ def main_loop():
         pg.mixer.Sound.set_volume(whit,0.4)
         #pg.mixer.Sound.set_volume(hop,2)
         #pg.mixer.Sound.set_volume(hop2,2)
+        #Et mängjal oleks alguses relv
+        ling.equip()
 
     while running:
-        if Tom.x < 500:
-            vanilla.equip()
-        if Tom.x > 500:
-            hernepüss.equip()
-        print(Relvad.instance)
-        
         
         #exit
         for event in pg.event.get():
