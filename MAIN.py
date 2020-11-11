@@ -100,9 +100,19 @@ def main_loop():
             self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
             self.kontr = True #kas saab kontrollida
             self.elus = True
+            self.elud_värv = (0,255,0)
             self.raha = 0
         
         def hit(self):
+            if self.health >= self.max_health * 0.8:
+                self.elud_värv = (0,255,0)
+            elif self.health >= self.max_health * 0.6:
+                self.elud_värv = (200,200,0)
+            elif self.health >= self.max_health * 0.4:
+                self.elud_värv = (255,100,0)
+            else:
+                self.elud_värv = (255,50,0)
+                
             if self.health > 1:
                 self.health -= 1
                 self.x -= 20
@@ -112,8 +122,8 @@ def main_loop():
             
         def draw(self, aken):
             #elud
-            pg.draw.rect(aken, (255,0,0),(self.x, self.y-15, self.laius, 10))
-            pg.draw.rect(aken, (0,255,0),(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
+            pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
+            pg.draw.rect(aken, self.elud_värv,(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
             #player
             self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
             pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
@@ -174,6 +184,7 @@ def main_loop():
             self.health = health
             self.max_health = health
             self.elus = True
+            self.elud_värv = (0,255,0)
             
         def move(self):
             if self.vel > 0:
@@ -188,10 +199,19 @@ def main_loop():
                     self.vel = -self.vel*dt
                     
         def draw(self, aken):
+            if self.health >= self.max_health * 0.8:
+                self.elud_värv = (0,255,0)
+            elif self.health >= self.max_health * 0.6:
+                self.elud_värv = (200,200,0)
+            elif self.health >= self.max_health * 0.4:
+                self.elud_värv = (255,100,0)
+            else:
+                self.elud_värv = (255,50,0)
+                
             if self.elus:
                 self.move()
-                pg.draw.rect(aken, (255,0,0),(self.x, self.y-15, self.laius, 10))
-                pg.draw.rect(aken, (0,255,0),(self.x, self.y-15, self.health * (self.laius // self.max_health), 10))
+                pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
+                pg.draw.rect(aken, self.elud_värv ,(self.x, self.y-15, self.health * (self.laius // self.max_health), 10))
                 self.hitbox = (self.x -1, self.y -1, self.laius+2, self.pikkus+2)             
                 pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
                 pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
@@ -346,7 +366,7 @@ def main_loop():
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
-            nupp("Annan alla", 400, 375, 200, 100, (100,0,0), (255,0,0), quit)
+            nupp("Annan alla", 400, 375, 200, 100, (100,0,0), (255,0,0), intro)
             nupp("Proovin uuesti", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
             
             pg.display.update()
