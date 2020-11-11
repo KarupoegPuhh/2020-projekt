@@ -72,25 +72,7 @@ def intro():
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
         
-       
-        
-        def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
-            mouse = pg.mouse.get_pos()
-            click = pg.mouse.get_pressed()
-            
-            
-            
-            if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
-                pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
-                pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
-                if click[0] == 1 and action != None:
-                    action()
-            else:
-                pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
 
-            textSurf, textRect = text_objects(text, smallText)
-            textRect.center = ((x+x+laius)//2, (y+y+kõrgus)//2)
-            aken.blit(textSurf, textRect)
         
         nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
         nupp("Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)
