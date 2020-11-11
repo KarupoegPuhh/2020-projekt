@@ -1,5 +1,7 @@
 import pygame as pg
 import sys
+from random import randint
+from random import choice
 pg.init()
 
 
@@ -128,6 +130,29 @@ def main_loop():
         def draw(self, aken):
             pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
 
+    class raha:
+        raha_maas = 0
+        instances = []
+        def __init__(self,x,y,v,suund,xoff):
+            self.__class__.instances.append(self)
+            self.x = x
+            self.y = y
+            self.v = v
+            self.suund = suund
+            self.xoff = xoff
+            self.kukkumas = True
+        
+        def kukub(self):
+            self.y += 0.5*(self.v**2)*dt
+            self.x += self.xoff 
+            self.v -= 1
+            if self.y >= mk:
+                self.y = mk
+                self.kukkumas = False
+        
+        def draw(self, aken):
+            pg.draw.circle(aken, (200,200,200), (self.x , self.y), 2)
+
     class Vastane:
         instances = []
         def __init__(self, x, y, lõpp, vel, health):
@@ -170,6 +195,9 @@ def main_loop():
             if self.health > 1:
                 self.health -= 1
             else:
+                for ugu in range(randint(3,6)):
+                    vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10))
+                    raha.raha_maas += 1
                 self.elus = False
                 self.instances.remove(self)
             print("hit!")
@@ -232,6 +260,8 @@ def main_loop():
         paha.draw(aken)
         paha1.draw(aken)
         
+        for rah in raha.instances:
+            rah.draw(aken)
         for kuul in kuulid:
             kuul.draw(aken)
         
@@ -282,17 +312,23 @@ def main_loop():
         if t.kb == 0: #knockbacki ajal surematu
             if t.x+t.laius+(t.vel*dt) >= e.x and t.x+t.laius < e.x + e.laius/2 and not t.y < e.y - t.pikkus:
                 Tom.kb = 1
+                Tom.kontr = False
                 Tom.hit()
+                valu.play()
                 return e.vel
             elif t.x <= e.x+e.laius+(t.vel*dt) and t.x > e.x+e.laius/2 and not t.y < e.y - t.pikkus:
                 Tom.kb = -1
+                Tom.kontr = False
                 Tom.hit()
+                valu.play()
                 return e.vel
             else:
                 Tom.kb = 0
                 return t.vh
 
     def surm():
+        psurm.play()
+        pg.mixer.music.stop()
         surm = True
         while surm:
             for event in pg.event.get():
@@ -314,15 +350,14 @@ def main_loop():
             
             pg.display.update()
 
-    #VARS
+    #VARS ja objektid
     if True: #et saaks collapsida
-
+        #objektid
         põrand1 = põrand(0,laius,500)#(0,600,500)
         plat2 = põrand(750+400,800+400,250)
         plat = põrand(500+400,600+400,400)
 
-        Tom = Player(500, 100, 40, 60)
-        #Tom.y = põrand1.y-Tom.pikkus
+        Tom = Player(580, 100, 40, 60)
         vh = Tom.vh
         Tom.vh = 0
         kuul = Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
@@ -331,6 +366,7 @@ def main_loop():
         paha1 = Vastane(100, 0, 400, 15, 2)
         paha1.y = põrand1.y-paha1.pikkus
 
+        #vars
         kuulid = []
         kuulide_cd = 0
         kuulide_cd_const = 10
@@ -346,12 +382,27 @@ def main_loop():
         global eelmine_mk
         eelmine_mk = 500
     
-    pg.mixer.music.load("game.mp3")
-    pg.mixer.music.play(-1)
-    pause = False
-    pos = 0
-    global start
-    start = 0
+    #sound cars, hiljem eraldi class vms
+    if True:
+        pg.mixer.music.load("game.mp3")
+        pg.mixer.music.play(-1)
+        pos = 0
+        global start
+        start = 0
+
+        vastane_valu = pg.mixer.Sound("Zhurt.mp3")
+        vastane_valu2 = pg.mixer.Sound("Zhurt1.mp3")
+        vastane_surm = pg.mixer.Sound("Zdeath.mp3")
+        valu = pg.mixer.Sound("hurt.mp3")
+        psurm = pg.mixer.Sound("death.mp3")
+        shoot = pg.mixer.Sound("shoot.mp3")
+        whit = pg.mixer.Sound("hit.mp3")
+        hop = pg.mixer.Sound("hop.mp3")
+        hop2 = pg.mixer.Sound("hop1.mp3")
+        pg.mixer.Sound.set_volume(shoot,0.4)
+        pg.mixer.Sound.set_volume(whit,0.4)
+        #pg.mixer.Sound.set_volume(hop,2)
+        #pg.mixer.Sound.set_volume(hop2,2)
 
     while running:
         #exit
@@ -367,23 +418,26 @@ def main_loop():
             if kuulide_cd > kuulide_cd_const:
                 kuulide_cd = 0
             for kuul in kuulid:
-                #Paha tulistamine
-                if kuul.y - kuul.raadius < paha.hitbox[1] + paha.hitbox[3] and kuul.y + kuul.raadius > paha.hitbox[1] and paha.elus:
-                    if kuul.x - kuul.raadius < paha.hitbox[0] + paha.hitbox[2] and kuul.x + kuul.raadius > paha.hitbox[0]:
-                        kuulid.pop(kuulid.index(kuul))
-                        paha.hit()
-                #Paha1 tulistamine
-                if kuul.y - kuul.raadius < paha1.hitbox[1] + paha1.hitbox[3] and kuul.y + kuul.raadius > paha1.hitbox[1] and paha1.elus:
-                    if kuul.x - kuul.raadius < paha1.hitbox[0] + paha1.hitbox[2] and kuul.x + kuul.raadius > paha1.hitbox[0]:
-                        kuulid.pop(kuulid.index(kuul))
-                        paha1.hit()
+                #Pahade tulistamine
+                for p in Vastane.instances:
+                    if kuul.y - kuul.raadius < p.hitbox[1] + p.hitbox[3] and kuul.y + kuul.raadius > p.hitbox[1] and p.elus:
+                        if kuul.x - kuul.raadius < p.hitbox[0] + p.hitbox[2] and kuul.x + kuul.raadius > p.hitbox[0]:
+                            kuulid.pop(kuulid.index(kuul))
+                            p.hit() 
+                            if randint(0,2):
+                                vastane_valu.play()
+                            else:
+                                vastane_valu2.play()
+
                 #sein
                 if not pole_sein_v(kuul.vel,kuul.x,kuul.y,0,0,5):
                     if kuul in kuulid:
                         kuulid.pop(kuulid.index(kuul))
+                        whit.play()
                 if not pole_sein_p(kuul.vel,kuul.x,kuul.y,0,0,5):
                     if kuul in kuulid:
                         kuulid.pop(kuulid.index(kuul))
+                        whit.play()
                 #liikumine
                 if kuul.x < Tom.x + 500 and kuul.x > Tom.x - 500:
                     kuul.x += kuul.vel*dt  # Moves the kuul by its vel
@@ -408,6 +462,10 @@ def main_loop():
             # TOM HÜPPAMINE
             if not Tom.jump:
                 if keys [pg.K_w]:
+                    if randint(0,2):
+                        hop.play()
+                    else:
+                        hop2.play()
                     Tom.jump = True
             if Tom.jump:
                 #F = 1 / 2 * mass * velocity ^ 2
@@ -450,7 +508,6 @@ def main_loop():
             if Tom.vh > 0:
                 F = (0.5*Tom.m*(lükkaja_v**2)) #/2
                 Tom.x -= (F*dt*Tom.kb)/3
-                Tom.kontr = False
             else:
                 F = -(0.5*Tom.m*(Tom.vh**2)) #/2
                 Tom.kontr = True
@@ -467,6 +524,7 @@ def main_loop():
 
         #TULISTAMINE
         if keys[pg.K_SPACE] and kuulide_cd == 0:
+            shoot.play()
             if Tom.vaatab == 1:
                 suund = 1
             else:
@@ -477,6 +535,11 @@ def main_loop():
             
             kuulide_cd = 1
         
+        #RAHA
+        for ir in raha.instances:
+            if ir.kukkumas:
+                ir.kukub()
+
         #PAUSE MENU
         if keys[pg.K_p]:
             pause = True
@@ -486,8 +549,8 @@ def main_loop():
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
-                
-            
+        
+
         redrawGameWindow()
 
 while True:
