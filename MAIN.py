@@ -27,18 +27,24 @@ nupp_klikk = pg.mixer.Sound(helidir+"\click.wav")
 def text_objects(text, font):
     textSurface = font.render(text, True, (0,0,0))
     return textSurface, textSurface.get_rect()
-        
+
+hiir_all = False
 def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
+    global hiir_all
     mouse = pg.mouse.get_pos()
     click = pg.mouse.get_pressed()
-    
+        
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
-        if click[0] == 1:
+        hiir_vabastatud = False
+        if hiir_all and not click[0]:
+            hiir_vabastatud = True
+        hiir_all = click[0]
+        if hiir_vabastatud:
             nupp_klikk.play()
-        if click[0] == 1 and action != None:
             action()
+
     else:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
     textSurf, textRect = text_objects(text, smallText)
@@ -152,26 +158,12 @@ def pood():
         #Registreerime kus on kursor
         mouse = pg.mouse.get_pos()
         click = pg.mouse.get_pressed()
-
-        #Jõujoogi ostmine
-        if click[0] == 1 and 370 > mouse[0] > 170 and 400 > mouse[1] > 300 and Tom.raha >= 1:
-            if Tom.health < Tom.max_health:
-                Tom.raha -= 1
-                Tom.health += 1
-        #Hernepüssi ostmine
-        if click[0] == 1 and 740 > mouse[0] > 540 and 400 > mouse[1] > 300 and Tom.raha >= 5 and not hernepüss.unlocked:
-            hernepüss.unlocked = True
-            Tom.raha -= 5
-        #DEJA VU I HAVE BEEN IN THIS PLACE BEFORE
-        if click[0] == 1 and 1110 > mouse[0] > 910 and 400 > mouse[1] > 300 and Tom.raha >= 1 and Tom.vel <= 20:
-            Tom.vel *= 1.5
-            Tom.raha -= 1
                     
         nupp("Ostud tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), pood_done)
         #Relva valik
-        nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65))
-        nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106))
-        nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144))
+        nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
+        nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
+        nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
         
         pg.display.update()
         
@@ -180,6 +172,21 @@ kangelane_värv = (113,16,15)
 def pood_done():
     global poes
     poes = False
+    
+def jõujook_ost():
+    if Tom.raha >= 1 and Tom.health < Tom.max_health:
+        Tom.raha -= 1
+        Tom.health += 1
+        
+def hernepüss_ost():
+    if Tom.raha >= 5 and not hernepüss.unlocked:
+        hernepüss.unlocked = True
+        Tom.raha -= 5
+        
+def ritaliin_ost():
+    if Tom.raha >= 1 and Tom.vel <= 20:
+        Tom.vel *= 1.5
+        Tom.raha -= 1
 
 def main_loop():
     global Tom
