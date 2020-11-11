@@ -19,11 +19,6 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     mouse = pg.mouse.get_pos()
     click = pg.mouse.get_pressed()
     
-    largeText = pg.font.Font("freesansbold.ttf", 70)
-    smallText = pg.font.Font("freesansbold.ttf", 20)
-        
-    
-    
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
@@ -45,8 +40,12 @@ def intro():
         aken.fill((70,70,70))
         
         #Teksdi suurused
-        largeText = pg.font.Font("freesansbold.ttf", 155)
-        smallText = pg.font.Font("freesansbold.ttf", 20)
+        global largeText
+        largeText = pg.font.Font("2.ttf", 155)
+        global mediumText
+        mediumText = pg.font.Font("2.ttf", 70)
+        global smallText
+        smallText = pg.font.Font("2.ttf", 20)
          
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
@@ -102,6 +101,7 @@ def main_loop():
             self.kontr = True #kas saab kontrollida
             self.elus = True
             self.elud_värv = (0,255,0)
+            self.raha = 0
         
         def hit(self):
             if self.health >= self.max_health * 0.8:
@@ -128,6 +128,11 @@ def main_loop():
             self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
             pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
+            #raha
+            veneText = pg.font.SysFont("MIROSLN.ttf", 36)
+            raha = veneText.render(str(self.raha)+" рубль", False, (255,215,0))
+            aken.blit(raha, (laius-100, 20))
+            
 
     class Kuul:
         def __init__(self, x, y, suund):
@@ -161,7 +166,7 @@ def main_loop():
                 self.kukkumas = False
         
         def draw(self, aken):
-            pg.draw.circle(aken, (200,200,200), (self.x , self.y), 2)
+            pg.draw.circle(aken, (255,215,0), (self.x , self.y), 3)
 
     class Vastane:
         instances = []
@@ -259,7 +264,6 @@ def main_loop():
                     quit()
                     
             aken.fill((70,70,70))
-            largeText = pg.font.Font("freesansbold.ttf", 70)
             TextSurf, TextRect = text_objects("Tõmban hinge", largeText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
@@ -358,10 +362,6 @@ def main_loop():
                     quit()
             aken.fill((70,70,70))
             
-            #Teksdi suurused
-            largeText = pg.font.Font("freesansbold.ttf", 70)
-            smallText = pg.font.Font("freesansbold.ttf", 20)
-             
             TextSurf, TextRect = text_objects("Hummid tampisid su ära...", largeText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
@@ -370,6 +370,25 @@ def main_loop():
             nupp("Proovin uuesti", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
             
             pg.display.update()
+
+    def võit():
+        if len(pahad) == 0:
+            while True:
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        quit()
+                        
+                aken.fill((70,70,70))
+                TextSurf, TextRect = text_objects("Sa tegid seda!", largeText)
+                TextRect.center = ((laius // 2), (170))
+                aken.blit(TextSurf, TextRect)
+                
+            
+                
+                nupp("Aitab kah...", laius/2-100 , kõrgus/2-50 , 200, 100, (100,100,0), (255,255,0), quit)
+                
+                pg.display.update()
 
     #VARS ja objektid
     if True: #et saaks collapsida
@@ -403,31 +422,6 @@ def main_loop():
         mk = 500
         global eelmine_mk
         eelmine_mk = 500
-        
-    def võit():
-        if len(pahad) == 0:
-            while True:
-                for event in pg.event.get():
-                    if event.type == pg.QUIT:
-                        pg.quit()
-                        quit()
-                        
-                aken.fill((70,70,70))
-                largeText = pg.font.Font("freesansbold.ttf", 70)
-                TextSurf, TextRect = text_objects("Sa tegid seda!", largeText)
-                TextRect.center = ((laius // 2), (170))
-                aken.blit(TextSurf, TextRect)
-                
-            
-                
-                nupp("Aitab kah...", laius/2-100 , kõrgus/2-50 , 200, 100, (100,100,0), (255,255,0), intro)
-                
-                pg.display.update()
-            
-            
-            
-            
-            
     
     #sound cars, hiljem eraldi class vms
     if True:
@@ -586,6 +580,9 @@ def main_loop():
         for ir in raha.instances:
             if ir.kukkumas:
                 ir.kukub()
+            if Tom.x+Tom.laius/2 >= ir.x-1 and Tom.x+Tom.laius/2 <= ir.x+1:
+                ir.instances.remove(ir)
+                Tom.raha += 1
 
         #PAUSE MENU
         if keys[pg.K_p]:
