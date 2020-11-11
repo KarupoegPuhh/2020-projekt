@@ -795,11 +795,11 @@ def main_loop():
             if ir.kukkumas:
                 raha_drop.play()
                 ir.kukub()
-            if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x:
+            if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x and Tom.y+Tom.pikkus > ir.y-3:
                 ir.instances.remove(ir)
                 raha_pickup.play()
                 raha.raha_maas -= 1
-                Tom.raha += 1
+                Tom.raha += 1000
 
         #PAUSE MENU
         if keys[pg.K_p]:
