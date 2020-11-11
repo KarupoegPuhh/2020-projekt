@@ -52,6 +52,17 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     aken.blit(textSurf, textRect)
 
 def intro():
+    
+    #Teksdi suurused
+    global largeText
+    largeText = pg.font.Font("RL.ttf", 150)
+    global mediumText
+    mediumText = pg.font.Font("RM.ttf", 70)
+    global smallText
+    smallText = pg.font.Font("RM.ttf", 22)
+    global veneText
+    veneText = pg.font.SysFont("MIROSLN.ttf", 36)
+
     intro = True
     while intro:
         for event in pg.event.get():
@@ -59,14 +70,6 @@ def intro():
                 pg.quit()
                 quit()
         aken.fill((119,81,87))
-        
-        #Teksdi suurused
-        global largeText
-        largeText = pg.font.Font("RL.ttf", 150)
-        global mediumText
-        mediumText = pg.font.Font("RM.ttf", 70)
-        global smallText
-        smallText = pg.font.Font("RM.ttf", 22)
          
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
@@ -143,7 +146,6 @@ def pood():
         nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
         nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
         
-        #veneText = pg.font.SysFont("MIROSLN.ttf", 36)
         raha = veneText.render(str(Tom.raha)+" рубль", False, (255,215,0))
         aken.blit(raha, (laius-100, 20))
         
@@ -223,7 +225,6 @@ def main_loop():
             pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
             #raha
-            veneText = pg.font.SysFont("MIROSLN.ttf", 36)
             raha = veneText.render(str(self.raha)+" рубль", False, (255,215,0))
             aken.blit(raha, (laius-100, 20))
             
@@ -700,8 +701,8 @@ def main_loop():
         eelmine_mk = mk
         maa_kõrgus(Tom.x,Tom.laius)
         
-        #if mk < Tom.y + Tom.pikkus: ÜRITUS FIXIDA KNOCKBACK KINNI JÄÄMIST
-        #    Tom.y = maa_kõrgus
+        if mk <= Tom.y + Tom.pikkus:
+            Tom.y = mk-Tom.pikkus
 
         if Tom.kontr:
             # TOM PAREMALE JA VASAKULE      
