@@ -75,9 +75,7 @@ def intro():
             if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
                 pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
                 pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
-                nupp_hover.play()
                 if click[0] == 1 and action != None:
-                    nupp_klikk.play()
                     action()
             else:
                 pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
