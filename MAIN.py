@@ -37,15 +37,15 @@ def intro():
             if event.type == pg.QUIT:
                 pg.quit()
                 quit()
-        aken.fill((70,70,70))
+        aken.fill((119,81,87))
         
         #Teksdi suurused
         global largeText
-        largeText = pg.font.Font("2.ttf", 155)
+        largeText = pg.font.Font("HACK.ttf", 150)
         global mediumText
-        mediumText = pg.font.Font("2.ttf", 70)
+        mediumText = pg.font.Font("HACK.ttf", 70)
         global smallText
-        smallText = pg.font.Font("2.ttf", 20)
+        smallText = pg.font.Font("HACK.ttf", 20)
          
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
@@ -70,9 +70,9 @@ def intro():
             textRect.center = ((x+x+laius)//2, (y+y+kõrgus)//2)
             aken.blit(textSurf, textRect)
         
-        nupp("minek",laius/3-100, 300, 200, 100, (0,100,0), (0,255,0), main_loop)
-        nupp("Vali oma sõdalane", laius/2-100, 300, 200, 100, (100,100,0), (255,255,0), vali_sõdalane)
-        nupp("annan alla", laius-laius/3-100, 300, 200, 100, (100,0,0), (255,0,0), quit)
+        nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
+        nupp("Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)
+        nupp("Annan alla...", laius/2-100, 550, 200, 100, (42,42,50), (72,72,89), quit)
         
         
         
@@ -330,7 +330,7 @@ def main_loop():
             
         
             nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
+            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), quit)
             nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
             
             pg.display.update()
@@ -512,9 +512,9 @@ def main_loop():
         paha1.y = põrand1.y-paha1.pikkus
         pahad = [paha, paha1]
         #Relvad
-        ling = Relvad(2, 10, 5, (255,255,255), 10, 1)
+        ling = Relvad(2, 30, 5, (255,255,255), 15, 1)
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
-        kartulikahur = Relvad(10, 30, 10, (161,127,27), 10, 0)
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0)
         railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0)
 
         #vars
