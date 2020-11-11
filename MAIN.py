@@ -36,6 +36,7 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
         if click[0] == 1 and action != None:
+            nupp_klikk.play()
             action()
     else:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
@@ -54,11 +55,11 @@ def intro():
         
         #Teksdi suurused
         global largeText
-        largeText = pg.font.Font("HACK.ttf", 150)
+        largeText = pg.font.Font("RL.ttf", 150)
         global mediumText
-        mediumText = pg.font.Font("HACK.ttf", 70)
+        mediumText = pg.font.Font("RM.ttf", 70)
         global smallText
-        smallText = pg.font.Font("HACK.ttf", 20)
+        smallText = pg.font.Font("RM.ttf", 22)
          
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
