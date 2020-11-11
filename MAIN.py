@@ -35,8 +35,9 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
-        if click[0] == 1 and action != None:
+        if click[0] == 1:
             nupp_klikk.play()
+        if click[0] == 1 and action != None:
             action()
     else:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
@@ -132,8 +133,57 @@ def teine_sõdalane():
 def kolmas_sõdalane():
     global kangelane_värv
     kangelane_värv = (80,5,94)
+    
+def pood():
+    global Tom
+    global hernepüss
+    global poes
+    poes = True
+    while poes:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+                
+        aken.fill((70,70,70))
+        TextSurf, TextRect = text_objects("Mida teile?", largeText)
+        TextRect.center = ((laius // 2), (100))
+        aken.blit(TextSurf, TextRect)
+        #Registreerime kus on kursor
+        mouse = pg.mouse.get_pos()
+        click = pg.mouse.get_pressed()
+
+        #Jõujoogi ostmine
+        if click[0] == 1 and 370 > mouse[0] > 170 and 400 > mouse[1] > 300 and Tom.raha >= 1:
+            if Tom.health < Tom.max_health:
+                Tom.raha -= 1
+                Tom.health += 1
+        #Hernepüssi ostmine
+        if click[0] == 1 and 740 > mouse[0] > 540 and 400 > mouse[1] > 300 and Tom.raha >= 5 and not hernepüss.unlocked:
+            hernepüss.unlocked = True
+            Tom.raha -= 5
+        #DEJA VU I HAVE BEEN IN THIS PLACE BEFORE
+        if click[0] == 1 and 1110 > mouse[0] > 910 and 400 > mouse[1] > 300 and Tom.raha >= 1 and Tom.vel <= 20:
+            Tom.vel *= 1.5
+            Tom.raha -= 1
+                    
+        nupp("Ostud tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), pood_done)
+        #Relva valik
+        nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65))
+        nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106))
+        nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144))
+        
+        pg.display.update()
+        
+kangelane_värv = (113,16,15)
+
+def pood_done():
+    global poes
+    poes = False
 
 def main_loop():
+    global Tom
+    global hernepüss
     global pause
     
     class Player:
@@ -299,15 +349,17 @@ def main_loop():
     class Relvad:
         instance = None
         
-        def __init__(self, dmg, cd, r, värv, vel, equipped):
+        def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked):
             self.dmg = dmg
             self.cd = cd
             self.r = r
             self.värv = värv
             self.vel = vel
+            self.unlocked = unlocked
             
         def equip(self):
-            Relvad.instance = self
+            if self.unlocked:
+                Relvad.instance = self
                 
     
     def unpause():
@@ -342,6 +394,7 @@ def main_loop():
             nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
             nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), quit)
             nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
+            nupp("Konsum", 540, 450, 200, 100, (0,100,0), (0,255,0), pood)
             
             pg.display.update()
     
@@ -522,10 +575,10 @@ def main_loop():
         paha1.y = põrand1.y-paha1.pikkus
         pahad = [paha, paha1]
         #Relvad
-        ling = Relvad(2, 30, 5, (255,255,255), 15, 1)
-        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
-        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0)
-        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0)
+        ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True)
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False)
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, True)
+        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True)
         #Et mängjal oleks alguses relv
         ling.equip()
 
