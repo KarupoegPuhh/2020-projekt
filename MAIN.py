@@ -2,6 +2,14 @@ import pygame as pg
 import sys
 from random import randint
 from random import choice
+import os
+
+dirr = os.path.dirname(os.path.abspath(__file__))
+#print(dirr)
+global helidir
+helidir = dirr+"\helid"
+print(helidir)
+
 pg.init()
 
 
@@ -10,6 +18,11 @@ kõrgus = 720
 aken = pg.display.set_mode((laius, kõrgus))
 pg.display.set_caption('D-day')
 pg.display.flip()
+
+global nupp_hover
+nupp_hover = pg.mixer.Sound(helidir+"\click_h.wav")
+global nupp_klikk
+nupp_klikk = pg.mixer.Sound(helidir+"\click.wav")
 
 def text_objects(text, font):
     textSurface = font.render(text, True, (0,0,0))
@@ -66,6 +79,7 @@ def intro():
                     action()
             else:
                 pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
+
             textSurf, textRect = text_objects(text, smallText)
             textRect.center = ((x+x+laius)//2, (y+y+kõrgus)//2)
             aken.blit(textSurf, textRect)
@@ -173,7 +187,6 @@ def main_loop():
             raha = veneText.render(str(self.raha)+" рубль", False, (255,215,0))
             aken.blit(raha, (laius-100, 20))
             
-
     class Kuul:
         def __init__(self, x, y, suund):
             self.x = x
@@ -266,7 +279,6 @@ def main_loop():
                 self.instances.remove(self)
                 pahad.pop(0)
             
-
     class põrand:
         instances = []
         
@@ -283,7 +295,6 @@ def main_loop():
             pg.draw.line(aken, (255, 0, 0), (self.x1,self.y),(self.x1,kõrgus))
             pg.draw.line(aken, (255, 0, 0), (self.x2,self.y),(self.x2,kõrgus))
             
-            
     class Relvad:
         instance = None
         
@@ -297,16 +308,14 @@ def main_loop():
         def equip(self):
             Relvad.instance = self
                 
-            
-
-
+    
     def unpause():
         global pause
         global start
         pause = False
         pos = pg.mixer.music.get_pos()
         pg.mixer.music.stop()
-        pg.mixer.music.load("game.mp3")
+        pg.mixer.music.load(helidir+"\game.mp3")
         start = start + pos/1000.0
         pg.mixer.music.play(-1, start)
     
@@ -516,6 +525,8 @@ def main_loop():
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0)
         kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0)
         railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0)
+        #Et mängjal oleks alguses relv
+        ling.equip()
 
         #vars
         kuulid = []
@@ -532,29 +543,27 @@ def main_loop():
         global eelmine_mk
         eelmine_mk = 500
     
-    #sound cars, hiljem eraldi class vms
+    #sound vars, hiljem eraldi class vms
     if True:
-        pg.mixer.music.load("game.mp3")
+        pg.mixer.music.load(helidir+"\game.mp3")
         pg.mixer.music.play(-1)
         pos = 0
         global start
         start = 0
 
-        vastane_valu = pg.mixer.Sound("Zhurt.mp3")
-        vastane_valu2 = pg.mixer.Sound("Zhurt1.mp3")
-        vastane_surm = pg.mixer.Sound("Zdeath.mp3")
-        valu = pg.mixer.Sound("hurt.mp3")
-        psurm = pg.mixer.Sound("death.mp3")
-        shoot = pg.mixer.Sound("shoot.mp3")
-        whit = pg.mixer.Sound("hit.mp3")
-        hop = pg.mixer.Sound("hop.mp3")
-        hop2 = pg.mixer.Sound("hop1.mp3")
+        vastane_valu = pg.mixer.Sound(helidir+"\Zhurt.mp3")
+        vastane_valu2 = pg.mixer.Sound(helidir+"\Zhurt1.mp3")
+        vastane_surm = pg.mixer.Sound(helidir+"\Zdeath.mp3")
+        valu = pg.mixer.Sound(helidir+"\hurt.mp3")
+        psurm = pg.mixer.Sound(helidir+"\death.mp3")
+        shoot = pg.mixer.Sound(helidir+"\shoot.mp3")
+        whit = pg.mixer.Sound(helidir+"\hit.mp3")
+        hop = pg.mixer.Sound(helidir+"\hop.mp3")
+        hop2 = pg.mixer.Sound(helidir+"\hop1.mp3")
         pg.mixer.Sound.set_volume(shoot,0.4)
         pg.mixer.Sound.set_volume(whit,0.4)
-        #pg.mixer.Sound.set_volume(hop,2)
-        #pg.mixer.Sound.set_volume(hop2,2)
-        #Et mängjal oleks alguses relv
-        ling.equip()
+        raha_pickup = pg.mixer.Sound(helidir+"\gold_pickup.mp3")
+        raha_drop = pg.mixer.Sound(helidir+"\gold_drop.mp3")
 
     while running:
         
@@ -691,9 +700,11 @@ def main_loop():
         #RAHA
         for ir in raha.instances:
             if ir.kukkumas:
+                raha_drop.play()
                 ir.kukub()
             if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x:
                 ir.instances.remove(ir)
+                raha_pickup.play()
                 raha.raha_maas -= 1
                 Tom.raha += 1
 
@@ -702,7 +713,7 @@ def main_loop():
             pause = True
             pos = pg.mixer.music.get_pos()
             pg.mixer.music.stop()
-            pg.mixer.music.load("game_filt.mp3")
+            pg.mixer.music.load(helidir+"\game_filt.mp3")
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
