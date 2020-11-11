@@ -200,7 +200,8 @@ def main_loop():
                     raha.raha_maas += 1
                 self.elus = False
                 self.instances.remove(self)
-            print("hit!")
+                pahad.pop(0)
+            
 
     class põrand:
         instances = []
@@ -245,7 +246,7 @@ def main_loop():
             
         
             nupp("Jätkan!", laius/3, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", laius/2, 300, 200, 100, (100,100,0), (255,255,0), quit)
+            nupp("Annan alla", laius/2, 300, 200, 100, (100,100,0), (255,255,0), intro)
             
             pg.display.update()
     
@@ -365,6 +366,7 @@ def main_loop():
         paha.y = põrand1.y-paha.pikkus
         paha1 = Vastane(100, 0, 400, 15, 2)
         paha1.y = põrand1.y-paha1.pikkus
+        pahad = [paha, paha1]
 
         #vars
         kuulid = []
@@ -381,6 +383,31 @@ def main_loop():
         mk = 500
         global eelmine_mk
         eelmine_mk = 500
+        
+    def võit():
+        if len(pahad) == 0:
+            while True:
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        quit()
+                        
+                aken.fill((70,70,70))
+                largeText = pg.font.Font("freesansbold.ttf", 70)
+                TextSurf, TextRect = text_objects("Sa tegid seda!", largeText)
+                TextRect.center = ((laius // 2), (170))
+                aken.blit(TextSurf, TextRect)
+                
+            
+                
+                nupp("Aitab kah...", laius/2-100 , kõrgus/2-50 , 200, 100, (100,100,0), (255,255,0), quit)
+                
+                pg.display.update()
+            
+            
+            
+            
+            
     
     #sound cars, hiljem eraldi class vms
     if True:
@@ -549,8 +576,8 @@ def main_loop():
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
-        
-
+                
+        võit()  
         redrawGameWindow()
 
 while True:
