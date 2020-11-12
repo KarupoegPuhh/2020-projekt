@@ -140,8 +140,15 @@ def kolmas_sõdalane():
 def pood():
     global Tom
     global hernepüss
+    global kartulikahur
+    global ka
     global poes
     poes = True
+    global ost
+    ost = pg.mixer.Sound(helidir+"\cash.mp3")
+    tere = pg.mixer.Sound(helidir+"\shop_e.mp3")
+    tere.play()
+
     while poes:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -158,12 +165,17 @@ def pood():
                     
         nupp("Ostud tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), pood_done)
         #Relva valik
-        nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
-        nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
-        nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
+        if Tom.health < Tom.max_health:
+            nupp("Jõujooki! -1₽", 170, 200, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
+        if not hernepüss.unlocked:    
+            nupp("Hernepüssi! -3₽", 540, 200, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
+        if Tom.vel <= 20:
+            nupp("Ritaliini! -1₽", 910 , 200, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
+        if not kartulikahur.unlocked:
+            nupp("kartul! -4₽", 540 , 400, 200, 100, (80,5,94), (130,55,144), kartulikahur_ost)
         
         raha = veneText.render(str(Tom.raha)+" рубль", False, (255,215,0))
-        aken.blit(raha, (laius-100, 20))
+        aken.blit(raha, (laius-200, 20))
         
         pg.display.update()
         
@@ -172,25 +184,40 @@ kangelane_värv = (113,16,15)
 def pood_done():
     global poes
     poes = False
+    headaega = pg.mixer.Sound(helidir+"\shop_l.mp3")
+    headaega.play()
     
 def jõujook_ost():
-    if Tom.raha >= 1 and Tom.health < Tom.max_health:
+    if Tom.raha >= 1:
         Tom.raha -= 1
         Tom.health += 1
+        ost.play()
         
 def hernepüss_ost():
-    if Tom.raha >= 5 and not hernepüss.unlocked:
+    if Tom.raha >= 3:
         hernepüss.unlocked = True
-        Tom.raha -= 5
+        Tom.raha -= 3
+        ost.play()
+
+def kartulikahur_ost():
+    if Tom.raha >= 4:
+        kartulikahur.unlocked = True
+        Tom.raha -= 4
+        ost.play()
         
 def ritaliin_ost():
-    if Tom.raha >= 1 and Tom.vel <= 20:
+    global vh
+    if Tom.raha >= 1:
         Tom.vel *= 1.5
+        Tom.vh += 1
+        vh += 1
         Tom.raha -= 1
+        ost.play()
 
 def main_loop():
     global Tom
     global hernepüss
+    global kartulikahur
     global pause
     
     intromus.stop()
@@ -209,7 +236,7 @@ def main_loop():
             self.m = 1
             self.vel = 10
             self.vh = 10 #hüppe vel
-            self.health = 10
+            self.health = 7
             self.max_health = 10
             self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
             self.kontr = True #kas saab kontrollida
@@ -537,7 +564,7 @@ def main_loop():
                     quit()
             aken.fill((70,70,70))
             
-            TextSurf, TextRect = text_objects("Hummid tampisid su ära...", largeText)
+            TextSurf, TextRect = text_objects("Hummid tampisid su ära...", mediumText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
@@ -582,8 +609,6 @@ def main_loop():
             TextSurf, TextRect = text_objects("(Sul on käes "+str(Relvad.instance.nimi)+")", mediumText)
             TextRect.center = ((laius // 2), (230))
             aken.blit(TextSurf, TextRect)
-            #käes = smallText.render("Sul on käes "+str(Relvad.instance.nimi), False, (0,0,0))
-            #aken.blit(käes, (laius/3, 250))
             
             nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
             #Relva valik
@@ -604,16 +629,13 @@ def main_loop():
         
     def ling_equip():
         if ling.unlocked:
-            Relvad.instance = ling
-        
+            Relvad.instance = ling      
     def hernepüss_equip():
         if hernepüss.unlocked:
             Relvad.instance = hernepüss
-    
     def kartulikahur_equip():
         if kartulikahur.unlocked:
             Relvad.instance = kartulikahur
-        
     def railgun_equip():
         if railgun.unlocked:
             Relvad.instance = railgun
@@ -635,6 +657,7 @@ def main_loop():
             o += 1
         #Tomi asjad
         Tom = Player(580, 100, 40, 60)
+        global vh
         vh = Tom.vh
         Tom.vh = 0
         #Pahad
@@ -645,7 +668,7 @@ def main_loop():
         #Relvad
         ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling")
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss")
-        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, True,"kartulikaur")
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur")
         railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset")
         #Et mängjal oleks alguses relv
         ling_equip()
