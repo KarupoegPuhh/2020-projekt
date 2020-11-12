@@ -643,6 +643,12 @@ def main_loop():
 
     def võit():
         if len(Vastane.instances) == 0 and raha.raha_maas == 0:
+            TextSurf, TextRect = text_objects("VÕIT!", largeText)
+            TextRect.center = ((laius // 2), (100))
+            aken.blit(TextSurf, TextRect)
+                
+            pg.display.update()
+            pg.time.wait(2000)
             while True:
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
@@ -666,6 +672,7 @@ def main_loop():
             global inventory_tab
             inventory_tab = True
             while inventory_tab:
+                mouse = pg.mouse.get_pos()
                 for event in pg.event.get():
                     if event.type == pg.QUIT:
                         pg.quit()
@@ -684,12 +691,110 @@ def main_loop():
                 #Relva valik
                 if ling.unlocked:
                     nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+                            
                 if hernepüss.unlocked:
                     nupp("Ma sain hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+                        
                 if kartulikahur.unlocked:
                     nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+                        
                 if railgun.unlocked:
                     nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100,100,100), (200,200,200), railgun_equip)
+                    
+                    
+                #joonistame kasti, et infot lugeda
+                if 540 < mouse[0] < 740 and 450 < mouse[1] < 550 and railgun.unlocked == True:
+                    #infoleht
+                    pg.draw.rect(aken, (150,150,150), (mouse[0], mouse[1], 200, 135))
+                    #nimi
+                    relv_dmg_txt = smallText.render("Nimi : " + "EMP gun", True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 15)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #dmg
+                    relv_dmg_txt = smallText.render("võimsus : " + str(railgun.dmg), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #kiirus
+                    relv_dmg_txt = smallText.render("kiirus : " + str(railgun.vel), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #cd
+                    relv_dmg_txt = smallText.render("laadimisaeg : " + str(railgun.cd), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 105)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                if 910 < mouse[0] < 1110 and 300 < mouse[1] < 400 and kartulikahur.unlocked == True:
+                    #infoleht
+                    pg.draw.rect(aken, (150,150,150), (mouse[0], mouse[1], 200, 135))
+                    #nimi
+                    relv_dmg_txt = smallText.render("Nimi : " + str(kartulikahur.nimi), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 15)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #dmg
+                    relv_dmg_txt = smallText.render("võimsus : " + str(kartulikahur.dmg), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #kiirus
+                    relv_dmg_txt = smallText.render("kiirus : " + str(kartulikahur.vel), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #cd
+                    relv_dmg_txt = smallText.render("laadimisaeg : " + str(kartulikahur.cd), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 105)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                if 540 < mouse[0] < 740 and 300 < mouse[1] < 400 and hernepüss.unlocked == True:
+                    #infoleht
+                    pg.draw.rect(aken, (150,150,150), (mouse[0], mouse[1], 200, 135))
+                    #nimi
+                    relv_dmg_txt = smallText.render("Nimi : " + str(hernepüss.nimi), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 15)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #dmg
+                    relv_dmg_txt = smallText.render("võimsus : " + str(hernepüss.dmg), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #kiirus
+                    relv_dmg_txt = smallText.render("kiirus : " + str(hernepüss.vel), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #cd
+                    relv_dmg_txt = smallText.render("laadimisaeg : " + str(hernepüss.cd), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 105)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                if 170 < mouse[0] < 370 and 300 < mouse[1] < 400 and ling.unlocked == True:
+                    #infoleht
+                    pg.draw.rect(aken, (150,150,150), (mouse[0], mouse[1], 200, 135))
+                    #nimi
+                    relv_dmg_txt = smallText.render("Nimi : " + str(ling.nimi), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 15)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #dmg
+                    relv_dmg_txt = smallText.render("võimsus : " + str(ling.dmg), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #kiirus
+                    relv_dmg_txt = smallText.render("kiirus : " + str(ling.vel), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+                    #cd
+                    relv_dmg_txt = smallText.render("laadimisaeg : " + str(ling.cd), True, (200,200,200))
+                    relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+                    relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 105)
+                    aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
                 
                 pg.display.update()
                 
@@ -759,7 +864,7 @@ def main_loop():
         aken.blit(raha, (915, 650))
         nupp("Konsumisse", 875, 675, 150, 25, (100,100,100), (200,200,200), pood)
         #Turvis
-        TextSurf, TextRect = text_objects("Turvise väärtus : " + str(Tom.armor), databarText)
+        TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText)
         TextRect.center = ((laius // 2), (700))
         aken.blit(TextSurf, TextRect)
         #Nupp inventoryle
