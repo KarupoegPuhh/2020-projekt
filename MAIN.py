@@ -255,16 +255,7 @@ def main_loop():
             self.elud_värv = (0,255,0)
             self.raha = 420
         
-        def hit(self):
-            if self.health >= self.max_health * 0.8:
-                self.elud_värv = (0,255,0)
-            elif self.health >= self.max_health * 0.6:
-                self.elud_värv = (200,200,0)
-            elif self.health >= self.max_health * 0.4:
-                self.elud_värv = (255,100,0)
-            else:
-                self.elud_värv = (255,50,0)
-                
+        def hit(self):    
             if self.health > 1:
                 self.health -= 1
                 self.x -= 20
@@ -273,6 +264,15 @@ def main_loop():
                 surm()
             
         def draw(self, aken):
+            #elude update
+            if self.health >= self.max_health * 0.8:
+                self.elud_värv = (0,255,0)
+            elif self.health >= self.max_health * 0.6:
+                self.elud_värv = (200,200,0)
+            elif self.health >= self.max_health * 0.4:
+                self.elud_värv = (255,100,0)
+            else:
+                self.elud_värv = (255,50,0)
             #elud
             pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
             pg.draw.rect(aken, self.elud_värv,(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
@@ -482,14 +482,14 @@ def main_loop():
             
         
             nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), quit)
+            nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
             nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
             nupp("Konsum", 540, 450, 200, 100, (0,100,0), (0,255,0), pood)
             
             pg.display.update()
     
     def redrawGameWindow():
-        aken.fill((0,0,0))
+        aken.fill((21,85,83))
 
         for prr in põrand.instances:
             prr.draw(aken)
@@ -559,8 +559,15 @@ def main_loop():
     def surm():
         psurm.play()
         pg.mixer.music.stop()
+        #Väike paus ja ütleb, et surid
+        TextSurf, TextRect = text_objects("Sa said surma...lol", mediumText)
+        TextRect.center = ((laius // 2), (170))
+        aken.blit(TextSurf, TextRect)
+        pg.display.update()
+        pg.time.wait(3000)
+    
         surm = True
-        while surm:
+        while surm:   
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
