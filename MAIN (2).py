@@ -12,7 +12,7 @@ print(helidir)
 
 pg.init()
 
-mitmes_kord = 0
+
 laius = 1280
 kõrgus = 720
 aken = pg.display.set_mode((laius, kõrgus))
@@ -52,13 +52,7 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     aken.blit(textSurf, textRect)
 
 def intro():
-    global mitmes_kord
-    mitmes_kord += 1
-    if mitmes_kord == 1:
-        global intromus
-        intromus = pg.mixer.Sound(helidir+"\delta.mp3")
-        intromus.play()
-
+    
     #Teksdi suurused
     global largeText
     largeText = pg.font.Font("RL.ttf", 150)
@@ -80,16 +74,6 @@ def intro():
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
-
-        #kontrollid
-        kontrollid = smallText.render("liigu: wasd", False, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 20))
-        kontrollid = smallText.render("tulista: space", False, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 40))
-        kontrollid = smallText.render("menüü: p", False, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 60))
-        kontrollid = smallText.render("KONTROLLID:", False, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 0))
         
         nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
         nupp("Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)
@@ -140,15 +124,8 @@ def kolmas_sõdalane():
 def pood():
     global Tom
     global hernepüss
-    global kartulikahur
-    global ka
     global poes
     poes = True
-    global ost
-    ost = pg.mixer.Sound(helidir+"\cash.mp3")
-    tere = pg.mixer.Sound(helidir+"\shop_e.mp3")
-    tere.play()
-
     while poes:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -165,17 +142,12 @@ def pood():
                     
         nupp("Ostud tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), pood_done)
         #Relva valik
-        if Tom.health < Tom.max_health:
-            nupp("Jõujooki! -1₽", 170, 200, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
-        if not hernepüss.unlocked:    
-            nupp("Hernepüssi! -3₽", 540, 200, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
-        if Tom.vel <= 20:
-            nupp("Ritaliini! -1₽", 910 , 200, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
-        if not kartulikahur.unlocked:
-            nupp("kartul! -4₽", 540 , 400, 200, 100, (80,5,94), (130,55,144), kartulikahur_ost)
+        nupp("Jõujooki!", 170, 300, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
+        nupp("Hernepüssi!", 540, 300, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
+        nupp("Ritaliini!", 910 , 300, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
         
         raha = veneText.render(str(Tom.raha)+" рубль", False, (255,215,0))
-        aken.blit(raha, (laius-200, 20))
+        aken.blit(raha, (laius-100, 20))
         
         pg.display.update()
         
@@ -184,44 +156,27 @@ kangelane_värv = (113,16,15)
 def pood_done():
     global poes
     poes = False
-    headaega = pg.mixer.Sound(helidir+"\shop_l.mp3")
-    headaega.play()
     
 def jõujook_ost():
-    if Tom.raha >= 1:
+    if Tom.raha >= 1 and Tom.health < Tom.max_health:
         Tom.raha -= 1
         Tom.health += 1
-        ost.play()
         
 def hernepüss_ost():
-    if Tom.raha >= 3:
+    if Tom.raha >= 5 and not hernepüss.unlocked:
         hernepüss.unlocked = True
-        Tom.raha -= 3
-        ost.play()
-
-def kartulikahur_ost():
-    if Tom.raha >= 4:
-        kartulikahur.unlocked = True
-        Tom.raha -= 4
-        ost.play()
+        Tom.raha -= 5
         
 def ritaliin_ost():
-    global vh
-    if Tom.raha >= 1:
+    if Tom.raha >= 1 and Tom.vel <= 20:
         Tom.vel *= 1.5
-        Tom.vh += 1
-        vh += 1
         Tom.raha -= 1
-        ost.play()
 
 def main_loop():
     global Tom
     global hernepüss
-    global kartulikahur
     global pause
     
-    intromus.stop()
-
     class Player:
         def __init__(self, x, y, laius, pikkus):
             self.x = x
@@ -236,13 +191,13 @@ def main_loop():
             self.m = 1
             self.vel = 10
             self.vh = 10 #hüppe vel
-            self.health = 7
+            self.health = 10
             self.max_health = 10
             self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
             self.kontr = True #kas saab kontrollida
             self.elus = True
             self.elud_värv = (0,255,0)
-            self.raha = 1000
+            self.raha = 0
         
         def hit(self):
             if self.health >= self.max_health * 0.8:
@@ -287,7 +242,7 @@ def main_loop():
     class raha:
         raha_maas = 0
         instances = []
-        def __init__(self,x,y,v,suund,xoff,mkr):
+        def __init__(self,x,y,v,suund,xoff):
             self.__class__.instances.append(self)
             self.x = x
             self.y = y
@@ -295,14 +250,13 @@ def main_loop():
             self.suund = suund
             self.xoff = xoff
             self.kukkumas = True
-            self.mkr = mkr
         
         def kukub(self):
             self.y += 0.5*(self.v**2)*dt
             self.x += self.xoff 
             self.v -= 1
-            if self.y+5 >= self.mkr:
-                self.y = self.mkr-5
+            if self.y >= mk:
+                self.y = mk
                 self.kukkumas = False
         
         def draw(self, aken):
@@ -371,7 +325,7 @@ def main_loop():
                             self.x += self.vel*dt
                         else:
                             self.tagane = False
-            #path
+            
             else:
                 if self.vel > 0:
                     if self.vel + self.x < self.path[1]:
@@ -406,7 +360,7 @@ def main_loop():
             self.health -= Relvad.instance.dmg
             if self.health <= 0:
                 for ugu in range(randint(3,6)):
-                    vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus)
+                    vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10))
                     raha.raha_maas += 1
                 self.elus = False
                 vastane_surm.play()
@@ -431,14 +385,17 @@ def main_loop():
     class Relvad:
         instance = None
         
-        def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked, nimi):
+        def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked):
             self.dmg = dmg
             self.cd = cd
             self.r = r
             self.värv = värv
             self.vel = vel
             self.unlocked = unlocked
-            self.nimi = nimi
+            
+        def equip(self):
+            if self.unlocked:
+                Relvad.instance = self
                 
     
     def unpause():
@@ -496,26 +453,18 @@ def main_loop():
         dt = clock.tick(30)
     
     def pole_sein_v(v,x,y,lai,pikk,umb=0,obj=põrand):
-        #pole window vasak äär
-        if v < 0:
-            v = -v
-        if v*dt < x:
-            #seinad vasakule minnes
-            for i in obj.instances:
-                if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
-                    return False
-            return True
-        return False
+        #seinad vasakule minnes
+        for i in obj.instances:
+            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                return False
+        return True
         
     def pole_sein_p(v,x,y,lai,pikk,umb=0,obj=põrand):
-        #pole window parem äär
-        if v*dt < (laius - x - lai):
-            #seinad paremale minnes
-            for i in obj.instances:
-                if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
-                    return False
+        #seinad paremale minnes
+        for i in obj.instances:
+            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                return False
             return True
-        return False
 
     def maa_kõrgus(px,lai,obj=põrand):
         global mk
@@ -564,7 +513,7 @@ def main_loop():
                     quit()
             aken.fill((70,70,70))
             
-            TextSurf, TextRect = text_objects("Hummid tampisid su ära...", mediumText)
+            TextSurf, TextRect = text_objects("Hummid tampisid su ära...", largeText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
@@ -605,21 +554,15 @@ def main_loop():
             TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
             TextRect.center = ((laius // 2), (100))
             aken.blit(TextSurf, TextRect)
-
-            TextSurf, TextRect = text_objects("(Sul on käes "+str(Relvad.instance.nimi)+")", mediumText)
-            TextRect.center = ((laius // 2), (230))
-            aken.blit(TextSurf, TextRect)
+            
+        
             
             nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
             #Relva valik
-            if ling.unlocked:
-                nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
-            if hernepüss.unlocked:
-                nupp("Ma sain hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
-            if kartulikahur.unlocked:
-                nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
-            if railgun.unlocked:
-                nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100,100,100), (200,200,200), railgun_equip)
+            nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+            nupp("Ma leidsin hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+            nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+            nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100, 100, 100), (200, 200, 200), railgun_equip)
             
             pg.display.update()
             
@@ -628,17 +571,16 @@ def main_loop():
         inventory_tab = False
         
     def ling_equip():
-        if ling.unlocked:
-            Relvad.instance = ling      
+        ling.equip()
+        
     def hernepüss_equip():
-        if hernepüss.unlocked:
-            Relvad.instance = hernepüss
+        hernepüss.equip()
+    
     def kartulikahur_equip():
-        if kartulikahur.unlocked:
-            Relvad.instance = kartulikahur
+        kartulikahur.equip()
+        
     def railgun_equip():
-        if railgun.unlocked:
-            Relvad.instance = railgun
+        railgun.equip()
         
 
     #VARS ja objektid
@@ -649,29 +591,33 @@ def main_loop():
         global screen
         screen = 0
         global screenid
-        screenid = {0:["põrand(1150,1200,250)","põrand(100,200,400)","põrand(700,850,400)"]}
-        #platformid
-        o = 0
-        for sc in screenid[screen]:
-            exec("plat"+str(o)+" = "+sc)
-            o += 1
+        screenid = {
+        -1:["põrand(750+400,800+400,250)"],
+        0:["põrand(750+400,800+400,250)","põrand(100,200,400)","põrand(700,850,400)"],
+        1:["põrand(10+400,800+400,250)","põrand(100,400,400)","põrand(700,720,600)"]
+        }
+        #uued platformide objektid
+        for o in range(len(screenid[screen])):
+            exec("plat"+str(o)+" = "+screenid[screen][o])
+        
         #Tomi asjad
         Tom = Player(580, 100, 40, 60)
-        global vh
         vh = Tom.vh
         Tom.vh = 0
+        #Kuulid
+        #kuul = None #Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
         #Pahad
         paha = Vastane(400, 0, 500, 5, 10,True)
         paha.y = põrand1.y-paha.pikkus
-        paha1 = Vastane(900, 0, 1100, 15, 2,False)
+        paha1 = Vastane(100, 0, 400, 15, 2,False)
         paha1.y = põrand1.y-paha1.pikkus
         #Relvad
-        ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling")
-        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss")
-        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur")
-        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset")
+        ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True)
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False)
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, True)
+        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True)
         #Et mängjal oleks alguses relv
-        ling_equip()
+        ling.equip()
 
         #vars
         kuulid = []
@@ -816,16 +762,14 @@ def main_loop():
         if Tom.kb != 0:
             Tom.värv = (255, 0, 0)
             if Tom.vh > 0:
-                F = -(0.5*Tom.m*(lükkaja_v**2)) #/2
-                if F < 0 and pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                    Tom.x += (F*dt*Tom.kb)/3
-                if F > 0 and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                    Tom.x += (F*dt*Tom.kb)/3
+                F = (0.5*Tom.m*(lükkaja_v**2)) #/2
+                #if pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus) and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus): ÜRITUS FIXIDA SEDA KINNI JÄÄMIST KNOCKBACKIS
+                Tom.x -= (F*dt*Tom.kb)/3
             else:
-                F = (0.5*Tom.m*(Tom.vh**2)) #/2
+                F = -(0.5*Tom.m*(Tom.vh**2)) #/2
                 Tom.kontr = True
             
-            Tom.y += (F*dt)/2
+            Tom.y -= (F*dt)/2
             
             Tom.vh -= 1
             lükkaja_v -= 1
@@ -859,9 +803,43 @@ def main_loop():
                 raha.raha_maas -= 1
                 Tom.raha += 1
         
-        #vaheta screeni
-        #if Tom.vel*dt < (laius - Tom.x - Tom.laius):
-        #    vaheta_screeni(screen,True)
+        #vaheta screeni paremale
+        if Tom.x+Tom.laius/2 > laius:
+            #tom spawn
+            Tom.x = 0-Tom.laius/2
+            #kustuta eelmised
+            for rii in põrand.instances:
+                rii.instances.remove(rii)
+            #kuhu poole
+            screen += 1
+            #uued platformide objektid
+            põrand1 = põrand(0,laius,500)
+            for o in range(len(screenid[screen])):
+                exec("plat"+str(o)+" = "+screenid[screen][o])
+            #vaenlased liigutada
+            for vaenlane in Vastane.instances:
+                vaenlane.x -= laius
+            #uued vaenlased
+            #veel implementimata
+        #vaheta screeni vasakule
+        if Tom.x+Tom.laius/2 < 0:
+            #tom spawn
+            Tom.x = laius-Tom.laius/2
+            #kustuta eelmised platvormid
+            for rii in põrand.instances:
+                rii.instances.remove(rii)
+            #kuhu poole
+            screen -= 1
+            #uued platformide objektid
+            põrand1 = põrand(0,laius,500)
+            for o in range(len(screenid[screen])):
+                exec("plat"+str(o)+" = "+screenid[screen][o])
+            #vaenlased liigutada
+            for vaenlane in Vastane.instances:
+                vaenlane.x += laius
+            #uued vaenlased
+            #veel implementimata
+
 
         #PAUSE MENU
         if keys[pg.K_p]:
