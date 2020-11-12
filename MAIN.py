@@ -507,10 +507,13 @@ def main_loop():
         dt = clock.tick(30)
     
     def pole_sein_v(v,x,y,lai,pikk,umb=0,obj=põrand):
+        #absoluutväärtus vel
+        if v < 0:
+            v = -v
         #seinad vasakule minnes
         for i in obj.instances:
-            print("seinvasakul"+str(x))
             if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                print("seinvasakul"+str(x))
                 return False
         return True
         
@@ -756,11 +759,11 @@ def main_loop():
                                 vastane_valu2.play()
 
                 #sein
-                if not pole_sein_v(kuul.vel,kuul.x,kuul.y,0,0,9):
+                if not pole_sein_v(kuul.vel,kuul.x,kuul.y,3,3,9):
                     if kuul in kuulid:
                         kuulid.pop(kuulid.index(kuul))
                         whit.play()
-                if not pole_sein_p(kuul.vel,kuul.x,kuul.y,0,0,9):
+                if not pole_sein_p(kuul.vel,kuul.x,kuul.y,3,3,9):
                     if kuul in kuulid:
                         kuulid.pop(kuulid.index(kuul))
                         whit.play()
