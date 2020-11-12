@@ -215,7 +215,7 @@ def main_loop():
             self.kontr = True #kas saab kontrollida
             self.elus = True
             self.elud_värv = (0,255,0)
-            self.raha = 0
+            self.raha = 1000
         
         def hit(self):
             if self.health >= self.max_health * 0.8:
@@ -404,17 +404,14 @@ def main_loop():
     class Relvad:
         instance = None
         
-        def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked):
+        def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked, nimi):
             self.dmg = dmg
             self.cd = cd
             self.r = r
             self.värv = värv
             self.vel = vel
             self.unlocked = unlocked
-            
-        def equip(self):
-            if self.unlocked:
-                Relvad.instance = self
+            self.nimi = nimi
                 
     
     def unpause():
@@ -581,15 +578,23 @@ def main_loop():
             TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
             TextRect.center = ((laius // 2), (100))
             aken.blit(TextSurf, TextRect)
-            
-        
+
+            TextSurf, TextRect = text_objects("(Sul on käes "+str(Relvad.instance.nimi)+")", mediumText)
+            TextRect.center = ((laius // 2), (230))
+            aken.blit(TextSurf, TextRect)
+            #käes = smallText.render("Sul on käes "+str(Relvad.instance.nimi), False, (0,0,0))
+            #aken.blit(käes, (laius/3, 250))
             
             nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
             #Relva valik
-            nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
-            nupp("Ma leidsin hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
-            nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
-            nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100, 100, 100), (200, 200, 200), railgun_equip)
+            if ling.unlocked:
+                nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+            if hernepüss.unlocked:
+                nupp("Ma sain hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+            if kartulikahur.unlocked:
+                nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+            if railgun.unlocked:
+                nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100,100,100), (200,200,200), railgun_equip)
             
             pg.display.update()
             
@@ -598,16 +603,20 @@ def main_loop():
         inventory_tab = False
         
     def ling_equip():
-        ling.equip()
+        if ling.unlocked:
+            Relvad.instance = ling
         
     def hernepüss_equip():
-        hernepüss.equip()
+        if hernepüss.unlocked:
+            Relvad.instance = hernepüss
     
     def kartulikahur_equip():
-        kartulikahur.equip()
+        if kartulikahur.unlocked:
+            Relvad.instance = kartulikahur
         
     def railgun_equip():
-        railgun.equip()
+        if railgun.unlocked:
+            Relvad.instance = railgun
         
 
     #VARS ja objektid
@@ -634,12 +643,12 @@ def main_loop():
         paha1 = Vastane(900, 0, 1100, 15, 2,False)
         paha1.y = põrand1.y-paha1.pikkus
         #Relvad
-        ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True)
-        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False)
-        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, True)
-        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True)
+        ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling")
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss")
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, True,"kartulikaur")
+        railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset")
         #Et mängjal oleks alguses relv
-        ling.equip()
+        ling_equip()
 
         #vars
         kuulid = []
