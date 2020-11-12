@@ -264,6 +264,7 @@ def main_loop():
             self.elud_värv = (0,255,0)
             self.raha = 420
             self.armor = 2
+            self.name = "nimi"
         
         def hit(self):    
             if self.health > 1:
