@@ -29,12 +29,19 @@ def text_objects(text, font):
     return textSurface, textSurface.get_rect()
 
 hiir_all = False
+#hoverib = False
+#vana_hover = False
 def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     global hiir_all
+    #global hoverib
+    #global vana_hover
     mouse = pg.mouse.get_pos()
     click = pg.mouse.get_pressed()
-        
+
+    #if vana_hover != hoverib:
+    #    nupp_hover.play()  
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
+        #hoverib = True
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
         hiir_vabastatud = False
@@ -47,9 +54,12 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
 
     else:
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
+        #hoverib = False
     textSurf, textRect = text_objects(text, smallText)
     textRect.center = ((x+x+laius)//2, (y+y+kõrgus)//2)
     aken.blit(textSurf, textRect)
+
+    #vana_hover = hoverib
 
 def intro():
     global mitmes_kord
@@ -242,7 +252,7 @@ def main_loop():
             self.kontr = True #kas saab kontrollida
             self.elus = True
             self.elud_värv = (0,255,0)
-            self.raha = 1000
+            self.raha = 420
         
         def hit(self):
             if self.health >= self.max_health * 0.8:
@@ -271,7 +281,7 @@ def main_loop():
             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
             #raha
             raha = veneText.render(str(self.raha)+" рубль", False, (255,215,0))
-            aken.blit(raha, (laius-100, 20))
+            aken.blit(raha, (laius-200, 20))
             
     class Kuul:
         def __init__(self, x, y, suund):
@@ -709,6 +719,8 @@ def main_loop():
         pg.mixer.Sound.set_volume(whit,0.4)
         raha_pickup = pg.mixer.Sound(helidir+"\gold_pickup.mp3")
         raha_drop = pg.mixer.Sound(helidir+"\gold_drop.mp3")
+        pg.mixer.Sound.set_volume(raha_drop,0.4)
+        pg.mixer.Sound.set_volume(raha_pickup,0.4)
 
     while running:
         
