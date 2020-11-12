@@ -3,11 +3,12 @@ import sys
 from random import randint
 from random import choice
 import os
+#from pathlib import Path
 
 dirr = os.path.dirname(os.path.abspath(__file__))
 #print(dirr)
 global helidir
-helidir = dirr+"\helid"
+helidir = dirr+"/helid/"
 print(helidir)
 
 pg.init()
@@ -20,9 +21,9 @@ pg.display.set_caption('D-day')
 pg.display.flip()
 
 global nupp_hover
-nupp_hover = pg.mixer.Sound(helidir+"\click_h.wav")
+nupp_hover = pg.mixer.Sound(helidir+"/click_h.wav")
 global nupp_klikk
-nupp_klikk = pg.mixer.Sound(helidir+"\click.wav")
+nupp_klikk = pg.mixer.Sound(helidir+"/click.wav")
 
 def text_objects(text, font):
     textSurface = font.render(text, True, (0,0,0))
@@ -66,7 +67,7 @@ def intro():
     mitmes_kord += 1
     if mitmes_kord == 1:
         global intromus
-        intromus = pg.mixer.Sound(helidir+"\delta.mp3")
+        intromus = pg.mixer.Sound(helidir+"/delta.mp3")
         intromus.play()
 
     #Teksdi suurused
@@ -155,8 +156,8 @@ def pood():
     global poes
     poes = True
     global ost
-    ost = pg.mixer.Sound(helidir+"\cash.mp3")
-    tere = pg.mixer.Sound(helidir+"\shop_e.mp3")
+    ost = pg.mixer.Sound(helidir+"/cash.mp3")
+    tere = pg.mixer.Sound(helidir+"/shop_e.mp3")
     tere.play()
 
     while poes:
@@ -194,7 +195,7 @@ kangelane_värv = (113,16,15)
 def pood_done():
     global poes
     poes = False
-    headaega = pg.mixer.Sound(helidir+"\shop_l.mp3")
+    headaega = pg.mixer.Sound(helidir+"/shop_l.mp3")
     headaega.play()
     
 def jõujook_ost():
@@ -457,7 +458,7 @@ def main_loop():
         pause = False
         pos = pg.mixer.music.get_pos()
         pg.mixer.music.stop()
-        pg.mixer.music.load(helidir+"\game.mp3")
+        pg.mixer.music.load(helidir+"/game.mp3")
         start = start + pos/1000.0
         pg.mixer.music.play(-1, start)
     
@@ -695,25 +696,25 @@ def main_loop():
     
     #sound vars, hiljem eraldi class vms
     if True:
-        pg.mixer.music.load(helidir+"\game.mp3")
+        pg.mixer.music.load(helidir+"/game.mp3")
         pg.mixer.music.play(-1)
         pos = 0
         global start
         start = 0
 
-        vastane_valu = pg.mixer.Sound(helidir+"\Zhurt.mp3")
-        vastane_valu2 = pg.mixer.Sound(helidir+"\Zhurt1.mp3")
-        vastane_surm = pg.mixer.Sound(helidir+"\Zdeath.mp3")
-        valu = pg.mixer.Sound(helidir+"\hurt.mp3")
-        psurm = pg.mixer.Sound(helidir+"\death.mp3")
-        shoot = pg.mixer.Sound(helidir+"\shoot.mp3")
-        whit = pg.mixer.Sound(helidir+"\hit.mp3")
-        hop = pg.mixer.Sound(helidir+"\hop.mp3")
-        hop2 = pg.mixer.Sound(helidir+"\hop1.mp3")
+        vastane_valu = pg.mixer.Sound(helidir+"/Zhurt.mp3")
+        vastane_valu2 = pg.mixer.Sound(helidir+"/Zhurt1.mp3")
+        vastane_surm = pg.mixer.Sound(helidir+"/Zdeath.mp3")
+        valu = pg.mixer.Sound(helidir+"/hurt.mp3")
+        psurm = pg.mixer.Sound(helidir+"/death.mp3")
+        shoot = pg.mixer.Sound(helidir+"/shoot.mp3")
+        whit = pg.mixer.Sound(helidir+"/hit.mp3")
+        hop = pg.mixer.Sound(helidir+"/hop.mp3")
+        hop2 = pg.mixer.Sound(helidir+"/hop1.mp3")
         pg.mixer.Sound.set_volume(shoot,0.4)
         pg.mixer.Sound.set_volume(whit,0.4)
-        raha_pickup = pg.mixer.Sound(helidir+"\gold_pickup.mp3")
-        raha_drop = pg.mixer.Sound(helidir+"\gold_drop.mp3")
+        raha_pickup = pg.mixer.Sound(helidir+"/gold_pickup.mp3")
+        raha_drop = pg.mixer.Sound(helidir+"/gold_drop.mp3")
         pg.mixer.Sound.set_volume(raha_drop,0.4)
         pg.mixer.Sound.set_volume(raha_pickup,0.4)
 
@@ -888,6 +889,7 @@ def main_loop():
             #vaenlased liigutada
             for vaenlane in Vastane.instances:
                 vaenlane.x -= laius
+                #vaenlane.
             #uued vaenlased
             #veel implementimata
         #vaheta screeni vasakule
@@ -914,7 +916,7 @@ def main_loop():
             pause = True
             pos = pg.mixer.music.get_pos()
             pg.mixer.music.stop()
-            pg.mixer.music.load(helidir+"\game_filt.mp3")
+            pg.mixer.music.load(helidir+"/game_filt.mp3")
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
