@@ -303,13 +303,14 @@ def main_loop():
             self.elus = True
             self.elud_värv = (0,255,0)
             self.raha = 420
-            self.armor = 2
+            self.armor = 10
             self.name = "nimi"
         
         def hit(self):    
             if self.health > 1:
-                self.health -= 1 / self.armor
+                self.health = round(self.health - 1 / self.armor, 2)
                 self.x -= 20
+                
             else:
                 self.elus = False
                 surm()
@@ -324,6 +325,9 @@ def main_loop():
                 self.elud_värv = (255,100,0)
             else:
                 self.elud_värv = (255,50,0)
+            #Elud muudab int kui täisarv
+            if round(self.health, 1) % 1 == 0:
+                    self.health = int(self.health)
             #elud
             pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
             pg.draw.rect(aken, self.elud_värv,(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
