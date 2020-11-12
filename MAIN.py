@@ -12,7 +12,7 @@ print(helidir)
 
 pg.init()
 
-
+mitmes_kord = 0
 laius = 1280
 kõrgus = 720
 aken = pg.display.set_mode((laius, kõrgus))
@@ -52,7 +52,13 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     aken.blit(textSurf, textRect)
 
 def intro():
-    
+    global mitmes_kord
+    mitmes_kord += 1
+    if mitmes_kord == 1:
+        global intromus
+        intromus = pg.mixer.Sound(helidir+"\delta.mp3")
+        intromus.play()
+
     #Teksdi suurused
     global largeText
     largeText = pg.font.Font("RL.ttf", 150)
@@ -74,6 +80,16 @@ def intro():
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
+
+        #kontrollid
+        kontrollid = smallText.render("liigu: wasd", False, (0,0,0))
+        aken.blit(kontrollid, (laius-300, 20))
+        kontrollid = smallText.render("tulista: space", False, (0,0,0))
+        aken.blit(kontrollid, (laius-300, 40))
+        kontrollid = smallText.render("menüü: p", False, (0,0,0))
+        aken.blit(kontrollid, (laius-300, 60))
+        kontrollid = smallText.render("KONTROLLID:", False, (0,0,0))
+        aken.blit(kontrollid, (laius-300, 0))
         
         nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
         nupp("Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)
@@ -177,6 +193,8 @@ def main_loop():
     global hernepüss
     global pause
     
+    intromus.stop()
+
     class Player:
         def __init__(self, x, y, laius, pikkus):
             self.x = x
@@ -242,7 +260,7 @@ def main_loop():
     class raha:
         raha_maas = 0
         instances = []
-        def __init__(self,x,y,v,suund,xoff):
+        def __init__(self,x,y,v,suund,xoff,mkr):
             self.__class__.instances.append(self)
             self.x = x
             self.y = y
@@ -250,13 +268,14 @@ def main_loop():
             self.suund = suund
             self.xoff = xoff
             self.kukkumas = True
+            self.mkr = mkr
         
         def kukub(self):
             self.y += 0.5*(self.v**2)*dt
             self.x += self.xoff 
             self.v -= 1
-            if self.y >= mk:
-                self.y = mk
+            if self.y+5 >= self.mkr:
+                self.y = self.mkr-5
                 self.kukkumas = False
         
         def draw(self, aken):
@@ -325,7 +344,7 @@ def main_loop():
                             self.x += self.vel*dt
                         else:
                             self.tagane = False
-            
+            #path
             else:
                 if self.vel > 0:
                     if self.vel + self.x < self.path[1]:
@@ -360,7 +379,7 @@ def main_loop():
             self.health -= Relvad.instance.dmg
             if self.health <= 0:
                 for ugu in range(randint(3,6)):
-                    vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10))
+                    vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus)
                     raha.raha_maas += 1
                 self.elus = False
                 vastane_surm.play()
@@ -463,17 +482,6 @@ def main_loop():
                     return False
             return True
         return False
-
-    """def vaheta_screeni(hetkescreen,paremale):
-        global screen
-        if paremale:
-            screen += 1
-        else:
-            screen -= 1
-        o = 0
-        for sc in screenid[screen]:
-            exec("plat"+str(o)+" = "+sc)
-            o += 1"""
         
     def pole_sein_p(v,x,y,lai,pikk,umb=0,obj=põrand):
         #pole window parem äär
@@ -610,7 +618,8 @@ def main_loop():
         global screen
         screen = 0
         global screenid
-        screenid = {0:["põrand(750+400,800+400,250)","põrand(100,200,400)","põrand(700,850,400)"]}
+        screenid = {0:["põrand(1150,1200,250)","põrand(100,200,400)","põrand(700,850,400)"]}
+        #platformid
         o = 0
         for sc in screenid[screen]:
             exec("plat"+str(o)+" = "+sc)
@@ -619,12 +628,10 @@ def main_loop():
         Tom = Player(580, 100, 40, 60)
         vh = Tom.vh
         Tom.vh = 0
-        #Kuulid
-        #kuul = None #Kuul(laius + Tom.x // 2, kõrgus + Tom.y // 2, Tom.vaatab)
         #Pahad
         paha = Vastane(400, 0, 500, 5, 10,True)
         paha.y = põrand1.y-paha.pikkus
-        paha1 = Vastane(100, 0, 400, 15, 2,False)
+        paha1 = Vastane(900, 0, 1100, 15, 2,False)
         paha1.y = põrand1.y-paha1.pikkus
         #Relvad
         ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True)
@@ -777,14 +784,16 @@ def main_loop():
         if Tom.kb != 0:
             Tom.värv = (255, 0, 0)
             if Tom.vh > 0:
-                F = (0.5*Tom.m*(lükkaja_v**2)) #/2
-                #if pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus) and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus): ÜRITUS FIXIDA SEDA KINNI JÄÄMIST KNOCKBACKIS
-                Tom.x -= (F*dt*Tom.kb)/3
+                F = -(0.5*Tom.m*(lükkaja_v**2)) #/2
+                if F < 0 and pole_sein_p(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                    Tom.x += (F*dt*Tom.kb)/3
+                if F > 0 and pole_sein_v(Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                    Tom.x += (F*dt*Tom.kb)/3
             else:
-                F = -(0.5*Tom.m*(Tom.vh**2)) #/2
+                F = (0.5*Tom.m*(Tom.vh**2)) #/2
                 Tom.kontr = True
             
-            Tom.y -= (F*dt)/2
+            Tom.y += (F*dt)/2
             
             Tom.vh -= 1
             lükkaja_v -= 1
