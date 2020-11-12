@@ -61,14 +61,19 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     aken.blit(textSurf, textRect)
 
     #vana_hover = hoverib
+    
+    
+    
+    
+    
 
 def intro():
     global mitmes_kord
     mitmes_kord += 1
     if mitmes_kord == 1:
         global intromus
-        intromus = pg.mixer.Sound(helidir+"/delta.mp3")
-        intromus.play()
+        #intromus = pg.mixer.Sound(helidir+"/delta.mp3")
+        #intromus.play()
 
     #Teksdi suurused
     global largeText
@@ -201,7 +206,10 @@ def pood_done():
 def jõujook_ost():
     if Tom.raha >= 1:
         Tom.raha -= 1
-        Tom.health += 1
+        if Tom.max_health - Tom.health >= 1:
+            Tom.health += 1
+        else:
+            Tom.health += Tom.max_health - Tom.health
         ost.play()
         
 def hernepüss_ost():
@@ -227,11 +235,12 @@ def ritaliin_ost():
 
 def main_loop():
     global Tom
+    global Relvad
     global hernepüss
     global kartulikahur
     global pause
     
-    intromus.stop()
+    #intromus.stop()
 
     class Player:
         def __init__(self, x, y, laius, pikkus):
@@ -254,10 +263,11 @@ def main_loop():
             self.elus = True
             self.elud_värv = (0,255,0)
             self.raha = 420
+            self.armor = 2
         
         def hit(self):    
             if self.health > 1:
-                self.health -= 1
+                self.health -= 1 / self.armor
                 self.x -= 20
             else:
                 self.elus = False
@@ -502,6 +512,8 @@ def main_loop():
             rah.draw(aken)
         for kuul in kuulid:
             kuul.draw(aken)
+            
+        databar()
         
         pg.display.update()
         dt = clock.tick(30)
@@ -649,6 +661,38 @@ def main_loop():
     def railgun_equip():
         if railgun.unlocked:
             Relvad.instance = railgun
+            
+    def databar():
+        pg.draw.rect(aken, (25,25,25), (238, 598, 804, 124))
+        pg.draw.rect(aken, (50,50,50), (240, 600, 800, 120))
+        #Fondid
+        databarText = pg.font.Font("RM.ttf", 15)
+        #healthbar
+        pg.draw.rect(aken, (100,0,0), (340, 625, 600, 20))
+        pg.draw.rect(aken, (200,0,0), (342, 627, 596 * (Tom.health / Tom.max_health), 16))
+        TextSurf, TextRect = text_objects(str(Tom.health) + " / " + str(Tom.max_health), databarText)
+        TextRect.center = ((laius // 2), (635))
+        aken.blit(TextSurf, TextRect)
+        
+        #Displayb tegelase suurused
+        #Kiirus
+        TextSurf, TextRect = text_objects("Kiirus : " + str(Tom.vel), databarText)
+        TextRect.center = ((laius // 2), (660))
+        aken.blit(TextSurf, TextRect)
+        #Relv
+        TextSurf, TextRect = text_objects("Relv : " + str(Relvad.instance.nimi), databarText)
+        TextRect.center = ((laius // 2), (680))
+        aken.blit(TextSurf, TextRect)
+        #Raha
+        raha = databarText.render(str(Tom.raha)+" рубль", True, (255,215,0))
+        aken.blit(raha, (915, 650))
+        nupp("Konsumisse", 875, 675, 150, 25, (100,100,100), (200,200,200), pood)
+        #Turvis
+        TextSurf, TextRect = text_objects("Turvise väärtus : " + str(Tom.armor), databarText)
+        TextRect.center = ((laius // 2), (700))
+        aken.blit(TextSurf, TextRect)
+        #Nupp inventoryle
+        nupp("Seljakott", 260, 675, 150, 25, (100,100,100), (200,200,200), inventory)
         
 
     #VARS ja objektid
