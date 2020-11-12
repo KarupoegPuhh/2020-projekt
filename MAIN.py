@@ -98,13 +98,13 @@ def intro():
         aken.blit(TextSurf, TextRect)
 
         #kontrollid
-        kontrollid = smallText.render("liigu: wasd", False, (0,0,0))
+        kontrollid = smallText.render("liigu: wasd", True, (0,0,0))
         aken.blit(kontrollid, (laius-300, 20))
-        kontrollid = smallText.render("tulista: space", False, (0,0,0))
+        kontrollid = smallText.render("tulista: space", True, (0,0,0))
         aken.blit(kontrollid, (laius-300, 40))
-        kontrollid = smallText.render("menüü: p", False, (0,0,0))
+        kontrollid = smallText.render("menüü: p", True, (0,0,0))
         aken.blit(kontrollid, (laius-300, 60))
-        kontrollid = smallText.render("KONTROLLID:", False, (0,0,0))
+        kontrollid = smallText.render("KONTROLLID:", True, (0,0,0))
         aken.blit(kontrollid, (laius-300, 0))
         
         nupp("Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), main_loop)
@@ -204,7 +204,7 @@ def pood():
         if not kartulikahur.unlocked:
             nupp("kartul! -4₽", 540 , 400, 200, 100, (80,5,94), (130,55,144), kartulikahur_ost)
         
-        raha = veneText.render(str(Tom.raha)+" рубль", False, (255,215,0))
+        raha = veneText.render(str(Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (laius-200, 20))
         
         pg.display.update()
@@ -304,7 +304,7 @@ def main_loop():
             pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
             #raha
-            raha = veneText.render(str(self.raha)+" рубль", False, (255,215,0))
+            raha = veneText.render(str(self.raha)+" рубль", True, (255,215,0))
             aken.blit(raha, (laius-200, 20))
             
     class Kuul:
@@ -381,7 +381,7 @@ def main_loop():
                         self.oota = 30*5
                 #jälitab
                 if self.jälitab:
-                    if Tom.x+Tom.laius/2 > self.x+self.laius/2:
+                    if Tom.x > self.x+self.laius/2:
                         if pole_sein_p(self.vel,self.x,self.y,self.laius,self.pikkus):
                             self.x += self.vel*dt
                             #self.seisab = False
@@ -532,9 +532,13 @@ def main_loop():
         dt = clock.tick(30)
     
     def pole_sein_v(v,x,y,lai,pikk,umb=0,obj=põrand):
+        #absoluutväärtus vel
+        if v < 0:
+            v = -v
         #seinad vasakule minnes
         for i in obj.instances:
             if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                print("seinvasakul"+str(x))
                 return False
         return True
         
@@ -542,8 +546,9 @@ def main_loop():
         #seinad paremale minnes
         for i in obj.instances:
             if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                #print("sein paremal"+str(x)
                 return False
-            return True
+        return True
 
     def maa_kõrgus(px,lai,obj=põrand):
         global mk
@@ -626,41 +631,56 @@ def main_loop():
                 nupp("Aitab kah...", laius/2-100 , 500 , 200, 100, (100,100,0), (255,255,0), intro)
                 
                 pg.display.update()
-                
-    def inventory():
-        global inventory_tab
-        inventory_tab = True
-        while inventory_tab:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    quit()
-                    
-            aken.fill((70,70,70))
-            TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
-            TextRect.center = ((laius // 2), (100))
-            aken.blit(TextSurf, TextRect)
 
-            TextSurf, TextRect = text_objects("(Sul on käes "+str(Relvad.instance.nimi)+")", mediumText)
-            TextRect.center = ((laius // 2), (230))
-            aken.blit(TextSurf, TextRect)
+    #inventory
+    if True:    
+        def inventory():
+            global inventory_tab
+            inventory_tab = True
+            while inventory_tab:
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        pg.quit()
+                        quit()
+                        
+                aken.fill((70,70,70))
+                TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
+                TextRect.center = ((laius // 2), (100))
+                aken.blit(TextSurf, TextRect)
+
+                TextSurf, TextRect = text_objects("(Sul on käes "+str(Relvad.instance.nimi)+")", mediumText)
+                TextRect.center = ((laius // 2), (230))
+                aken.blit(TextSurf, TextRect)
+                
+                nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
+                #Relva valik
+                if ling.unlocked:
+                    nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+                if hernepüss.unlocked:
+                    nupp("Ma sain hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+                if kartulikahur.unlocked:
+                    nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+                if railgun.unlocked:
+                    nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100,100,100), (200,200,200), railgun_equip)
+                
+                pg.display.update()
+                
+        def invent_stop():
+            global inventory_tab
+            inventory_tab = False
             
-            nupp("Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
-            #Relva valik
+        def ling_equip():
             if ling.unlocked:
-                nupp("lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
+                Relvad.instance = ling      
+        def hernepüss_equip():
             if hernepüss.unlocked:
-                nupp("Ma sain hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
+                Relvad.instance = hernepüss
+        def kartulikahur_equip():
             if kartulikahur.unlocked:
-                nupp("Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
+                Relvad.instance = kartulikahur
+        def railgun_equip():
             if railgun.unlocked:
-                nupp("Tulevik in nüüd, vanamees!", 540, 450, 200, 100, (100,100,100), (200,200,200), railgun_equip)
-            
-            pg.display.update()
-            
-    def invent_stop():
-        global inventory_tab
-        inventory_tab = False
+                Relvad.instance = railgun
         
     def ling_equip():
         if ling.unlocked:
@@ -768,7 +788,7 @@ def main_loop():
         global eelmine_mk
         eelmine_mk = 500
     
-    #sound vars, hiljem eraldi class vms
+    #sound vars, hiljem eraldi class vms?
     if True:
         pg.mixer.music.load(helidir+"/game.mp3")
         pg.mixer.music.play(-1)
@@ -819,11 +839,11 @@ def main_loop():
                                 vastane_valu2.play()
 
                 #sein
-                if not pole_sein_v(kuul.vel,kuul.x,kuul.y,0,0,5):
+                if not pole_sein_v(kuul.vel,kuul.x,kuul.y,3,3,9):
                     if kuul in kuulid:
                         kuulid.pop(kuulid.index(kuul))
                         whit.play()
-                if not pole_sein_p(kuul.vel,kuul.x,kuul.y,0,0,5):
+                if not pole_sein_p(kuul.vel,kuul.x,kuul.y,3,3,9):
                     if kuul in kuulid:
                         kuulid.pop(kuulid.index(kuul))
                         whit.play()
@@ -921,7 +941,9 @@ def main_loop():
                 Tom.y = mk-Tom.pikkus
                 Tom.kb = 0
                 Tom.vh = vh
-                Tom.värv = (0, 255, 0)
+                Tom.värv = värvike
+        else:
+            värvike = Tom.värv
 
         #TULISTAMINE
         if keys[pg.K_SPACE] and kuulide_cd == 0:
