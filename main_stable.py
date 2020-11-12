@@ -252,7 +252,7 @@ def main_loop():
             self.kontr = True #kas saab kontrollida
             self.elus = True
             self.elud_värv = (0,255,0)
-            self.raha = 420
+            self.raha = 5
         
         def hit(self):
             if self.health >= self.max_health * 0.8:
