@@ -180,6 +180,7 @@ def pood():
     tere.play()
 
     while poes:
+        mouse = pg.mouse.get_pos()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
@@ -197,12 +198,39 @@ def pood():
         #Relva valik
         if Tom.health < Tom.max_health:
             nupp("Jõujooki! -1₽", 170, 200, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
+            if 170 < mouse[0] < 370 and 200 < mouse[1] < 300:
+                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
+                JJ = smallText.render("Saad 1 hp juurde", True, (200,200,200))
+                JJ_kord = JJ.get_rect()
+                JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
+                aken.blit(JJ, JJ_kord)
+                
         if not hernepüss.unlocked:    
             nupp("Hernepüssi! -3₽", 540, 200, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
+            if 540 < mouse[0] < 740 and 200 < mouse[1] < 300:
+                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
+                hernepüss_txt = smallText.render("Püstolkuulipilduja", True, (200,200,200))
+                hernepüss_txt_kord = hernepüss_txt.get_rect()
+                hernepüss_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
+                aken.blit(hernepüss_txt, hernepüss_txt_kord)
+                
         if Tom.vel <= 20:
             nupp("Ritaliini! -1₽", 910 , 200, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
+            if 910 < mouse[0] < 1110 and 200 < mouse[1] < 300:
+                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
+                ritaliin_txt = smallText.render("Mmmm... maitsev", True, (200,200,200))
+                ritaliin_txt_kord = ritaliin_txt.get_rect()
+                ritaliin_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
+                aken.blit(ritaliin_txt, ritaliin_txt_kord)
+            
         if not kartulikahur.unlocked:
             nupp("kartul! -4₽", 540 , 400, 200, 100, (80,5,94), (130,55,144), kartulikahur_ost)
+            if 540 < mouse[0] < 740 and 400 < mouse[1] < 500:
+                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
+                potato_txt = smallText.render("SeE oN hIigLasLiK!", True, (200,200,200))
+                potato_txt_kord = potato_txt.get_rect()
+                potato_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
+                aken.blit(potato_txt, potato_txt_kord)
         
         raha = veneText.render(str(Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (laius-200, 20))
