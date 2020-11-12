@@ -453,37 +453,18 @@ def main_loop():
         dt = clock.tick(30)
     
     def pole_sein_v(v,x,y,lai,pikk,umb=0,obj=põrand):
-        #pole window vasak äär
-        if v < 0:
-            v = -v
-        if v*dt < x:
-            #seinad vasakule minnes
-            for i in obj.instances:
-                if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
-                    return False
-            return True
-        return False
-
-    """def vaheta_screeni(hetkescreen,paremale):
-        global screen
-        if paremale:
-            screen += 1
-        else:
-            screen -= 1
-        o = 0
-        for sc in screenid[screen]:
-            exec("plat"+str(o)+" = "+sc)
-            o += 1"""
+        #seinad vasakule minnes
+        for i in obj.instances:
+            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                return False
+        return True
         
     def pole_sein_p(v,x,y,lai,pikk,umb=0,obj=põrand):
-        #pole window parem äär
-        if v*dt < (laius - x - lai):
-            #seinad paremale minnes
-            for i in obj.instances:
-                if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
-                    return False
+        #seinad paremale minnes
+        for i in obj.instances:
+            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                return False
             return True
-        return False
 
     def maa_kõrgus(px,lai,obj=põrand):
         global mk
@@ -610,11 +591,15 @@ def main_loop():
         global screen
         screen = 0
         global screenid
-        screenid = {0:["põrand(750+400,800+400,250)","põrand(100,200,400)","põrand(700,850,400)"]}
-        o = 0
-        for sc in screenid[screen]:
-            exec("plat"+str(o)+" = "+sc)
-            o += 1
+        screenid = {
+        -1:["põrand(750+400,800+400,250)"],
+        0:["põrand(750+400,800+400,250)","põrand(100,200,400)","põrand(700,850,400)"],
+        1:["põrand(10+400,800+400,250)","põrand(100,400,400)","põrand(700,720,600)"]
+        }
+        #uued platformide objektid
+        for o in range(len(screenid[screen])):
+            exec("plat"+str(o)+" = "+screenid[screen][o])
+        
         #Tomi asjad
         Tom = Player(580, 100, 40, 60)
         vh = Tom.vh
@@ -818,9 +803,43 @@ def main_loop():
                 raha.raha_maas -= 1
                 Tom.raha += 1
         
-        #vaheta screeni
-        #if Tom.vel*dt < (laius - Tom.x - Tom.laius):
-        #    vaheta_screeni(screen,True)
+        #vaheta screeni paremale
+        if Tom.x+Tom.laius/2 > laius:
+            #tom spawn
+            Tom.x = 0-Tom.laius/2
+            #kustuta eelmised
+            for rii in põrand.instances:
+                rii.instances.remove(rii)
+            #kuhu poole
+            screen += 1
+            #uued platformide objektid
+            põrand1 = põrand(0,laius,500)
+            for o in range(len(screenid[screen])):
+                exec("plat"+str(o)+" = "+screenid[screen][o])
+            #vaenlased liigutada
+            for vaenlane in Vastane.instances:
+                vaenlane.x -= laius
+            #uued vaenlased
+            #veel implementimata
+        #vaheta screeni vasakule
+        if Tom.x+Tom.laius/2 < 0:
+            #tom spawn
+            Tom.x = laius-Tom.laius/2
+            #kustuta eelmised platvormid
+            for rii in põrand.instances:
+                rii.instances.remove(rii)
+            #kuhu poole
+            screen -= 1
+            #uued platformide objektid
+            põrand1 = põrand(0,laius,500)
+            for o in range(len(screenid[screen])):
+                exec("plat"+str(o)+" = "+screenid[screen][o])
+            #vaenlased liigutada
+            for vaenlane in Vastane.instances:
+                vaenlane.x += laius
+            #uued vaenlased
+            #veel implementimata
+
 
         #PAUSE MENU
         if keys[pg.K_p]:
