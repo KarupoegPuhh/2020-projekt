@@ -130,28 +130,42 @@ def vali_sõdalane():
         
         nupp("Valik tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), sõdalane_valitud)
         #Relva valik
-        nupp("Tahan olla kuninglik!", 170, 300, 200, 100, (113,16,15), (163,66,65), esimene_sõdalane)
+        nupp("Deus Vult!", 170, 300, 200, 100, (150,150,150), (250,250,250), esimene_sõdalane)
         nupp("Tahan olla camo!", 540, 300, 200, 100, (112,130,56), (162,180,106), teine_sõdalane)
         nupp("Vidi vini vici", 910 , 300, 200, 100, (80,5,94), (130,55,144), kolmas_sõdalane)
         
         pg.display.update()
         
-kangelane_värv = (113,16,15)        
+kangelane_värv = (255,255,255)
+kangelane_nimi = "Jeesus Kristus"
+kangelane_pilt = pg.image.load("jesus.png")
 def sõdalane_valitud():
     global valin_sõdalane
     valin_sõdalane = False
     
 def esimene_sõdalane():
+    global kangelane_nimi
     global kangelane_värv
-    kangelane_värv = (113,16,15)    
+    global kangelane_pilt
+    kangelane_värv = (255,255,255)
+    kangelane_nimi = "Jeesus Kristus"
+    kangelane_pilt = pg.image.load("jesus.png")
         
 def teine_sõdalane():
+    global kangelane_nimi
     global kangelane_värv
+    global kangelane_pilt
     kangelane_värv = (112,130,56)
+    kangelane_nimi = "al-Assad"
+    kangelane_pilt = pg.image.load("bashar.png")
 
 def kolmas_sõdalane():
+    global kangelane_nimi
     global kangelane_värv
+    global kangelane_pilt
     kangelane_värv = (80,5,94)
+    kangelane_nimi = "Julius Caesar"
+    kangelane_pilt = pg.image.load("JC_120x120.png")
     
 def pood():
     global Tom
@@ -194,8 +208,6 @@ def pood():
         aken.blit(raha, (laius-200, 20))
         
         pg.display.update()
-        
-kangelane_värv = (113,16,15)
 
 def pood_done():
     global poes
@@ -674,6 +686,16 @@ def main_loop():
         TextSurf, TextRect = text_objects(str(Tom.health) + " / " + str(Tom.max_health), databarText)
         TextRect.center = ((laius // 2), (635))
         aken.blit(TextSurf, TextRect)
+        
+        #Pilt tegelase jaoks
+        pg.draw.rect(aken, (25,25,25), (0, 570, 124, 200))
+        pg.draw.rect(aken, (50,50,50), (2, 600, 120, 120))
+        aken.blit(kangelane_pilt, (2,600))
+        ##Tegelase nimi
+        nimi = databarText.render(kangelane_nimi, True, (200,200,200))
+        nimi_kord = nimi.get_rect()
+        nimi_kord.center = (60, 585)
+        aken.blit(nimi, nimi_kord)
         
         #Displayb tegelase suurused
         #Kiirus
