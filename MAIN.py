@@ -6,9 +6,9 @@ import os
 #from pathlib import Path
 
 dirr = os.path.dirname(os.path.abspath(__file__))
-#print(dirr)
+print(dirr)
 global helidir
-helidir = dirr+"/helid/"
+helidir = dirr+"/helid"
 print(helidir)
 
 pg.init()
