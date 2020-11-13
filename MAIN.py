@@ -521,17 +521,21 @@ def main_loop():
             self.kõrgus = 60
             self.aeg = 0
             
-        def equipped(self):
-            if self.unlocked:
+        def equip(self):
+            if not self.equipped:
                 self.equipped = True
+                Tom.armor += self.armor
+                
+        def unequip(self):
+            if self.equipped:
+                self.equipped = False
+                Tom.armor -= self.armor
                 
         def draw(self):
             if not self.unlocked:
                 pg.draw.rect(aken, (255,255,0), (self.x, self.y, self.laius, self.kõrgus))
             if not self.unlocked and self.x < Tom.x < self.x + self.laius and self.y < Tom.y < self.y + self.kõrgus:
                 self.unlocked = True
-                self.equipped = True
-                Tom.armor += self.armor
                 self.aeg = pg.time.get_ticks()
             self.unlocked_sõnum()
                 
@@ -575,10 +579,76 @@ def main_loop():
         
             nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
             nupp("Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
-            nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
+            nupp("Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), seljakott)
             nupp("Konsum", 540, 450, 200, 100, (0,100,0), (0,255,0), pood)
             
             pg.display.update()
+            
+    def seljakott():
+        global sk
+        sk = True
+        while sk:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+                    
+            aken.fill((70,70,70))
+            TextSurf, TextRect = text_objects("Seljakott", largeText)
+            TextRect.center = ((laius // 2), (170))
+            aken.blit(TextSurf, TextRect)
+            
+            keys = pg.key.get_pressed()
+      
+            if keys [pg.K_i]:
+                inventory()
+            
+        
+            nupp("Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), sk_done)
+            nupp("Riided", 540, 300, 200, 100, (100,100,0), (255,255,0), riided)
+            nupp("Relvad", 910, 300, 200, 100, (0,100,0), (0,255,0), inventory)
+            
+            pg.display.update()
+            
+    def sk_done():
+        global sk
+        sk = False
+        
+    def riided():
+        global riided_m
+        riided_m = True
+        while riided_m:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    quit()
+                    
+            aken.fill((70,70,70))
+            TextSurf, TextRect = text_objects("Riided", largeText)
+            TextRect.center = ((laius // 2), (170))
+            aken.blit(TextSurf, TextRect)
+            
+            keys = pg.key.get_pressed()
+      
+            if keys [pg.K_i]:
+                inventory()
+            
+        
+            nupp("Jätkan!", 540, 600, 200, 100, (0,100,0), (0,255,0), riided_done)
+            
+            if kasukas.unlocked:
+                if not kasukas.equipped:
+                    nupp("Abramovi kasukas", 170, 300, 200, 100, (100,0,0), (200,0,0), kasukas.equip)
+                if kasukas.equipped:
+                    nupp("Abramovi kasukas", 170, 300, 200, 100, (0,100,0), (0,200,0), kasukas.unequip)
+                
+            pg.display.update()
+            
+    def riided_done():
+        global riided_m
+        riided_m = False
+        
+    
     
     def redrawGameWindow():
         aken.fill((21,85,83))
@@ -928,7 +998,7 @@ def main_loop():
         TextRect.center = ((laius // 2), (700))
         aken.blit(TextSurf, TextRect)
         #Nupp inventoryle
-        nupp("Seljakott", 260, 675, 150, 25, (100,100,100), (200,200,200), inventory)
+        nupp("Seljakott", 260, 675, 150, 25, (100,100,100), (200,200,200), seljakott)
         
 
     #VARS ja objektid
