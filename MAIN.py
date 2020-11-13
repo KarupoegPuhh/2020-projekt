@@ -44,7 +44,7 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
         #hoverib = True
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
-        pg.draw.rect(aken, värv_hele, (x-5, y-5, laius, kõrgus))
+        pg.draw.rect(aken, värv_hele, (x-2, y-2, laius, kõrgus))
         hiir_vabastatud = False
         if hiir_all and not click[0]:
             hiir_vabastatud = True
@@ -54,6 +54,7 @@ def nupp(text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
             action()
 
     else:
+        pg.draw.rect(aken, (0,0,0), (x-2, y-1, laius+4, kõrgus+2))
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         #hoverib = False
     textSurf, textRect = text_objects(text, smallText)
@@ -303,7 +304,7 @@ def main_loop():
             self.elus = True
             self.elud_värv = (0,255,0)
             self.raha = 420
-            self.armor = 100
+            self.armor = 1
             self.name = "nimi"
         
         def hit(self):    
@@ -505,7 +506,43 @@ def main_loop():
             self.vel = vel
             self.unlocked = unlocked
             self.nimi = nimi
+            
+    class Varustus:
+        
+        def __init__(self, speed, armor, equipped, unlocked, nimi, x, y):
+            self.armor = armor
+            self.speed = speed
+            self.equipped = equipped
+            self.unlocked = unlocked
+            self.nimi = nimi
+            self.x = x
+            self.y = y
+            self.laius = 60
+            self.kõrgus = 60
+            self.aeg = 0
+            
+        def equipped(self):
+            if self.unlocked:
+                self.equipped = True
                 
+        def draw(self):
+            if not self.unlocked:
+                pg.draw.rect(aken, (255,255,0), (self.x, self.y, self.laius, self.kõrgus))
+            if not self.unlocked and self.x < Tom.x < self.x + self.laius and self.y < Tom.y < self.y + self.kõrgus:
+                self.unlocked = True
+                self.equipped = True
+                Tom.armor += self.armor
+                self.aeg = pg.time.get_ticks()
+            self.unlocked_sõnum()
+                
+        def unlocked_sõnum(self):
+            aeg = pg.time.get_ticks()
+            if self.unlocked and self.aeg + 2000 >= aeg:
+                #self.aeg += 1
+                TextSurf, TextRect = text_objects("Sa leidsid midagi", largeText)
+                TextRect.center = ((laius // 2), (170))
+                aken.blit(TextSurf, TextRect)
+                pg.display.update()
     
     def unpause():
         global pause
@@ -559,6 +596,7 @@ def main_loop():
             kuul.draw(aken)
             
         databar()
+        kasukas.draw()
         
         pg.display.update()
         dt = clock.tick(30)
@@ -925,6 +963,8 @@ def main_loop():
         hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss")
         kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur")
         railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset")
+        #Varustus
+        kasukas = Varustus(0, 5, False, False, "vammus", 130, 325)
         #Et mängjal oleks alguses relv
         ling_equip()
 
