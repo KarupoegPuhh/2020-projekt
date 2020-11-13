@@ -31,12 +31,12 @@ class Vastane:
     def move(self, dt, Tom):
         if self.jälitaja:
             #märkab tomi
-            if abs(self.x+self.laius/2) - abs(Tom.x+Tom.laius/2) < self.nägemiskaugus and self.y == Tom.y and not self.tagane:
+            if abs((self.x+self.laius/2) - (Tom.x+Tom.laius/2)) < self.nägemiskaugus and self.y == Tom.y and not self.tagane:
                 self.jälitab = True
                 self.tagane = False
             if self.jälitab:
                 #lõpetab jälitamise
-                if not abs(self.x+self.laius/2) - abs(Tom.x+Tom.laius/2) < self.nägemiskaugus or self.y and self.y != Tom.y: #and self.seisab:
+                if abs((self.x+self.laius/2) - (Tom.x+Tom.laius/2)) >= self.nägemiskaugus or self.y != Tom.y and not Tom.jump: #and self.seisab:
                     self.jälitab = False
                     self.oota = 30*5
             #jälitab
