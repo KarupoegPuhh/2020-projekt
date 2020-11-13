@@ -2,7 +2,7 @@ import maailm
 import pygame as pg
 from pygame_init import *
 from abi import *
-from Player import *
+from player import *
 
 mitmes_kord = 0
 

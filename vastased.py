@@ -1,13 +1,11 @@
 import pygame as pg
-from põrand import *
-from Player_lisad import *
 from random import randint
 from random import choice
+import maailm
+from player_lisad import *
 
 class Vastane:
-    instances = []
     def __init__(self, x, y, lõpp, vel, health, jälitaja):
-        self.__class__.instances.append(self)
         self.x = x
         self.y = y
         self.xspawn = x
@@ -44,10 +42,10 @@ class Vastane:
             #jälitab
             if self.jälitab:
                 if Tom.x > self.x+self.laius/2:
-                    if pole_sein_p(dt, self.vel,self.x,self.y,self.laius,self.pikkus):
+                    if maailm.pole_sein_p(dt, self.vel,self.x,self.y,self.laius,self.pikkus):
                         self.x += self.vel*dt
                         #self.seisab = False
-                elif pole_sein_v(dt, self.vel,self.x,self.y,self.laius,self.pikkus):
+                elif maailm.pole_sein_v(dt, self.vel,self.x,self.y,self.laius,self.pikkus):
                     self.x -= self.vel*dt
                     #self.seisab = False
                 else:
@@ -89,21 +87,19 @@ class Vastane:
             self.elud_värv = (255,100,0)
         else:
             self.elud_värv = (255,50,0)
-            
-        if self.elus:
-            
-            pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
-            pg.draw.rect(aken, self.elud_värv ,(self.x, self.y-15, self.health * (self.laius // self.max_health), 10))
-            self.hitbox = (self.x -1, self.y -1, self.laius+2, self.pikkus+2)             
-            pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
-            pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
+        
+        pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
+        pg.draw.rect(aken, self.elud_värv ,(self.x, self.y-15, self.health * (self.laius // self.max_health), 10))
+        self.hitbox = (self.x -1, self.y -1, self.laius+2, self.pikkus+2)             
+        pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
+        pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
 
-    def hit(self):
-        self.health -= Relvad.instance.dmg
+    def hit(self, kuul):
+        self.health -= kuul.dmg
         if self.health <= 0:
             for ugu in range(randint(3,6)):
-                vars()["r"+str(raha.raha_maas)] = raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus)
-                raha.raha_maas += 1
+                vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus)
+                maailm.rahad.append(vars()["r"+str(len(maailm.rahad))])
             self.elus = False
             vastane_surm.play()
-            self.instances.remove(self)
+            maailm.vastased.remove(self)

@@ -1,8 +1,9 @@
 import pygame as pg
 import maailm
 from abi import *
-from Player import *
-from Player_lisad import *
+from player import *
+from player_lisad import *
+
 #pood
 def pood():
     global poes
@@ -84,7 +85,7 @@ def inventory():
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
 
-        TextSurf, TextRect = text_objects("(Sul on käes "+str(Relvad.instance.nimi)+")", mediumText)
+        TextSurf, TextRect = text_objects("(Sul on käes "+str(maailm.Tom.relv.nimi)+")", mediumText)
         TextRect.center = ((laius // 2), (230))
         aken.blit(TextSurf, TextRect)
         
@@ -117,16 +118,16 @@ def invent_stop():
     
 def ling_equip():
     if maailm.ling.unlocked:
-        Relvad.instance = maailm.ling      
+        maailm.Tom.relv = maailm.ling      
 def hernepüss_equip():
     if maailm.hernepüss.unlocked:
-        Relvad.instance = maailm.hernepüss
+        maailm.Tom.relv = maailm.hernepüss
 def kartulikahur_equip():
     if maailm.kartulikahur.unlocked:
-        Relvad.instance = maailm.kartulikahur
+        maailm.Tom.relv = maailm.kartulikahur
 def railgun_equip():
     if maailm.railgun.unlocked:
-        Relvad.instance = maailm.railgun
+        maailm.Tom.relv = maailm.railgun
                 
 def pood_done():
     global poes
@@ -160,7 +161,7 @@ def ritaliin_ost():
     if maailm.Tom.raha >= 1:
         maailm.Tom.vel *= 1.5
         maailm.Tom.vh += 1
-        Player.vh += 1
+        maailm.Tom.initial_vh += 1
         maailm.Tom.raha -= 1
         ost.play()
         

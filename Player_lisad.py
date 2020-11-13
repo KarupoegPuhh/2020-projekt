@@ -2,21 +2,19 @@ import pygame as pg
 from abi import *
 
 class Kuul:
-    def __init__(self, x, y, suund):
+    def __init__(self, x, y, suund, relv):
         self.x = x
         self.y = y
-        self.raadius = Relvad.instance.r
-        self.värv = Relvad.instance.värv
-        self.vel = Relvad.instance.vel * suund
+        self.raadius = relv.raadius
+        self.värv = relv.värv
+        self.vel = relv.vel * suund
+        self.dmg = relv.dmg
         
     def draw(self, aken):
         pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
             
-class raha:
-    raha_maas = 0
-    instances = []
+class Raha:
     def __init__(self,x,y,v,suund,xoff,mkr):
-        self.__class__.instances.append(self)
         self.x = x
         self.y = y
         self.v = v
@@ -36,12 +34,10 @@ class raha:
         pg.draw.circle(aken, (255,215,0), (self.x , self.y), 5)
             
 class Relvad:
-    instance = None
-    
-    def __init__(self, dmg, cd, r, värv, vel, equipped, unlocked, nimi, nimi_data):
+    def __init__(self, dmg, cd, raadius, värv, vel, equipped, unlocked, nimi, nimi_data):
         self.dmg = dmg
         self.cd = cd
-        self.r = r
+        self.raadius = raadius
         self.värv = värv
         self.vel = vel
         self.unlocked = unlocked
@@ -49,7 +45,6 @@ class Relvad:
         self.nimi_data = nimi_data
         
 class Varustus:
-        
     def __init__(self, speed, armor, equipped, unlocked, nimi, x, y):
         self.armor = armor
         self.speed = speed

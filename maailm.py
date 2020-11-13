@@ -1,6 +1,6 @@
-from põrand import *
 import pygame as pg
-from Player import *
+from põrand import *
+from player import *
 from vastased import *
 
 
@@ -32,7 +32,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(Vastane.instances) == 0 and raha.raha_maas == 0:
+    if len(vastased) == 0 and len(rahad) == 0:
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
@@ -95,22 +95,84 @@ def paused():
 
 
 def main_loop():
-    
     global pood, seljakott, intro
     from algus import intro
     from pood_invnet import pood, seljakott
     
+    #OBJEKTID
+    global pole_sein_p, pole_sein_v
+    global Tom
+    global kuulid, vastased, põrandad, rahad
+    global hernepüss, kartulikahur, ling, railgun
+    global kasukas
+    
+    #vars
+    kuulid = []
+    kuulide_cd = 0
+    kuulide_maxcount = 500
+    vastased = []
+    põrandad = []
+    rahad = []
+    
+    #level layout
+    põrand1 = Põrand(0,laius,500)#(0,600,500)
+    põrandad.append(põrand1)
+    global screen
+    screen = 0
+    global screenid
+    screenid = {
+    -1:[Põrand(750+400,800+400,250)],
+    0:[Põrand(750+400,800+400,250),Põrand(100,200,400),Põrand(700,850,400)],
+    1:[Põrand(10+400,800+400,250),Põrand(100,400,400),Põrand(700,720,600)]
+    }
+    #uued platformide objektid
+    for o in range(len(screenid[screen])):
+        põrandad.append(screenid[screen][o])
+    
+    #Pahad
+    paha = Vastane(400, 0, 500, 5, 10,True)
+    paha.y = põrand1.y-paha.pikkus
+    paha1 = Vastane(900, 0, 1100, 15, 2,False)
+    paha1.y = põrand1.y-paha1.pikkus
+    vastased.append(paha)
+    vastased.append(paha1)
+    
+    #Relvad
+    ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
+    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss", "AK-47")
+    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
+    railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset", "EMP gun")
+    #Varustus
+    kasukas = Varustus(0, 5, False, False, "vammus", 130, 325)
+    #Et mängjal oleks alguses relv
+    Tom = Player(580, 100, 40, 60, ling)
+
+    clock = pg.time.Clock()
+    global dt
+    dt = 1
+    global mk #maa kõrgus (suurem arv = madalam kõrgus)
+    mk = 500
+    global eelmine_mk
+    eelmine_mk = 500
+
+    #taustamuusika
+    pg.mixer.music.load(helidir+"/game.mp3")
+    pg.mixer.music.play(-1)
+    pos = 0
+    global start
+    start = 0
+    
     def redrawGameWindow():
         aken.fill((21,85,83))
 
-        for prr in põrand.instances:
+        for prr in põrandad:
             prr.draw(aken)
 
         Tom.draw(aken)
-        for p1 in Vastane.instances:
+        for p1 in vastased:
             p1.draw(aken)
         
-        for rah in raha.instances:
+        for rah in rahad:
             rah.draw(aken)
         for kuul in kuulid:
             kuul.draw(aken)
@@ -121,11 +183,11 @@ def main_loop():
         pg.display.update()
         dt = clock.tick(30)
         
-    def maa_kõrgus(px,lai,obj=põrand):
+    def maa_kõrgus(px,lai,obj=põrandad):
         global mk
         eelm_mk = mk
         y = []
-        for i in obj.instances:
+        for i in obj:
             if px >= i.x1-lai and px <= i.x2:
                 #print(i.x1)
                 #print(px+lai)
@@ -137,6 +199,24 @@ def main_loop():
             mk = eelm_mk
         else:
             mk = (min(y))
+
+    def pole_sein_v(dt,v,x,y,lai,pikk,umb=0,obj=põrandad):
+        #absoluutväärtus vel
+        if v < 0:
+            v = -v
+        #seinad vasakule minnes
+        for i in obj:
+            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                return False
+        return True
+        
+    def pole_sein_p(dt,v,x,y,lai,pikk,umb=0,obj=põrandad):
+        #seinad paremale minnes
+        for i in obj:
+            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+                return False
+        return True
+
 
     def databar():
         pg.draw.rect(aken, (25,25,25), (238, 598, 804, 124))
@@ -182,7 +262,7 @@ def main_loop():
         TextRect.center = ((laius // 2), (660))
         aken.blit(TextSurf, TextRect)
         #Relv
-        TextSurf, TextRect = text_objects("Relv : " + str(Relvad.instance.nimi), databarText)
+        TextSurf, TextRect = text_objects("Relv : " + str(Tom.relv.nimi), databarText)
         TextRect.center = ((laius // 2), (680))
         aken.blit(TextSurf, TextRect)
         #Raha
@@ -195,65 +275,7 @@ def main_loop():
         aken.blit(TextSurf, TextRect)
         #Nupp inventoryle
         nupp(aken, "Seljakott", 260, 675, 150, 25, (100,100,100), (200,200,200), seljakott)
-
     
-    #OBJEKTID
-    global Tom
-    global hernepüss, kartulikahur, ling, railgun
-    global kasukas
-    #level layout
-    põrand1 = põrand(0,laius,500)#(0,600,500)
-    global screen
-    screen = 0
-    global screenid
-    screenid = {
-    -1:["põrand(750+400,800+400,250)"],
-    0:["põrand(750+400,800+400,250)","põrand(100,200,400)","põrand(700,850,400)"],
-    1:["põrand(10+400,800+400,250)","põrand(100,400,400)","põrand(700,720,600)"]
-    }
-    #uued platformide objektid
-    for o in range(len(screenid[screen])):
-        exec("plat"+str(o)+" = "+screenid[screen][o])
-
-    #Tomi asjad
-    Tom = Player(580, 100, 40, 60)
-    global vh
-    vh = Tom.vh
-    Tom.vh = 0
-    #Pahad
-    paha = Vastane(400, 0, 500, 5, 10,True)
-    paha.y = põrand1.y-paha.pikkus
-    paha1 = Vastane(900, 0, 1100, 15, 2,False)
-    paha1.y = põrand1.y-paha1.pikkus
-    #Relvad
-    ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
-    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss", "AK-47")
-    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
-    railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset", "EMP gun")
-    #Varustus
-    kasukas = Varustus(0, 5, False, False, "vammus", 130, 325)
-    #Et mängjal oleks alguses relv
-    Relvad.instance = ling
-
-    #vars
-    kuulid = []
-    kuulide_cd = 0
-    kuulide_maxcount = 500
-
-    clock = pg.time.Clock()
-    global dt
-    dt = 1
-    global mk #maa kõrgus (suurem arv = madalam kõrgus)
-    mk = 500
-    global eelmine_mk
-    eelmine_mk = 500
-
-    #taustamuusika
-    pg.mixer.music.load(helidir+"/game.mp3")
-    pg.mixer.music.play(-1)
-    pos = 0
-    global start
-    start = 0
     
     while True:       
         #exit
@@ -266,15 +288,15 @@ def main_loop():
         if True: #lihtsalt et saaks collapsida seda
             if kuulide_cd > 0:
                 kuulide_cd += 1
-            if kuulide_cd > Relvad.instance.cd:
+            if kuulide_cd > Tom.relv.cd:
                 kuulide_cd = 0
             for kuul in kuulid:
                 #Pahade tulistamine
-                for p in Vastane.instances:
+                for p in vastased:
                     if kuul.y - kuul.raadius < p.hitbox[1] + p.hitbox[3] and kuul.y + kuul.raadius > p.hitbox[1] and p.elus:
                         if kuul.x - kuul.raadius < p.hitbox[0] + p.hitbox[2] and kuul.x + kuul.raadius > p.hitbox[0]:
                             kuulid.pop(kuulid.index(kuul))
-                            p.hit() 
+                            p.hit(kuul) 
                             if randint(0,2):
                                 vastane_valu.play()
                             else:
@@ -335,10 +357,10 @@ def main_loop():
                 if Tom.y+Tom.pikkus >= mk:
                     Tom.y = mk-Tom.pikkus
                     Tom.jump = False
-                    Tom.vh = vh
+                    Tom.vh = Tom.initial_vh
         else:
             Tom.jump = False
-            #Tom.vh = vh
+            #Tom.vh = Tom.initial_vh
 
         #tom kukkumine
         if mk > eelmine_mk and not Tom.jump:
@@ -351,10 +373,10 @@ def main_loop():
             if Tom.y+Tom.pikkus >= mk:
                 Tom.y = mk-Tom.pikkus
                 Tom.kukub = False
-                Tom.vh = vh
+                Tom.vh = Tom.initial_vh
         
         #TOM SAAB PIHTA
-        for kuri in Vastane.instances:
+        for kuri in vastased:
             lükkaja_v = Tom.põrkub(kuri, dt)
         #if lükkaja_v < 0:  #lükkaja mõte oli knockback teha vastavaks vastase velocytiga aga see läks segaseks ja ei töötand
         #    lükkaja_v = -lükkaja_v
@@ -382,7 +404,7 @@ def main_loop():
             if Tom.y+Tom.pikkus >= mk:
                 Tom.y = mk-Tom.pikkus
                 Tom.kb = 0
-                Tom.vh = vh
+                Tom.vh = Tom.initial_vh
                 Tom.värv = värvike
         else:
             värvike = Tom.värv
@@ -396,23 +418,22 @@ def main_loop():
                 suund = -1
 
             if len(kuulid) < kuulide_maxcount:  # This will make sure we cannot exceed 5 bullets on the screen at once
-                kuulid.append(Kuul(round(Tom.x+Tom.laius//2+suund*Tom.laius/2), round(Tom.y + Tom.pikkus//2), suund))
+                kuulid.append(Kuul(round(Tom.x+Tom.laius//2+suund*Tom.laius/2), round(Tom.y + Tom.pikkus//2), suund, Tom.relv))
             
             kuulide_cd = 1
         
         #RAHA
-        for ir in raha.instances:
+        for ir in rahad:
             if ir.kukkumas:
                 raha_drop.play()
                 ir.kukub(dt)
             if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x and Tom.y+Tom.pikkus > ir.y-3:
-                ir.instances.remove(ir)
+                rahad.remove(ir)
                 raha_pickup.play()
-                raha.raha_maas -= 1
                 Tom.raha += 1
                 
         #Vastase liikumine
-        for vastane in Vastane.instances:
+        for vastane in vastased:
             if vastane.elus:
                 vastane.move(dt, Tom)
                 
@@ -425,16 +446,17 @@ def main_loop():
             #tom spawn
             Tom.x = 0-Tom.laius/2
             #kustuta eelmised
-            for rii in põrand.instances:
-                rii.instances.remove(rii)
+            for rii in põrandad:
+                põrandad.remove(rii)
             #kuhu poole
             screen += 1
             #uued platformide objektid
-            põrand1 = põrand(0,laius,500)
+            põrand1 = Põrand(0,laius,500)
+            põrandad.append(põrand1)
             for o in range(len(screenid[screen])):
-                exec("plat"+str(o)+" = "+screenid[screen][o])
+                põrandad.append(screenid[screen][o])
             #vaenlased liigutada
-            for vaenlane in Vastane.instances:
+            for vaenlane in vastased:
                 vaenlane.x -= laius
                 #vaenlane.
             #uued vaenlased
@@ -444,16 +466,17 @@ def main_loop():
             #tom spawn
             Tom.x = laius-Tom.laius/2
             #kustuta eelmised platvormid
-            for rii in põrand.instances:
-                rii.instances.remove(rii)
+            for rii in põrandad:
+                põrandad.remove(rii)
             #kuhu poole
             screen -= 1
             #uued platformide objektid
-            põrand1 = põrand(0,laius,500)
+            põrand1 = Põrand(0,laius,500)
+            põrandad.append(põrand1)
             for o in range(len(screenid[screen])):
-                exec("plat"+str(o)+" = "+screenid[screen][o])
+                põrandad.append(screenid[screen][o])
             #vaenlased liigutada
-            for vaenlane in Vastane.instances:
+            for vaenlane in vastased:
                 vaenlane.x += laius
             #uued vaenlased
             #veel implementimata
@@ -469,6 +492,6 @@ def main_loop():
             paused()
                 
         võit()
-        if not Tom.elus:
+        if not Tom.elus and Tom.kontr:
             surm()
         redrawGameWindow()

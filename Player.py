@@ -2,7 +2,7 @@ import pygame as pg
 from abi import *
 
 class Player:
-    def __init__(self, x, y, laius, pikkus):
+    def __init__(self, x, y, laius, pikkus, relv):
         self.x = x
         self.y = y
         self.laius = laius
@@ -14,7 +14,8 @@ class Player:
         self.kukub = True
         self.m = 1
         self.vel = 10
-        self.vh = 10 #hüppe vel
+        self.initial_vh = 10
+        self.vh = 0 #hüppe vel
         self.health = 7
         self.max_health = 10
         self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
@@ -24,18 +25,17 @@ class Player:
         self.raha = 420
         self.armor = 1
         self.name = "nimi"
+        self.relv = relv
     
     kangelane_värv = (255,255,255)
     kangelane_nimi = "Jeesus Kristus"
     kangelane_pilt = pg.image.load("jesus.png")
-    vh = 10
     
     def hit(self):    
-        if self.health > 1:
+        if self.health > 0:
             self.health = round(self.health - 1 / self.armor, 2)
             self.x -= 20
-            
-        else:
+        if self.health <= 0:
             self.elus = False
         
     def draw(self, aken):
