@@ -303,7 +303,7 @@ def main_loop():
             self.elus = True
             self.elud_värv = (0,255,0)
             self.raha = 420
-            self.armor = 10
+            self.armor = 100
             self.name = "nimi"
         
         def hit(self):    
@@ -326,7 +326,7 @@ def main_loop():
             else:
                 self.elud_värv = (255,50,0)
             #Elud muudab int kui täisarv
-            if round(self.health, 1) % 1 == 0:
+            if round(self.health, 3) % 1 == 0:
                     self.health = int(self.health)
             #elud
             pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
@@ -840,7 +840,7 @@ def main_loop():
         #healthbar
         pg.draw.rect(aken, (100,0,0), (340, 625, 600, 20))
         pg.draw.rect(aken, (200,0,0), (342, 627, 596 * (Tom.health / Tom.max_health), 16))
-        TextSurf, TextRect = text_objects(str(Tom.health) + " / " + str(Tom.max_health), databarText)
+        TextSurf, TextRect = text_objects(str(round(Tom.health, 2)) + " / " + str(Tom.max_health), databarText)
         TextRect.center = ((laius // 2), (635))
         aken.blit(TextSurf, TextRect)
         
@@ -853,6 +853,24 @@ def main_loop():
         nimi_kord = nimi.get_rect()
         nimi_kord.center = (60, 585)
         aken.blit(nimi, nimi_kord)
+        
+        #Üleminek pildilt healtbarile
+        #pilt joonistatakse paraboolide abil
+        a = -2
+        x_laius = 123
+        y_kõrgus = 600
+        while -2 <= a <= 2:
+            while -2 <= a <= 0:
+                pg.draw.rect(aken, (25, 25, 25), (x_laius, y_kõrgus, 2, 125))
+                a += 0.035
+                x_laius -= a
+                y_kõrgus += 0.5 * a**2
+            while 0 <= a <= 2:
+                pg.draw.rect(aken, (25, 25, 25), (x_laius, y_kõrgus, 2, 125))
+                a += 0.035
+                x_laius += a
+                y_kõrgus -= 0.5 * a**2 
+            
         
         #Displayb tegelase suurused
         #Kiirus
