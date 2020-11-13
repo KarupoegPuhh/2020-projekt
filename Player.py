@@ -1,4 +1,5 @@
 import pygame as pg
+from abi import *
 
 class Player:
     def __init__(self, x, y, laius, pikkus):
@@ -27,6 +28,7 @@ class Player:
     kangelane_värv = (255,255,255)
     kangelane_nimi = "Jeesus Kristus"
     kangelane_pilt = pg.image.load("jesus.png")
+    vh = 10
     
     def hit(self):    
         if self.health > 1:
@@ -35,7 +37,6 @@ class Player:
             
         else:
             self.elus = False
-            surm()
         
     def draw(self, aken):
         #elude update
@@ -57,4 +58,23 @@ class Player:
         self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
         pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
         pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
+        
+    def põrkub(self, vastane, dt):
+        #kui vastane (s) läheb sulle (t) pihta saad knockback ja kaotad elud
+        if self.kb == 0: #knockbacki ajal surematu
+            if self.x+self.laius+(self.vel*dt) >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2 and not self.y < vastane.y - self.pikkus:
+                self.kb = 1
+                self.kontr = False
+                self.hit()
+                valu.play()
+                return vastane.vel
+            elif self.x <= vastane.x+vastane.laius+(self.vel*dt) and self.x > vastane.x+vastane.laius/2 and not self.y < vastane.y - self.pikkus:
+                self.kb = -1
+                self.kontr = False
+                self.hit()
+                valu.play()
+                return vastane.vel
+            else:
+                self.kb = 0
+                return self.vh
         

@@ -1,6 +1,6 @@
 import pygame as pg
 from põrand import *
-from Player_class_lisad import *
+from Player_lisad import *
 from random import randint
 from random import choice
 

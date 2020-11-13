@@ -23,6 +23,8 @@ raha_pickup = pg.mixer.Sound(helidir+"/gold_pickup.mp3")
 raha_drop = pg.mixer.Sound(helidir+"/gold_drop.mp3")
 pg.mixer.Sound.set_volume(raha_drop,0.4)
 pg.mixer.Sound.set_volume(raha_pickup,0.4)
+ost = pg.mixer.Sound(helidir+"/cash.mp3")
+tere = pg.mixer.Sound(helidir+"/shop_e.mp3")
 #Teksdi suurused
 largeText = pg.font.Font("RL.ttf", 150)
 mediumText = pg.font.Font("RM.ttf", 70)
