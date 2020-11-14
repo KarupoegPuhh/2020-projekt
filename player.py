@@ -31,9 +31,9 @@ class Player:
     kangelane_nimi = "Jeesus Kristus"
     kangelane_pilt = pg.image.load("jesus.png")
     
-    def hit(self):    
+    def hit(self, vastane):    
         if self.health > 0:
-            self.health = round(self.health - 1 / self.armor, 2)
+            self.health = round(self.health - vastane.dmg / self.armor, 2)
             self.x -= 20
         if self.health <= 0:
             self.elus = False
@@ -65,13 +65,13 @@ class Player:
             if self.x+self.laius+(self.vel*dt) >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2:
                 self.kb = 1
                 self.kontr = False
-                self.hit()
+                self.hit(vastane)
                 valu.play()
                 return vastane.vel
             elif self.x <= vastane.x+vastane.laius+(self.vel*dt) and self.x > vastane.x+vastane.laius/2:
                 self.kb = -1
                 self.kontr = False
-                self.hit()
+                self.hit(vastane)
                 valu.play()
                 return vastane.vel
             else:

@@ -11,12 +11,13 @@ class Vastane:
         self.x = x
         self.y = y - self.pikkus
         self.vel = vel
-        self.värv = (0, 255, 255)
+        self.värv = värv
         self.hitbox = (self.x -1, self.y -1, self.laius+2, self.pikkus+2)
         self.health = health
         self.max_health = health
         self.elus = True
         self.elud_värv = (0,255,0)
+        self.dmg = dmg
         
         #self.seisab = False
                     
@@ -114,9 +115,16 @@ class Lind(Vastane):
     def __init__(self):
         Vastane.__init__(self)
     
-class Vampiir(Vastane):
-    def __init__(self, x, y, laius, pikkus, vel, health, värv):
-        Vastane.__init__(self)
+class Vampiir(Zombie):
+    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path, health_regen):
+        Zombie.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path)
+        self.health_regen = health_regen
+    def move(self, dt, Tom):
+        if self.health <= self.max_health:
+            self.health += self.health_regen
+        Zombie.move(self, dt, Tom)
+        
+    
     
 class Preester(Vastane):
     def __init__(self):
