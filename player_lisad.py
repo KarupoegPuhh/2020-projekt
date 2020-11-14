@@ -67,7 +67,15 @@ class Varustus:
         if self.equipped:
             self.equipped = False
             Tom.armor -= self.armor
-            
+
+class Collectable():
+    def __init__(self, x, y, laius, kõrgus, asi):
+        self.x = x
+        self.y = y
+        self.laius = laius
+        self.kõrgus = kõrgus
+        self.asi = asi
+    
     def draw(self, aken):
         if not self.unlocked:
             pg.draw.rect(aken, (255,255,0), (self.x, self.y, self.laius, self.kõrgus))
@@ -75,7 +83,7 @@ class Varustus:
             self.unlocked = True
             self.aeg = pg.time.get_ticks()
         self.unlocked_sõnum()
-            
+        
     def unlocked_sõnum(self):
         aeg = pg.time.get_ticks()
         if self.unlocked and self.aeg + 2000 >= aeg:
@@ -84,3 +92,4 @@ class Varustus:
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             pg.display.update()
+    
