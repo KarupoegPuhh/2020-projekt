@@ -48,7 +48,7 @@ class Vastane:
 
 class Zombie(Vastane):
     def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path):
-        Vastane.__init__(self, x, y, laius, pikkus, vel, health, värv)
+        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
         self.path = [self.x, path + self.x - self.laius]
         
     def move(self, dt, Tom):
@@ -65,7 +65,7 @@ class Zombie(Vastane):
     
 class Jälitaja(Vastane):
     def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv):
-        Vastane.__init__(self, x, y, laius, pikkus, vel, health, värv)
+        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
         self.jälitab = False
         self.tagane = False
         self.nägemiskaugus = 300
