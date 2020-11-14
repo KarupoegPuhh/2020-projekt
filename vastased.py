@@ -37,8 +37,10 @@ class Vastane:
         pg.draw.rect(aken, (255,0,0), self.hitbox, 1)
         pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.pikkus))
 
-    def hit(self, kuul):
+    def hit(self, kuul):  
         self.health -= kuul.dmg
+        if self.health >= self.max_health:
+            self.health = self.max_health
         if self.health <= 0:
             for ugu in range(randint(3,6)):
                 vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus)
@@ -46,6 +48,12 @@ class Vastane:
             self.elus = False
             vastane_surm.play()
             maailm.vastased.remove(self)
+            self.player_väljub(maailm.Tom)
+            
+    def player_siseneb(self, Tom):
+        pass
+    def player_väljub(self, Tom):
+        pass
 
 class Zombie(Vastane):
     def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path):
@@ -112,8 +120,78 @@ class Jälitaja(Vastane):
                     self.tagane = False
 
 class Lind(Vastane):
-    def __init__(self):
-        Vastane.__init__(self)
+    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, range, cd, path):
+        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
+        self.range = range
+        self.jälitab = False
+        self.tagane = True
+        self.oota = 30*5
+        self.xspawn = x
+        self.yspawn = self.y
+        self.cooldown = 0
+        self.cooldown_c = cd
+        self.lõin = False
+        self.xpath = x
+        self.path = path
+        self.suund = 1
+        
+    def move(self, dt, Tom):
+        
+        #märkab tomi
+        if self.xspawn - self.range < Tom.x + Tom.laius/2 < self.xspawn + self.range:
+            self.jälitab = True
+            self.tagane = False
+        if self.jälitab:
+            #lõpetab jälitamise
+            if self.xspawn - self.range > Tom.x + Tom.laius or Tom.x > self.xspawn + self.range:
+                self.jälitab = False
+                self.oota = 30
+        #jälitab
+        if self.jälitab:
+            if Tom.x + Tom.laius/2 > self.x+self.laius/2 and self.cooldown == 0:
+                if Tom.y > self.y + self.pikkus / 2:
+                    self.x += self.vel*dt
+                    self.y += self.vel*dt
+                else:
+                    self.x += self.vel*dt
+                if Tom.kb != 0:
+                    self.lõin = True
+            elif Tom.x + Tom.laius/2 < self.x+self.laius/2 and self.cooldown == 0:
+                if Tom.y > self.y + self.pikkus / 2:
+                    self.x -= self.vel*dt
+                    self.y += self.vel*dt
+                else:
+                    self.x -= self.vel*dt
+                if Tom.kb != 0:
+                    self.lõin = True
+            if self.lõin:
+                self.cooldown += 1
+                self.y -= self.vel*dt
+            if self.cooldown >= self.cooldown_c:
+                self.cooldown = 0
+                self.lõin = False
+                
+        #ei jälita
+        else:
+            self.xpath += self.vel * self.suund
+            if not self.xspawn - self.path < self.xpath < self.xspawn + self.path:
+                self.suund *= -1
+            if self.y > self.yspawn:
+                self.y -= self.vel*dt
+            #ootab
+            if self.oota < 0:
+                self.tagane = True
+            else:
+                self.oota -= 1
+            #taganeb
+            if self.tagane:
+                if self.x > self.xpath:
+                    self.x -= self.vel*dt
+                elif self.x < self.xpath:
+                    self.x += self.vel*dt
+                else:
+                    self.tagane = False
+        
     
 class Vampiir(Zombie):
     def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path, health_regen):
@@ -122,13 +200,51 @@ class Vampiir(Zombie):
     def move(self, dt, Tom):
         if self.health <= self.max_health:
             self.health += self.health_regen
-        Zombie.move(self, dt, Tom)
-        
+        Zombie.move(self, dt, Tom)       
     
     
 class Preester(Vastane):
-    def __init__(self):
-        Vastane.__init__(self)
+    #db nagu debuff
+    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, veldb, dmgdb, armordb):
+        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
+        self.veldb = veldb
+        self.dmgdb = dmgdb
+        self.armordb = armordb
+        self.y_c = self.y
+        self.dbkontroll = False
+        
+    def player_siseneb(self, Tom):
+        pass
+        
+    def player_väljub(self, Tom):
+        pass
+    
+    def move(self, dt, Tom):
+        if 200 < Tom.x + Tom.laius/2 < laius -200:
+            if not self.dbkontroll:
+                self.dbkontroll = True
+                Tom.vel *= -1
+                Tom.armor *= self.armordb
+                maailm.ling.dmg -= self.dmgdb
+                maailm.hernepüss.dmg -= self.dmgdb
+                maailm.kartulikahur.dmg -= self.dmgdb
+                maailm.railgun.dmg -= self.dmgdb
+                maailm.kasukas.armor *= self.armordb
+                
+        if 100 > Tom.x + Tom.laius/2 or Tom.x + Tom.laius/2 > laius - 100:
+            if self.dbkontroll:
+                self.dbkontroll = False
+                Tom.vel *= -1
+                Tom.armor = Tom.armor / self.armordb
+                maailm.ling.dmg += self.dmgdb
+                maailm.hernepüss.dmg += self.dmgdb
+                maailm.kartulikahur.dmg += self.dmgdb
+                maailm.railgun.dmg += self.dmgdb
+                maailm.kasukas.armor /= self.armordb
+        
+        if not self.y_c > self.y > self.y_c - 30:
+            self.vel *= -1
+        self.y += self.vel
     
 class Boss(Vastane):
     def __init__(self):

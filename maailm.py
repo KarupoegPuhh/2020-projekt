@@ -266,9 +266,14 @@ def main_loop():
     def vaheta_ekraani():
         global põrandad
         global vastased
+        for i in vastased:
+            i.player_väljub(Tom)
         #uued platformide objektid
         põrandad = screenid.get(screen, [])
         vastased = vastased_ekraanis.get(screen,[])
+        for i in vastased:
+            i.player_siseneb(Tom)
+            
         
     vaheta_ekraani()
     while True:       

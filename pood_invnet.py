@@ -45,7 +45,7 @@ def pood():
                 hernepüss_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
                 aken.blit(hernepüss_txt, hernepüss_txt_kord)
                 
-        if maailm.Tom.vel <= 20:
+        if abs(maailm.Tom.vel) <= 20:
             nupp(aken, "Ritaliini! -1₽", 910 , 200, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
             if 910 < mouse[0] < 1110 and 200 < mouse[1] < 300:
                 pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
