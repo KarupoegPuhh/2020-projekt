@@ -2,6 +2,7 @@ import pygame as pg
 from põrand import *
 from player import *
 from vastased import *
+from ekraanid import *
 
 
 def surm():
@@ -32,7 +33,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(vastased) == 0 and len(rahad) == 0:
+    if len(vastased_ekraanis[1]) == 0 and len(rahad) == 0:
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
@@ -115,27 +116,13 @@ def main_loop():
     rahad = []
     
     #level layout
-    põrand1 = Põrand(0,laius,500)#(0,600,500)
-    põrandad.append(põrand1)
     global screen
     screen = 0
     global screenid
-    screenid = {
-    -1:[Põrand(750+400,800+400,250)],
-    0:[Põrand(750+400,800+400,250),Põrand(100,200,400),Põrand(700,850,400)],
-    1:[Põrand(10+400,800+400,250),Põrand(100,400,400),Põrand(700,720,600)]
-    }
-    #uued platformide objektid
-    for o in range(len(screenid[screen])):
-        põrandad.append(screenid[screen][o])
     
-    #Pahad
-    paha = Vastane(400, 0, 500, 5, 10,True)
-    paha.y = põrand1.y-paha.pikkus
-    paha1 = Vastane(900, 0, 1100, 15, 2,False)
-    paha1.y = põrand1.y-paha1.pikkus
-    vastased.append(paha)
-    vastased.append(paha1)
+    for scr in screenid:
+        põrand1 = Põrand(0,laius,500)
+        screenid[scr].append(põrand1)
     
     #Relvad
     ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
@@ -183,11 +170,11 @@ def main_loop():
         pg.display.update()
         dt = clock.tick(30)
         
-    def maa_kõrgus(px,lai,obj=põrandad):
+    def maa_kõrgus(px,lai):
         global mk
         eelm_mk = mk
         y = []
-        for i in obj:
+        for i in põrandad:
             if px >= i.x1-lai and px <= i.x2:
                 #print(i.x1)
                 #print(px+lai)
@@ -200,19 +187,19 @@ def main_loop():
         else:
             mk = (min(y))
 
-    def pole_sein_v(dt,v,x,y,lai,pikk,umb=0,obj=põrandad):
+    def pole_sein_v(dt,v,x,y,lai,pikk,umb=0):
         #absoluutväärtus vel
         if v < 0:
             v = -v
         #seinad vasakule minnes
-        for i in obj:
+        for i in põrandad:
             if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
         
-    def pole_sein_p(dt,v,x,y,lai,pikk,umb=0,obj=põrandad):
+    def pole_sein_p(dt,v,x,y,lai,pikk,umb=0):
         #seinad paremale minnes
-        for i in obj:
+        for i in põrandad:
             if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
@@ -253,7 +240,7 @@ def main_loop():
                 pg.draw.rect(aken, (25, 25, 25), (x_laius, y_kõrgus, 2, 125))
                 a += 0.035
                 x_laius += a
-                y_kõrgus -= 0.5 * a**2 
+                y_kõrgus -= 0.5 * a**2
         
     
         #Displayb tegelase suurused
@@ -276,7 +263,14 @@ def main_loop():
         #Nupp inventoryle
         nupp(aken, "Seljakott", 260, 675, 150, 25, (100,100,100), (200,200,200), seljakott)
     
-    
+    def vaheta_ekraani():
+        global põrandad
+        global vastased
+        #uued platformide objektid
+        põrandad = screenid.get(screen, [])
+        vastased = vastased_ekraanis.get(screen,[])
+        
+    vaheta_ekraani()
     while True:       
         #exit
         for event in pg.event.get():
@@ -445,41 +439,17 @@ def main_loop():
         if Tom.x+Tom.laius/2 > laius:
             #tom spawn
             Tom.x = 0-Tom.laius/2
-            #kustuta eelmised
-            for rii in põrandad:
-                põrandad.remove(rii)
             #kuhu poole
             screen += 1
-            #uued platformide objektid
-            põrand1 = Põrand(0,laius,500)
-            põrandad.append(põrand1)
-            for o in range(len(screenid[screen])):
-                põrandad.append(screenid[screen][o])
-            #vaenlased liigutada
-            for vaenlane in vastased:
-                vaenlane.x -= laius
-                #vaenlane.
-            #uued vaenlased
-            #veel implementimata
+            vaheta_ekraani()
+            
         #vaheta screeni vasakule
         if Tom.x+Tom.laius/2 < 0:
             #tom spawn
             Tom.x = laius-Tom.laius/2
-            #kustuta eelmised platvormid
-            for rii in põrandad:
-                põrandad.remove(rii)
             #kuhu poole
             screen -= 1
-            #uued platformide objektid
-            põrand1 = Põrand(0,laius,500)
-            põrandad.append(põrand1)
-            for o in range(len(screenid[screen])):
-                põrandad.append(screenid[screen][o])
-            #vaenlased liigutada
-            for vaenlane in vastased:
-                vaenlane.x += laius
-            #uued vaenlased
-            #veel implementimata
+            vaheta_ekraani()
 
         #PAUSE MENU
         if keys[pg.K_p]:

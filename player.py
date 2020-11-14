@@ -61,14 +61,14 @@ class Player:
         
     def põrkub(self, vastane, dt):
         #kui vastane (s) läheb sulle (t) pihta saad knockback ja kaotad elud
-        if self.kb == 0: #knockbacki ajal surematu
-            if self.x+self.laius+(self.vel*dt) >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2 and not self.y < vastane.y - self.pikkus:
+        if self.kb == 0 and self.y + self.pikkus > vastane.y and vastane.y + vastane.pikkus > self.y: #knockbacki ajal surematu
+            if self.x+self.laius+(self.vel*dt) >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2:
                 self.kb = 1
                 self.kontr = False
                 self.hit()
                 valu.play()
                 return vastane.vel
-            elif self.x <= vastane.x+vastane.laius+(self.vel*dt) and self.x > vastane.x+vastane.laius/2 and not self.y < vastane.y - self.pikkus:
+            elif self.x <= vastane.x+vastane.laius+(self.vel*dt) and self.x > vastane.x+vastane.laius/2:
                 self.kb = -1
                 self.kontr = False
                 self.hit()
