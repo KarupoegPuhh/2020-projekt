@@ -47,7 +47,7 @@ class Vastane:
             maailm.vastased.remove(self)
 
 class Zombie(Vastane):
-    def __init__(self, x, y, laius, pikkus, vel, health, värv, path):
+    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path):
         Vastane.__init__(self, x, y, laius, pikkus, vel, health, värv)
         self.path = [self.x, path + self.x - self.laius]
         
@@ -64,7 +64,7 @@ class Zombie(Vastane):
                 self.vel = -self.vel*dt
     
 class Jälitaja(Vastane):
-    def __init__(self, x, y, laius, pikkus, vel, health, värv):
+    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv):
         Vastane.__init__(self, x, y, laius, pikkus, vel, health, värv)
         self.jälitab = False
         self.tagane = False
