@@ -331,8 +331,8 @@ def main_loop():
         
         keys = pg.key.get_pressed()
         
-        eelmine_mk = mk
-        maa_kõrgus(Tom.x,Tom.laius)
+        #eelmine_mk = mk
+        #maa_kõrgus(Tom.x,Tom.laius)
         
         if mk <= Tom.y + Tom.pikkus:
             Tom.y = mk-Tom.pikkus
@@ -393,6 +393,12 @@ def main_loop():
         #    lükkaja_v = -lükkaja_v
         lükkaja_v = Tom.vh
         #knockback
+
+        #if pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus) and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+        #    lükkab_seina = False KB FIX PROOV
+        #else:
+        #    lükkab_seina = True
+
         if Tom.kb != 0:
             #if Tom.kukub:
             #    Tom.kukub = False
@@ -400,9 +406,10 @@ def main_loop():
             Tom.värv = (255, 0, 0)
             if Tom.vh > 0:
                 F = -(0.5*Tom.m*(lükkaja_v**2)) #/2
-                if F < 0 and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                if F < 0 and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus,3):
                     Tom.x += (F*dt*Tom.kb)/3
-                if F > 0 and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                if F > 0 and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus,3):
+                #if not lükkab_seina: KB FIX PROOV
                     Tom.x += (F*dt*Tom.kb)/3
             else:
                 F = (0.5*Tom.m*(Tom.vh**2)) #/2
@@ -419,6 +426,8 @@ def main_loop():
                 Tom.värv = värvike
         else:
             värvike = Tom.värv
+            eelmine_mk = mk
+            maa_kõrgus(Tom.x,Tom.laius) #POSSIBLE KB PLATFORMI OTSA FIX AGA VÕIBOLLA TEEB MINGEID BUGE (muidu need kaks rida jooksid iga frame)
 
         #TULISTAMINE
         if keys[pg.K_SPACE] and kuulide_cd == 0:
