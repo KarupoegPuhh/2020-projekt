@@ -120,7 +120,7 @@ def main_loop():
     ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
     hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss", "AK-47")
     kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
-    railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset", "EMP gun")
+    railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
     #Varustus
     kasukas = Varustus(0, 5, False, False, "vammus")
     
@@ -132,7 +132,6 @@ def main_loop():
     screen = 0
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
-    print(itemid_ekraanis)
     
     for scr in screenid:
         põrand1 = Põrand(0,laius,500)
@@ -449,7 +448,7 @@ def main_loop():
                 
         #Collision varustusega
         for item in itemid:
-            if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus / 2 < item.y + item.kõrgus:
+            if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus <= item.y + item.kõrgus*2:
                 item.collision = True
         
         #vaheta screeni paremale

@@ -217,13 +217,15 @@ class Preester(Vastane):
         pass
         
     def player_väljub(self, Tom):
-        Tom.vel *= -1
-        Tom.armor = Tom.armor / self.armordb
-        maailm.ling.dmg += self.dmgdb
-        maailm.hernepüss.dmg += self.dmgdb
-        maailm.kartulikahur.dmg += self.dmgdb
-        maailm.railgun.dmg += self.dmgdb
-        maailm.kasukas.armor /= self.armordb
+        if self.dbkontroll:
+            self.dbkontroll = False
+            Tom.vel *= -1
+            Tom.armor = Tom.armor / self.armordb
+            maailm.ling.dmg += self.dmgdb
+            maailm.hernepüss.dmg += self.dmgdb
+            maailm.kartulikahur.dmg += self.dmgdb
+            maailm.railgun.dmg += self.dmgdb
+            maailm.kasukas.armor /= self.armordb
     
     def move(self, dt, Tom):
         if 200 < Tom.x + Tom.laius/2 < laius -200:

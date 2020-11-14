@@ -63,20 +63,20 @@ class Varustus:
             Tom.armor -= self.armor
 
 class Item():
-    def __init__(self, x, y, laius, kõrgus, asi, tekst):
+    def __init__(self, x, y, laius, kõrgus, asi, tekst, värv):
         self.x = x
-        self.y = y
+        self.y = y - kõrgus
         self.laius = laius
         self.kõrgus = kõrgus
         self.asi = asi
         self.tekst = tekst
         self.collision = False
         self.aeg = 0
+        self.värv = värv
     
     def draw(self, aken):
-        print("joonistasin")
         if not self.asi.unlocked:
-            pg.draw.rect(aken, (255,255,0), (self.x, self.y, self.laius, self.kõrgus))
+            pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.kõrgus))
         if not self.asi.unlocked and self.collision:
             self.asi.unlocked = True
             self.aeg = pg.time.get_ticks()

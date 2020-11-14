@@ -20,5 +20,6 @@ def vastaste_loomine():
         }
 
 def itemite_loomine():
-    print("LÕIN")
-    return {0:[Item(120, 350, 50, 50, maailm.kasukas, "Sa leidsid rõivaid!")]}
+    return {0:[Item(120, 395, 20, 20, maailm.kasukas, "Sa leidsid rõivaid!", (200,200,0))],
+            1:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))]
+            }
