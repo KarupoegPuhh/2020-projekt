@@ -45,18 +45,12 @@ class Relvad:
         self.nimi_data = nimi_data
         
 class Varustus:
-    def __init__(self, speed, armor, equipped, unlocked, nimi, x, y):
+    def __init__(self, speed, armor, equipped, unlocked, nimi):
         self.armor = armor
         self.speed = speed
         self.equipped = equipped
         self.unlocked = unlocked
-        self.collision = False
         self.nimi = nimi
-        self.x = x
-        self.y = y
-        self.laius = 60
-        self.kõrgus = 60
-        self.aeg = 0
         
     def equip(self, Tom):
         if not self.equipped:
@@ -68,27 +62,31 @@ class Varustus:
             self.equipped = False
             Tom.armor -= self.armor
 
-class Collectable():
-    def __init__(self, x, y, laius, kõrgus, asi):
+class Item():
+    def __init__(self, x, y, laius, kõrgus, asi, tekst):
         self.x = x
         self.y = y
         self.laius = laius
         self.kõrgus = kõrgus
         self.asi = asi
+        self.tekst = tekst
+        self.collision = False
+        self.aeg = 0
     
     def draw(self, aken):
-        if not self.unlocked:
+        print("joonistasin")
+        if not self.asi.unlocked:
             pg.draw.rect(aken, (255,255,0), (self.x, self.y, self.laius, self.kõrgus))
-        if not self.unlocked and self.collision:
-            self.unlocked = True
+        if not self.asi.unlocked and self.collision:
+            self.asi.unlocked = True
             self.aeg = pg.time.get_ticks()
         self.unlocked_sõnum()
         
     def unlocked_sõnum(self):
         aeg = pg.time.get_ticks()
-        if self.unlocked and self.aeg + 2000 >= aeg:
+        if self.asi.unlocked and self.aeg + 2000 >= aeg:
             #self.aeg += 1
-            TextSurf, TextRect = text_objects("Sa leidsid midagi", largeText)
+            TextSurf, TextRect = text_objects(self.tekst, largeText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             pg.display.update()

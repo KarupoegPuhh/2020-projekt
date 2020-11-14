@@ -103,7 +103,7 @@ def main_loop():
     #OBJEKTID
     global pole_sein_p, pole_sein_v
     global Tom
-    global kuulid, vastased, põrandad, rahad
+    global kuulid, vastased, põrandad, rahad, itemid
     global hernepüss, kartulikahur, ling, railgun
     global kasukas
     
@@ -112,17 +112,9 @@ def main_loop():
     kuulide_cd = 0
     kuulide_maxcount = 500
     vastased = []
-    põrandad = []
+    põrandad = None
     rahad = []
-    
-    #level layout
-    global screen
-    screen = 0
-    global screenid
-    
-    for scr in screenid:
-        põrand1 = Põrand(0,laius,500)
-        screenid[scr].append(põrand1)
+    itemid = None
     
     #Relvad
     ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
@@ -130,7 +122,23 @@ def main_loop():
     kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
     railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, True,"midagi erakordset", "EMP gun")
     #Varustus
-    kasukas = Varustus(0, 5, False, False, "vammus", 130, 325)
+    kasukas = Varustus(0, 5, False, False, "vammus")
+    
+    #level layout
+    global screen
+    global screenid
+    global vastased_ekraanis
+    screenid = screenide_loomine()
+    screen = 0
+    vastased_ekraanis = vastaste_loomine()
+    itemid_ekraanis = itemite_loomine()
+    print(itemid_ekraanis)
+    
+    for scr in screenid:
+        põrand1 = Põrand(0,laius,500)
+        screenid[scr].append(põrand1)
+    
+    
     #Et mängjal oleks alguses relv
     Tom = Player(580, 100, 40, 60, ling)
 
@@ -165,7 +173,8 @@ def main_loop():
             kuul.draw(aken)
             
         databar()
-        kasukas.draw(aken)
+        for item in itemid:
+            item.draw(aken)
         
         pg.display.update()
         dt = clock.tick(30)
@@ -266,11 +275,13 @@ def main_loop():
     def vaheta_ekraani():
         global põrandad
         global vastased
+        global itemid
         for i in vastased:
             i.player_väljub(Tom)
         #uued platformide objektid
         põrandad = screenid.get(screen, [])
         vastased = vastased_ekraanis.get(screen,[])
+        itemid = itemid_ekraanis.get(screen,[])
         for i in vastased:
             i.player_siseneb(Tom)
             
@@ -437,8 +448,9 @@ def main_loop():
                 vastane.move(dt, Tom)
                 
         #Collision varustusega
-        if kasukas.x < Tom.x < kasukas.x + kasukas.laius and kasukas.y < Tom.y < kasukas.y + kasukas.kõrgus:
-            kasukas.collision = True
+        for item in itemid:
+            if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus / 2 < item.y + item.kõrgus:
+                item.collision = True
         
         #vaheta screeni paremale
         if Tom.x+Tom.laius/2 > laius:
