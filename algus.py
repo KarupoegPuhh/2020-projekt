@@ -6,6 +6,9 @@ from player import *
 
 mitmes_kord = 0
 
+dirr = os.path.dirname(os.path.abspath(__file__))
+piltdir = dirr+"/pildid"
+
 def intro():
     global mitmes_kord
     mitmes_kord += 1
@@ -69,16 +72,17 @@ def sõdalane_valitud():
     valin_sõdalane = False
     
 def esimene_sõdalane():
+    global piltdir
     Player.kangelane_värv = (255,255,255)
     Player.kangelane_nimi = "Jeesus Kristus"
-    Player.kangelane_pilt = pg.image.load("jesus.png")
+    Player.kangelane_pilt = pg.image.load(piltdir+"/jesus.png")
         
 def teine_sõdalane():
     Player.kangelane_värv = (112,130,56)
     Player.kangelane_nimi = "al-Assad"
-    Player.kangelane_pilt = pg.image.load("bashar.png")
+    Player.kangelane_pilt = pg.image.load(piltdir+"/bashar.png")
 
 def kolmas_sõdalane():
     Player.kangelane_värv = (80,5,94)
     Player.kangelane_nimi = "Julius Caesar"
-    Player.kangelane_pilt = pg.image.load("JC_120x120.png")
+    Player.kangelane_pilt = pg.image.load(piltdir+"/JC_120x120.png")

@@ -26,10 +26,10 @@ class Player:
         self.armor = 1
         self.name = "nimi"
         self.relv = relv
-    
+    dirr = os.path.dirname(os.path.abspath(__file__))
     kangelane_värv = (255,255,255)
     kangelane_nimi = "Jeesus Kristus"
-    kangelane_pilt = pg.image.load("jesus.png")
+    kangelane_pilt = pg.image.load(dirr+"/pildid/jesus.png")
     
     def hit(self, vastane):    
         if self.health > 0:

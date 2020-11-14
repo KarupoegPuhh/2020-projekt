@@ -275,6 +275,7 @@ def main_loop():
         global põrandad
         global vastased
         global itemid
+        #RAHA?
         for i in vastased:
             i.player_väljub(Tom)
         #uued platformide objektid
@@ -286,6 +287,7 @@ def main_loop():
             
         
     vaheta_ekraani()
+    #main loop
     while True:       
         #exit
         for event in pg.event.get():

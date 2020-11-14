@@ -26,7 +26,7 @@ class Raha:
         self.y += 0.5*(self.v**2)*dt
         self.x += self.xoff 
         self.v -= 1
-        if self.y+5 >= self.mkr:
+        if self.y+5 >= self.mkr: #and pole_sein_p(self.v,self.x,self.y,3,3) and pole_sein_v(self.v,self.x,self.y,3,3): NAD SATUVAD SEINA SISSE VAHEST
             self.y = self.mkr-5
             self.kukkumas = False
     
