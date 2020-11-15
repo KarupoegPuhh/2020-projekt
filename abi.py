@@ -6,7 +6,7 @@ from pygame_init import *
 dirr = os.path.dirname(os.path.abspath(__file__))
 helidir = dirr+"/helid"
 fontdir = dirr+"/fontid"
-#piltdir = dirr+"/pildid"
+piltdir = dirr+"/pildid"
 
 #helid
 nupp_hover = pg.mixer.Sound(helidir+"/click_h.wav")

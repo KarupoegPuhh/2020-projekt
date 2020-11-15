@@ -163,20 +163,20 @@ def main_loop():
         aken.fill((21,85,83))
 
         for prr in põrandad:
-            prr.draw(aken)
+            prr.draw()
 
-        Tom.draw(aken)
+        Tom.draw()
         for p1 in vastased:
-            p1.draw(aken)
+            p1.draw()
         
         for rah in rahad:
-            rah.draw(aken)
+            rah.draw()
         for kuul in kuulid:
-            kuul.draw(aken)
+            kuul.draw()
             
         databar()
         for item in itemid:
-            item.draw(aken)
+            item.draw()
         
         pg.display.update()
         dt = clock.tick(30)

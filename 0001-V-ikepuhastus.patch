@@ -1,0 +1,198 @@
+From 9649e899d2a0bcc3e77ae6eefee30b62338d0bb0 Mon Sep 17 00:00:00 2001
+From: FeldrinH <fhandswitch@gmail.com>
+Date: Sun, 15 Nov 2020 14:48:37 +0200
+Subject: [PATCH] =?UTF-8?q?V=C3=A4ikepuhastus?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ MAIN.py            |  3 +++
+ abi.py             |  2 +-
+ algus.py           |  5 ++---
+ maailm.py          | 12 ++++++------
+ player.py          |  8 ++++----
+ player_lisad.py    |  4 ++--
+ pood_invnet.py     |  1 -
+ "p\303\265rand.py" |  8 ++------
+ vastased.py        |  2 +-
+ 9 files changed, 21 insertions(+), 24 deletions(-)
+
+diff --git a/MAIN.py b/MAIN.py
+index dda7e8e..734fbcc 100644
+--- a/MAIN.py
++++ b/MAIN.py
+@@ -1,4 +1,7 @@
+ from algus import *
+ 
++# algsed seaded
++esimene_sõdalane()
+ while True:
++    # alustame mängu, avame intro menüü
+     intro()
+\ No newline at end of file
+diff --git a/abi.py b/abi.py
+index e2e3955..0d6cc94 100644
+--- a/abi.py
++++ b/abi.py
+@@ -6,7 +6,7 @@ from pygame_init import *
+ dirr = os.path.dirname(os.path.abspath(__file__))
+ helidir = dirr+"/helid"
+ fontdir = dirr+"/fontid"
+-#piltdir = dirr+"/pildid"
++piltdir = dirr+"/pildid"
+ 
+ #helid
+ nupp_hover = pg.mixer.Sound(helidir+"/click_h.wav")
+diff --git a/algus.py b/algus.py
+index 0765737..bd835a4 100644
+--- a/algus.py
++++ b/algus.py
+@@ -6,14 +6,13 @@ from player import *
+ 
+ mitmes_kord = 0
+ 
+-dirr = os.path.dirname(os.path.abspath(__file__))
+-piltdir = dirr+"/pildid"
+-
+ def intro():
+     global mitmes_kord
+     mitmes_kord += 1
+     if mitmes_kord == 1:
+         global intromus
++        #intromus = pg.mixer.Sound(helidir+"/delta.mp3")
++        #intromus.play()
+ 
+     intro = True
+     while intro:
+diff --git a/maailm.py b/maailm.py
+index 010ea10..e631cdd 100644
+--- a/maailm.py
++++ b/maailm.py
+@@ -160,20 +160,20 @@ def main_loop():
+         aken.fill((21,85,83))
+ 
+         for prr in põrandad:
+-            prr.draw(aken)
++            prr.draw()
+ 
+-        Tom.draw(aken)
++        Tom.draw()
+         for p1 in vastased:
+-            p1.draw(aken)
++            p1.draw()
+         
+         for rah in rahad:
+-            rah.draw(aken)
++            rah.draw()
+         for kuul in kuulid:
+-            kuul.draw(aken)
++            kuul.draw()
+             
+         databar()
+         for item in itemid:
+-            item.draw(aken)
++            item.draw()
+         
+         pg.display.update()
+         dt = clock.tick(30)
+diff --git a/player.py b/player.py
+index 6cd52dd..325f84a 100644
+--- a/player.py
++++ b/player.py
+@@ -27,9 +27,9 @@ class Player:
+         self.name = "nimi"
+         self.relv = relv
+     
+-    kangelane_värv = (255,255,255)
+-    kangelane_nimi = "Jeesus Kristus"
+-    kangelane_pilt = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid/jesus.png")
++    kangelane_värv = (0,0,0)
++    kangelane_nimi = "nimi"
++    kangelane_pilt = None
+     
+     def hit(self, vastane):    
+         if self.health > 0:
+@@ -38,7 +38,7 @@ class Player:
+         if self.health <= 0:
+             self.elus = False
+         
+-    def draw(self, aken):
++    def draw(self):
+         #elude update
+         if self.health >= self.max_health * 0.8:
+             self.elud_värv = (0,255,0)
+diff --git a/player_lisad.py b/player_lisad.py
+index e3dbfed..9dd3ed1 100644
+--- a/player_lisad.py
++++ b/player_lisad.py
+@@ -10,7 +10,7 @@ class Kuul:
+         self.vel = relv.vel * suund
+         self.dmg = relv.dmg
+         
+-    def draw(self, aken):
++    def draw(self):
+         pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
+             
+ class Raha:
+@@ -74,7 +74,7 @@ class Item():
+         self.aeg = 0
+         self.värv = värv
+     
+-    def draw(self, aken):
++    def draw(self):
+         if not self.asi.unlocked:
+             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.kõrgus))
+         if not self.asi.unlocked and self.collision:
+diff --git a/pood_invnet.py b/pood_invnet.py
+index 4390a58..506af4b 100644
+--- a/pood_invnet.py
++++ b/pood_invnet.py
+@@ -11,7 +11,6 @@ def pood():
+     tere.play()
+ 
+     while poes:
+-        mouse = pg.mouse.get_pos()
+         for event in pg.event.get():
+             if event.type == pg.QUIT:
+                 pg.quit()
+diff --git "a/p\303\265rand.py" "b/p\303\265rand.py"
+index 9bf9d3c..7f6aace 100644
+--- "a/p\303\265rand.py"
++++ "b/p\303\265rand.py"
+@@ -1,17 +1,13 @@
+ import pygame as pg
+ from pygame_init import *
+ 
+-class Põrand:
+-    instances = []
+-    
++class Põrand:    
+     def __init__(self,x1,x2,y):
+-        self.__class__.instances.append(self)
+-
+         self.y = y
+         self.x1 = x1
+         self.x2 = x2
+     
+-    def draw(self, aken):
++    def draw(self):
+         pg.draw.line(aken, (255, 0, 0), (self.x1,self.y),(self.x2,self.y))
+         #seinad
+         pg.draw.line(aken, (255, 0, 0), (self.x1,self.y),(self.x1,kõrgus))
+diff --git a/vastased.py b/vastased.py
+index 57df088..fd77973 100644
+--- a/vastased.py
++++ b/vastased.py
+@@ -22,7 +22,7 @@ class Vastane:
+         
+         #self.seisab = False
+                     
+-    def draw(self, aken):
++    def draw(self):
+         if self.health >= self.max_health * 0.8:
+             self.elud_värv = (0,255,0)
+         elif self.health >= self.max_health * 0.6:
+-- 
+2.28.0.windows.1
+

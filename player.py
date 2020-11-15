@@ -27,9 +27,9 @@ class Player:
         self.name = "nimi"
         self.relv = relv
     
-    kangelane_värv = (255,255,255)
-    kangelane_nimi = "Jeesus Kristus"
-    kangelane_pilt = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid/jesus.png")
+    kangelane_värv = (0,0,0)
+    kangelane_nimi = "nimi"
+    kangelane_pilt = None
     
     def hit(self, vastane):    
         if self.health > 0:
@@ -38,7 +38,7 @@ class Player:
         if self.health <= 0:
             self.elus = False
         
-    def draw(self, aken):
+    def draw(self):
         #elude update
         if self.health >= self.max_health * 0.8:
             self.elud_värv = (0,255,0)

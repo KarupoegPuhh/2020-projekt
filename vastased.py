@@ -22,7 +22,7 @@ class Vastane:
         
         #self.seisab = False
                     
-    def draw(self, aken):
+    def draw(self):
         if self.health >= self.max_health * 0.8:
             self.elud_värv = (0,255,0)
         elif self.health >= self.max_health * 0.6:

@@ -6,14 +6,13 @@ from player import *
 
 mitmes_kord = 0
 
-dirr = os.path.dirname(os.path.abspath(__file__))
-piltdir = dirr+"/pildid"
-
 def intro():
     global mitmes_kord
     mitmes_kord += 1
     if mitmes_kord == 1:
         global intromus
+        #intromus = pg.mixer.Sound(helidir+"/delta.mp3")
+        #intromus.play()
 
     intro = True
     while intro:

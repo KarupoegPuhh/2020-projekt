@@ -10,7 +10,7 @@ class Kuul:
         self.vel = relv.vel * suund
         self.dmg = relv.dmg
         
-    def draw(self, aken):
+    def draw(self):
         pg.draw.circle(aken, self.värv, (self.x , self.y), self.raadius)
             
 class Raha:
@@ -76,7 +76,7 @@ class Item():
         self.aeg = 0
         self.värv = värv
     
-    def draw(self, aken):
+    def draw(self):
         if not self.asi.unlocked:
             pg.draw.rect(aken, self.värv, (self.x, self.y, self.laius, self.kõrgus))
         if not self.asi.unlocked and self.collision:

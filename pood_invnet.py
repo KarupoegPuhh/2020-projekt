@@ -23,7 +23,6 @@ def pood():
     tere.play()
 
     while poes:
-        mouse = pg.mouse.get_pos()
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
