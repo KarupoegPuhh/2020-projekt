@@ -76,21 +76,18 @@ def paused():
                 pg.quit()
                 quit()
                 
-        aken.fill((70,70,70))
-        TextSurf, TextRect = text_objects("Tõmban hinge", largeText)
-        TextRect.center = ((laius // 2), (170))
+        aken.fill((42,45,67))
+        TextSurf, TextRect = text_objects("Tõmban hinge!", largeText)
+        TextRect.center = ((520), (100))
         aken.blit(TextSurf, TextRect)
         
-        keys = pg.key.get_pressed()
-  
-        if keys [pg.K_i]:
-            inventory()
-        
     
-        nupp(aken, "Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-        nupp(aken, "Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
-        nupp(aken, "Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), seljakott)
-        nupp(aken, "Konsum", 540, 450, 200, 100, (0,100,0), (0,255,0), pood)
+        nupp(aken, "Jätkan!", 1050, 150, 200, 100, (100,100,100), (15,113,115), unpause)
+        nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
+        nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
+        nupp(aken, "Annan alla", 1050, 600, 200, 100, (100,100,100), (15,113,115), intro)
+        
+        aken.blit(sleep, (100,225))
         
         pg.display.update()
 
@@ -106,6 +103,7 @@ def main_loop():
     global kuulid, vastased, põrandad, rahad, itemid
     global hernepüss, kartulikahur, ling, railgun
     global kasukas, kiiver, püksid, sandaalid
+    global ritaliin, ritaliin_cd
     
     #vars
     kuulid = []
@@ -123,9 +121,13 @@ def main_loop():
     railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
     #Varustus
     kasukas = Varustus(0, 5, False, False, "vammus")
-    kiiver = Varustus(1, 2, False, True, "rattakiiver")
+    kiiver = Varustus(1, 2, False, False, "rattakiiver")
     püksid = Varustus(2, 1, False, True, "viigipüksid")
     sandaalid = Varustus(5, 0, False, True, "sandaalid")
+    
+    #Ritaliin buff
+    ritaliin = False
+    ritaliin_cd = 0
     
     #level layout
     global screen
@@ -169,8 +171,8 @@ def main_loop():
         for p1 in vastased:
             p1.draw()
         
-        for rah in rahad:
-            rah.draw()
+        for raha in rahad:
+            raha.draw()
         for kuul in kuulid:
             kuul.draw()
             
@@ -220,10 +222,22 @@ def main_loop():
         pg.draw.rect(aken, (25,25,25), (238, 598, 804, 124))
         pg.draw.rect(aken, (50,50,50), (240, 600, 800, 120))
         #healthbar
-        pg.draw.rect(aken, (100,0,0), (340, 625, 600, 20))
-        pg.draw.rect(aken, (200,0,0), (342, 627, 596 * (Tom.health / Tom.max_health), 16))
-        TextSurf, TextRect = text_objects(str(round(Tom.health, 2)) + " / " + str(Tom.max_health), databarText)
-        TextRect.center = ((laius // 2), (635))
+        pg.draw.rect(aken, (100,0,0), (340, 605, 600, 20))
+        if Tom.health >= 0:
+            pg.draw.rect(aken, (200,0,0), (342, 607, 596 * (Tom.health / Tom.max_health), 16))
+            TextSurf, TextRect = text_objects(str(round(Tom.health, 2)) + " / " + str(Tom.max_health), databarText)
+            TextRect.center = ((laius // 2), (615))
+            aken.blit(TextSurf, TextRect)
+        else:
+            TextSurf, TextRect = text_objects("0" + " / " + str(Tom.max_health), databarText)
+            TextRect.center = ((laius // 2), (615))
+            aken.blit(TextSurf, TextRect)
+        #ritaliinbar
+        pg.draw.rect(aken, (0,0,100), (340, 630, 600, 20))
+        if ritaliin:
+            pg.draw.rect(aken, (0,0,200), (342, 632, 596 * ((1800 - ritaliin_cd) / 1800 ), 16))
+        TextSurf, TextRect = text_objects(("Ritaliin"), databarText)
+        TextRect.center = ((laius // 2), (640))
         aken.blit(TextSurf, TextRect)
         
         #Pilt tegelase jaoks
@@ -490,6 +504,16 @@ def main_loop():
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
+            
+        if ritaliin:
+            ritaliin_cd += 1
+            print(ritaliin_cd)
+            if ritaliin_cd >= 1800:
+                ritaliin = False
+                ritaliin_cd = 0
+                Tom.vel /= 1.5
+                Tom.vh -= 1
+                Tom.initial_vh -= 1
                 
         võit()
         if not Tom.elus and Tom.kontr:
