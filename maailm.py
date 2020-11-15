@@ -76,21 +76,18 @@ def paused():
                 pg.quit()
                 quit()
                 
-        aken.fill((70,70,70))
-        TextSurf, TextRect = text_objects("Tõmban hinge", largeText)
-        TextRect.center = ((laius // 2), (170))
+        aken.fill((42,45,67))
+        TextSurf, TextRect = text_objects("Tõmban hinge!", largeText)
+        TextRect.center = ((520), (100))
         aken.blit(TextSurf, TextRect)
         
-        keys = pg.key.get_pressed()
-  
-        if keys [pg.K_i]:
-            inventory()
-        
     
-        nupp(aken, "Jätkan!", 170, 300, 200, 100, (0,100,0), (0,255,0), unpause)
-        nupp(aken, "Annan alla", 540, 300, 200, 100, (100,100,0), (255,255,0), intro)
-        nupp(aken, "Varustuse juurde", 910, 300, 200, 100, (0,100,0), (0,255,0), seljakott)
-        nupp(aken, "Konsum", 540, 450, 200, 100, (0,100,0), (0,255,0), pood)
+        nupp(aken, "Jätkan!", 1050, 150, 200, 100, (100,100,100), (15,113,115), unpause)
+        nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
+        nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
+        nupp(aken, "Annan alla", 1050, 600, 200, 100, (100,100,100), (15,113,115), intro)
+        
+        aken.blit(sleep, (100,225))
         
         pg.display.update()
 
@@ -124,7 +121,7 @@ def main_loop():
     railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
     #Varustus
     kasukas = Varustus(0, 5, False, False, "vammus")
-    kiiver = Varustus(1, 2, False, True, "rattakiiver")
+    kiiver = Varustus(1, 2, False, False, "rattakiiver")
     püksid = Varustus(2, 1, False, True, "viigipüksid")
     sandaalid = Varustus(5, 0, False, True, "sandaalid")
     
@@ -174,8 +171,8 @@ def main_loop():
         for p1 in vastased:
             p1.draw()
         
-        for rah in rahad:
-            rah.draw()
+        for raha in rahad:
+            raha.draw()
         for kuul in kuulid:
             kuul.draw()
             

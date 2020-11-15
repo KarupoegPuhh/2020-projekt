@@ -4,18 +4,6 @@ from abi import *
 from player import *
 from player_lisad import *
 
-dirr = os.path.dirname(os.path.abspath(__file__))
-piltdir = dirr+"/pildid"
-
-pea = pg.image.load(piltdir+"/pea.png")
-keha = pg.image.load(piltdir+"/keha.png")
-jalad = pg.image.load(piltdir+"/jalad.png")
-tossud = pg.image.load(piltdir+"/tossud.png")
-pea1 = pg.image.load(piltdir+"/pea1.png")
-keha1 = pg.image.load(piltdir+"/keha1.png")
-jalad1 = pg.image.load(piltdir+"/jalad1.png")
-tossud1 = pg.image.load(piltdir+"/tossud1.png")
-
 #pood
 def pood():
     global poes
@@ -98,6 +86,10 @@ def pood():
         TextRect.center = (1050, 180)
         aken.blit(TextSurf, TextRect)
         
+        if not maailm.kiiver.unlocked:
+            nupp(aken, "Kiiver! -4₽", 950 , 340, 200, 70, (100,100,100), (15,113,115), kiiver_ost)
+            
+        
         #aken rahale ja raha
         pg.draw.rect(aken, (148, 82, 74), (1061,0,158,54))
         pg.draw.rect(aken, (162, 126, 111), (1065,0,150,50))
@@ -158,6 +150,9 @@ def ritaliin_ost():
         maailm.Tom.initial_vh += 1
         maailm.Tom.raha -= 1
         ost.play()
+        
+def kiiver_ost():
+    maailm.kiiver.unlocked = True
         
 #Seljakott
 def seljakott():

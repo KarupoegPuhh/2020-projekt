@@ -30,7 +30,7 @@ class Raha:
             self.y = self.mkr-5
             self.kukkumas = False
     
-    def draw(self, aken):
+    def draw(self):
         pg.draw.circle(aken, (255,215,0), (self.x , self.y), 5)
             
 class Relvad:

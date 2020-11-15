@@ -39,6 +39,17 @@ menu_headText = pg.font.Font(fontdir+"/RM.ttf", 50)
 menu_head1Text = pg.font.Font(fontdir+"/RM.ttf", 40)
 menu_head2Text = pg.font.Font(fontdir+"/RM.ttf", 30)
 
+#Pildid
+pea = pg.image.load(piltdir+"/pea.png")
+keha = pg.image.load(piltdir+"/keha.png")
+jalad = pg.image.load(piltdir+"/jalad.png")
+tossud = pg.image.load(piltdir+"/tossud.png")
+pea1 = pg.image.load(piltdir+"/pea1.png")
+keha1 = pg.image.load(piltdir+"/keha1.png")
+jalad1 = pg.image.load(piltdir+"/jalad1.png")
+tossud1 = pg.image.load(piltdir+"/tossud1.png")
+sleep = pg.image.load(piltdir+"/sleep.png")
+
 
 
 def text_objects(text, font):
