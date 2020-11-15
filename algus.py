@@ -5,6 +5,7 @@ from abi import *
 from player import *
 
 mitmes_kord = 0
+tegelane_pilt_menüüs = jeesus1
 
 def intro():
     global mitmes_kord
@@ -43,6 +44,7 @@ def intro():
         pg.display.update()
         
 def vali_sõdalane():
+    global a
     global valin_sõdalane
     valin_sõdalane = True
     while valin_sõdalane:
@@ -51,17 +53,28 @@ def vali_sõdalane():
                 pg.quit()
                 quit()
                 
-        aken.fill((70,70,70))
-        TextSurf, TextRect = text_objects("Vali oma sõdalane!", largeText)
-        TextRect.center = ((laius // 2), (100))
+        aken.fill((42,45,67))
+            
+        #Currently selected sõdalane 200x200 pilt
+        aken.blit(tegelane_pilt_menüüs,(540,10))
+        aken.blit(border, (530,0))
+        
+        #Valisõdalane tekst
+        TextSurf, TextRect = text_objects("Vali oma sõdalane!", mediumText)
+        TextRect.center = ((laius // 2), (270))
         aken.blit(TextSurf, TextRect)
     
         
-        nupp(aken, "Valik tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), sõdalane_valitud)
-        #Relva valik
-        nupp(aken, "Deus Vult!", 170, 300, 200, 100, (150,150,150), (250,250,250), esimene_sõdalane)
-        nupp(aken, "Tahan olla camo!", 540, 300, 200, 100, (112,130,56), (162,180,106), teine_sõdalane)
-        nupp(aken, "Vidi vini vici", 910 , 300, 200, 100, (80,5,94), (130,55,144), kolmas_sõdalane)
+        nupp(aken, "Valik tehtud!", laius/2-100 , 600, 200, 100, (148, 82, 74), (168, 102, 94), sõdalane_valitud)
+        #Tegelase valik
+        nupp(aken, "Kalkulaator!", 96, 330, 200, 100, (44,86,150), (64,106,170), zolk_sõdalane)
+        nupp(aken, "V klub", 392, 330, 200, 100, (255,154,19), (255,174,39), oleg_sõdalane)
+        nupp(aken, "3rd Reich", 688 , 330, 200, 100, (254,184,198), (255,204,218), ott_sõdalane)
+        nupp(aken, "Nnnnnnoh!", 984, 330, 200, 100, (205,3,0), (235,3,0), hennoste_sõdalane)
+        nupp(aken, "Deus Vult!", 96, 460, 200, 100, (150,150,150), (250,250,250), esimene_sõdalane)
+        nupp(aken, "Tahan olla camo!", 392, 460, 200, 100, (112,130,56), (162,180,106), teine_sõdalane)
+        nupp(aken, "Vidi vini vici", 688, 460, 200, 100, (80,5,94), (130,55,144), kolmas_sõdalane)
+        nupp(aken, "Deus Vult!", 984, 460, 200, 100, (150,150,150), (250,250,250), esimene_sõdalane)
         
         pg.display.update()
         
@@ -71,17 +84,50 @@ def sõdalane_valitud():
     valin_sõdalane = False
     
 def esimene_sõdalane():
-    global piltdir
+    global tegelane_pilt_menüüs
     Player.kangelane_värv = (255,255,255)
     Player.kangelane_nimi = "Jeesus Kristus"
-    Player.kangelane_pilt = pg.image.load(piltdir+"/jesus.png")
+    Player.kangelane_pilt = jeesus
+    tegelane_pilt_menüüs = jeesus1
         
 def teine_sõdalane():
+    global tegelane_pilt_menüüs
     Player.kangelane_värv = (112,130,56)
     Player.kangelane_nimi = "al-Assad"
-    Player.kangelane_pilt = pg.image.load(piltdir+"/bashar.png")
+    Player.kangelane_pilt = al_assad
+    tegelane_pilt_menüüs = al_assad1
 
 def kolmas_sõdalane():
+    global tegelane_pilt_menüüs
     Player.kangelane_värv = (80,5,94)
     Player.kangelane_nimi = "Julius Caesar"
-    Player.kangelane_pilt = pg.image.load(piltdir+"/JC_120x120.png")
+    Player.kangelane_pilt = Julius
+    tegelane_pilt_menüüs = Julius1
+    
+def zolk_sõdalane():
+    global tegelane_pilt_menüüs
+    Player.kangelane_värv = (44,86,150)
+    Player.kangelane_nimi = "Indrek Zolk"
+    Player.kangelane_pilt = zolk
+    tegelane_pilt_menüüs = zolk1
+    
+def oleg_sõdalane():
+    global tegelane_pilt_menüüs
+    Player.kangelane_värv = (255,154,19)
+    Player.kangelane_nimi = "Oleg Košik"
+    Player.kangelane_pilt = oleg
+    tegelane_pilt_menüüs = oleg1
+    
+def ott_sõdalane():
+    global tegelane_pilt_menüüs
+    Player.kangelane_värv = (254,184,198)
+    Player.kangelane_nimi = "Ott-Kaarel"
+    Player.kangelane_pilt = ott
+    tegelane_pilt_menüüs = ott1
+    
+def hennoste_sõdalane():
+    global tegelane_pilt_menüüs
+    Player.kangelane_värv = (205,3,0)
+    Player.kangelane_nimi = "Hennoste"
+    Player.kangelane_pilt = hennoste
+    tegelane_pilt_menüüs = hennoste1
