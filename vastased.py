@@ -226,7 +226,10 @@ class Preester(Vastane):
             maailm.hernepüss.dmg += self.dmgdb
             maailm.kartulikahur.dmg += self.dmgdb
             maailm.railgun.dmg += self.dmgdb
+            maailm.kiiver.armor /= self.armordb
             maailm.kasukas.armor /= self.armordb
+            maailm.püksid.armor /= self.armordb
+            maailm.sandaalid.armor /= self.armordb
     
     def move(self, dt, Tom):
         if 200 < Tom.x + Tom.laius/2 < laius -200:
@@ -238,7 +241,10 @@ class Preester(Vastane):
                 maailm.hernepüss.dmg -= self.dmgdb
                 maailm.kartulikahur.dmg -= self.dmgdb
                 maailm.railgun.dmg -= self.dmgdb
+                maailm.kiiver.armor *= self.armordb
                 maailm.kasukas.armor *= self.armordb
+                maailm.püksid.armor *= self.armordb
+                maailm.sandaalid.armor *= self.armordb
                 
         if 100 > Tom.x + Tom.laius/2 or Tom.x + Tom.laius/2 > laius - 100:
             if self.dbkontroll:
@@ -249,7 +255,10 @@ class Preester(Vastane):
                 maailm.hernepüss.dmg += self.dmgdb
                 maailm.kartulikahur.dmg += self.dmgdb
                 maailm.railgun.dmg += self.dmgdb
+                maailm.kiiver.armor /= self.armordb
                 maailm.kasukas.armor /= self.armordb
+                maailm.püksid.armor /= self.armordb
+                maailm.sandaalid.armor /= self.armordb
         
         if not self.y_c > self.y > self.y_c - 30:
             self.vel *= -1
