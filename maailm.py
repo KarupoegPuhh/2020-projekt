@@ -106,6 +106,7 @@ def main_loop():
     global kuulid, vastased, põrandad, rahad, itemid
     global hernepüss, kartulikahur, ling, railgun
     global kasukas, kiiver, püksid, sandaalid
+    global ritaliin, ritaliin_cd
     
     #vars
     kuulid = []
@@ -126,6 +127,10 @@ def main_loop():
     kiiver = Varustus(1, 2, False, True, "rattakiiver")
     püksid = Varustus(2, 1, False, True, "viigipüksid")
     sandaalid = Varustus(5, 0, False, True, "sandaalid")
+    
+    #Ritaliin buff
+    ritaliin = False
+    ritaliin_cd = 0
     
     #level layout
     global screen
@@ -490,6 +495,16 @@ def main_loop():
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
+            
+        if ritaliin:
+            ritaliin_cd += 1
+            print(ritaliin_cd)
+            if ritaliin_cd >= 1800:
+                ritaliin = False
+                ritaliin_cd = 0
+                Tom.vel /= 1.5
+                Tom.vh -= 1
+                Tom.initial_vh -= 1
                 
         võit()
         if not Tom.elus and Tom.kontr:
