@@ -105,7 +105,7 @@ def main_loop():
     global Tom
     global kuulid, vastased, põrandad, rahad, itemid
     global hernepüss, kartulikahur, ling, railgun
-    global kasukas
+    global kasukas, kiiver, püksid, sandaalid
     
     #vars
     kuulid = []
@@ -123,6 +123,9 @@ def main_loop():
     railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
     #Varustus
     kasukas = Varustus(0, 5, False, False, "vammus")
+    kiiver = Varustus(1, 2, False, True, "rattakiiver")
+    püksid = Varustus(2, 1, False, True, "viigipüksid")
+    sandaalid = Varustus(5, 0, False, True, "sandaalid")
     
     #level layout
     global screen

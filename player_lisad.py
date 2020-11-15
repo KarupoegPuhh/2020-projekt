@@ -56,11 +56,13 @@ class Varustus:
         if not self.equipped:
             self.equipped = True
             Tom.armor += self.armor
+            Tom.vel += self.speed
             
     def unequip(self, Tom):
         if self.equipped:
             self.equipped = False
             Tom.armor -= self.armor
+            Tom.vel -= self.speed
 
 class Item():
     def __init__(self, x, y, laius, kõrgus, asi, tekst, värv):
