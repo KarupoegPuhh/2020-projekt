@@ -36,6 +36,8 @@ smallText = pg.font.Font(fontdir+"/RM.ttf", 22)
 veneText = pg.font.SysFont(fontdir+"/MIROSLN.ttf", 36)
 databarText = pg.font.Font(fontdir+"/RM.ttf", 15)
 menu_headText = pg.font.Font(fontdir+"/RM.ttf", 50)
+menu_head1Text = pg.font.Font(fontdir+"/RM.ttf", 40)
+menu_head2Text = pg.font.Font(fontdir+"/RM.ttf", 30)
 
 
 

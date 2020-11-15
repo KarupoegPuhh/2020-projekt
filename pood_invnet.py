@@ -28,104 +28,86 @@ def pood():
                 pg.quit()
                 quit()
                 
-        aken.fill((70,70,70))
-        TextSurf, TextRect = text_objects("Mida teile?", largeText)
-        TextRect.center = ((laius // 2), (100))
+        aken.fill((42,45,67))
+        pg.draw.rect(aken, (148, 82, 74), (446,0,388,104))
+        pg.draw.rect(aken, (162, 126, 111), (450,0,380,100))
+        TextSurf, TextRect = text_objects("Mida teile?", mediumText)
+        TextRect.center = ((laius // 2), (50))
         aken.blit(TextSurf, TextRect)
         #Registreerime kus on kursor
         mouse = pg.mouse.get_pos()
         click = pg.mouse.get_pressed()
-                    
-        nupp(aken, "Ostud tehtud!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), pood_done)
-        #Relva valik
+        #Joogid ja ained
+        pg.draw.rect(aken, (148, 82, 74), (47,127,366,486))
+        pg.draw.rect(aken, (162, 126, 111), (50,130,360,480))
+        pg.draw.rect(aken, (148, 82, 74), (100,130,260,100))
+        TextSurf, TextRect = text_objects("Mmm... maitsev", menu_head2Text)
+        TextRect.center = (230, 180)
+        aken.blit(TextSurf, TextRect)
+        
+        if not maailm.ritaliin:
+            nupp(aken, "Ritaliini! -1₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
+            if 130 < mouse[0] < 330 and 250 < mouse[1] < 310:
+                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
+                ritaliin_txt = smallText.render("Mmmm... maitsev", True, (200,200,200))
+                ritaliin_txt_kord = ritaliin_txt.get_rect()
+                ritaliin_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
+                aken.blit(ritaliin_txt, ritaliin_txt_kord)
+                
         if maailm.Tom.health < maailm.Tom.max_health:
-            nupp(aken, "Jõujooki! -1₽", 170, 200, 200, 100, (113,16,15), (163,66,65), jõujook_ost)
-            if 170 < mouse[0] < 370 and 200 < mouse[1] < 300:
+            nupp(aken, "Jõujooki! -1₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
+            if 130 < mouse[0] < 330 and 340 < mouse[1] < 410:
                 pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
                 JJ = smallText.render("Saad 1 hp juurde", True, (200,200,200))
                 JJ_kord = JJ.get_rect()
                 JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
                 aken.blit(JJ, JJ_kord)
                 
+        #Relvade valik
+        pg.draw.rect(aken, (148, 82, 74), (457,127,366,486))
+        pg.draw.rect(aken, (162, 126, 111), (460,130,360,480))
+        pg.draw.rect(aken, (148, 82, 74), (510,130,260,100))
+        TextSurf, TextRect = text_objects("Põhh põhh...", menu_head2Text)
+        TextRect.center = (640, 180)
+        aken.blit(TextSurf, TextRect)
+                
         if not maailm.hernepüss.unlocked:    
-            nupp(aken, "Hernepüssi! -3₽", 540, 200, 200, 100, (112,130,56), (162,180,106), hernepüss_ost)
-            if 540 < mouse[0] < 740 and 200 < mouse[1] < 300:   
+            nupp(aken, "Hernepüssi! -3₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)
+            if 540 < mouse[0] < 740 and 250 < mouse[1] < 310:   
                 pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
                 hernepüss_txt = smallText.render("Püstolkuulipilduja", True, (200,200,200))
                 hernepüss_txt_kord = hernepüss_txt.get_rect()
                 hernepüss_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
                 aken.blit(hernepüss_txt, hernepüss_txt_kord)
                 
-        if not maailm.ritaliin:
-            nupp(aken, "Ritaliini! -1₽", 910 , 200, 200, 100, (80,5,94), (130,55,144), ritaliin_ost)
-            if 910 < mouse[0] < 1110 and 200 < mouse[1] < 300:
-                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
-                ritaliin_txt = smallText.render("Mmmm... maitsev", True, (200,200,200))
-                ritaliin_txt_kord = ritaliin_txt.get_rect()
-                ritaliin_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
-                aken.blit(ritaliin_txt, ritaliin_txt_kord)
             
         if not maailm.kartulikahur.unlocked:
-            nupp(aken, "kartul! -4₽", 540 , 400, 200, 100, (80,5,94), (130,55,144), kartulikahur_ost)
-            if 540 < mouse[0] < 740 and 400 < mouse[1] < 500:
+            nupp(aken, "kartul! -4₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
+            if 540 < mouse[0] < 740 and 340 < mouse[1] < 410:
                 pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
                 potato_txt = smallText.render("SeE oN hIigLasLiK!", True, (200,200,200))
                 potato_txt_kord = potato_txt.get_rect()
                 potato_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
                 aken.blit(potato_txt, potato_txt_kord)
+                
+        #Riiete valik
+        pg.draw.rect(aken, (148, 82, 74), (867,127,366,486))
+        pg.draw.rect(aken, (162, 126, 111), (870,130,360,480))
+        pg.draw.rect(aken, (148, 82, 74), (920,130,260,100))
+        TextSurf, TextRect = text_objects("Rõivad", menu_head2Text)
+        TextRect.center = (1050, 180)
+        aken.blit(TextSurf, TextRect)
         
+        #aken rahale ja raha
+        pg.draw.rect(aken, (148, 82, 74), (1061,0,158,54))
+        pg.draw.rect(aken, (162, 126, 111), (1065,0,150,50))
         raha = veneText.render(str(maailm.Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (laius-200, 20))
         
-        pg.display.update()
-
-
-#inventory   
-def inventory():
-    global inventory_tab
-    inventory_tab = True
-    while inventory_tab:
-        mouse = pg.mouse.get_pos()
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                quit()
-                
-        aken.fill((70,70,70))
-        TextSurf, TextRect = text_objects("Vali oma varustus", largeText)
-        TextRect.center = ((laius // 2), (100))
-        aken.blit(TextSurf, TextRect)
-
-        TextSurf, TextRect = text_objects("(Sul on käes "+str(maailm.Tom.relv.nimi)+")", mediumText)
-        TextRect.center = ((laius // 2), (230))
-        aken.blit(TextSurf, TextRect)
+        #Ostud tehtud
+        nupp(aken, "Ostud tehtud!", 540, 630, 200, 70, (148, 82, 74), (168, 102, 94), pood_done)
         
-        nupp(aken, "Olen valmis naasma!", laius/2-100 , 600, 200, 100, (100,100,0), (255,255,0), invent_stop)
-        #Relva valik
-        if maailm.ling.unlocked:
-            nupp(aken, "lingu viskama!", 170, 300, 200, 100, (100,100,100), (200,200,200), ling_equip)
-                    
-        if maailm.hernepüss.unlocked:
-            nupp(aken, "Ma sain hernepüssi!", 540, 300, 200, 100, (100,100,100), (200,200,200), hernepüss_equip)
-                
-        if maailm.kartulikahur.unlocked:
-            nupp(aken, "Ohh kartulikahur!", 910 , 300, 200, 100, (100,100,100), (200,200,200), kartulikahur_equip)
-                
-        if maailm.railgun.unlocked:
-            nupp(aken, "Tulevik in nüüd, vanamees!", 490, 450, 300, 100, (100,100,100), (200,200,200), railgun_equip)
-            
-            
-        #joonistame kasti, et infot lugeda
-        nupu_hover_txt(maailm.ling, 170, 300, 200, 100, (200,200,200))
-        nupu_hover_txt(maailm.hernepüss, 540, 300, 200, 100, (200,200,200))
-        nupu_hover_txt(maailm.kartulikahur, 910, 300, 200, 100, (21,244,238))
-        nupu_hover_txt(maailm.railgun, 490, 450, 300, 100, (191,0,255))
-
         pg.display.update()
-        
-def invent_stop():
-    global inventory_tab
-    inventory_tab = False
     
 def ling_equip():
     if maailm.ling.unlocked:
@@ -198,7 +180,6 @@ def seljakott():
         pg.draw.rect(aken, (148, 82, 74), (47,127,406,486))
         pg.draw.rect(aken, (162, 126, 111), (50,130,400,480))
         pg.draw.rect(aken, (148, 82, 74), (150,130,200,100))
-        #pg.draw.rect(aken, (238, 244, 212), (155,135,190,90)) veel üks kast nimele
         TextSurf, TextRect = text_objects("Rõivad", menu_headText)
         TextRect.center = (250, 180)
         aken.blit(TextSurf, TextRect)

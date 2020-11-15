@@ -225,10 +225,22 @@ def main_loop():
         pg.draw.rect(aken, (25,25,25), (238, 598, 804, 124))
         pg.draw.rect(aken, (50,50,50), (240, 600, 800, 120))
         #healthbar
-        pg.draw.rect(aken, (100,0,0), (340, 625, 600, 20))
-        pg.draw.rect(aken, (200,0,0), (342, 627, 596 * (Tom.health / Tom.max_health), 16))
-        TextSurf, TextRect = text_objects(str(round(Tom.health, 2)) + " / " + str(Tom.max_health), databarText)
-        TextRect.center = ((laius // 2), (635))
+        pg.draw.rect(aken, (100,0,0), (340, 605, 600, 20))
+        if Tom.health >= 0:
+            pg.draw.rect(aken, (200,0,0), (342, 607, 596 * (Tom.health / Tom.max_health), 16))
+            TextSurf, TextRect = text_objects(str(round(Tom.health, 2)) + " / " + str(Tom.max_health), databarText)
+            TextRect.center = ((laius // 2), (615))
+            aken.blit(TextSurf, TextRect)
+        else:
+            TextSurf, TextRect = text_objects("0" + " / " + str(Tom.max_health), databarText)
+            TextRect.center = ((laius // 2), (615))
+            aken.blit(TextSurf, TextRect)
+        #ritaliinbar
+        pg.draw.rect(aken, (0,0,100), (340, 630, 600, 20))
+        if ritaliin:
+            pg.draw.rect(aken, (0,0,200), (342, 632, 596 * ((1800 - ritaliin_cd) / 1800 ), 16))
+        TextSurf, TextRect = text_objects(("Ritaliin"), databarText)
+        TextRect.center = ((laius // 2), (640))
         aken.blit(TextSurf, TextRect)
         
         #Pilt tegelase jaoks
