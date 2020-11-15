@@ -17,7 +17,7 @@ class Player:
         self.initial_vh = 10
         self.vh = 0 #hüppe vel
         self.health = 7
-        self.max_health = 10
+        self.max_health = 100
         self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
         self.kontr = True #kas saab kontrollida
         self.elus = True
@@ -29,7 +29,7 @@ class Player:
     
     kangelane_värv = (255,255,255)
     kangelane_nimi = "Jeesus Kristus"
-    kangelane_pilt = pg.image.load("jesus.png")
+    kangelane_pilt = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid/jesus.png")
     
     def hit(self, vastane):    
         if self.health > 0:
