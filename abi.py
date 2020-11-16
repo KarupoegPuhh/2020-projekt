@@ -49,6 +49,22 @@ keha1 = pg.image.load(piltdir+"/keha1.png")
 jalad1 = pg.image.load(piltdir+"/jalad1.png")
 tossud1 = pg.image.load(piltdir+"/tossud1.png")
 sleep = pg.image.load(piltdir+"/sleep.png")
+jeesus = pg.image.load(piltdir+"/jesus.png")
+al_assad = pg.image.load(piltdir+"/bashar.png")
+Julius = pg.image.load(piltdir+"/JC_120x120.png")
+jeesus1 = pg.image.load(piltdir+"/jesus1.png")
+al_assad1 = pg.image.load(piltdir+"/bashar1.png")
+Julius1 = pg.image.load(piltdir+"/JC1.png")
+border = pg.image.load(piltdir+"/border.png")
+zolk = pg.image.load(piltdir+"/zolk.png")
+zolk1 = pg.image.load(piltdir+"/zolk1.png")
+oleg = pg.image.load(piltdir+"/oleg.png")
+oleg1 = pg.image.load(piltdir+"/oleg1.png")
+ott = pg.image.load(piltdir+"/ott.png")
+ott1 = pg.image.load(piltdir+"/ott1.png")
+hennoste = pg.image.load(piltdir+"/hennoste.png")
+hennoste1 = pg.image.load(piltdir+"/hennoste1.png")
+
 
 
 

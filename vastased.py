@@ -150,18 +150,20 @@ class Lind(Vastane):
         #jälitab
         if self.jälitab:
             if Tom.x + Tom.laius/2 > self.x+self.laius/2 and self.cooldown == 0:
-                if Tom.y > self.y + self.pikkus / 2:
+                if Tom.y >= self.y + self.pikkus / 2:
                     self.x += self.vel*dt
                     self.y += self.vel*dt
                 else:
+                    self.y -= self.vel*dt
                     self.x += self.vel*dt
                 if Tom.kb != 0:
                     self.lõin = True
             elif Tom.x + Tom.laius/2 < self.x+self.laius/2 and self.cooldown == 0:
-                if Tom.y > self.y + self.pikkus / 2:
+                if Tom.y >= self.y + self.pikkus / 2:
                     self.x -= self.vel*dt
                     self.y += self.vel*dt
                 else:
+                    self.y -= self.vel*dt
                     self.x -= self.vel*dt
                 if Tom.kb != 0:
                     self.lõin = True

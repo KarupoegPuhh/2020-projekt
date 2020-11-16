@@ -145,7 +145,7 @@ def ritaliin_ost():
     global vh
     if maailm.Tom.raha >= 1:
         maailm.ritaliin = True
-        maailm.Tom.vel *= 1.5
+        maailm.Tom.vel += 7
         maailm.Tom.vh += 1
         maailm.Tom.initial_vh += 1
         maailm.Tom.raha -= 1

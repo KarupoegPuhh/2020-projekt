@@ -534,11 +534,10 @@ def main_loop():
             
         if ritaliin:
             ritaliin_cd += 1
-            print(ritaliin_cd)
             if ritaliin_cd >= 1800:
                 ritaliin = False
                 ritaliin_cd = 0
-                Tom.vel /= 1.5
+                Tom.vel -= 7
                 Tom.vh -= 1
                 Tom.initial_vh -= 1
                 
