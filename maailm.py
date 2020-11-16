@@ -139,7 +139,7 @@ def main_loop():
     itemid_ekraanis = itemite_loomine()
     
     for scr in screenid:
-        põrand1 = Põrand(0,laius,500)
+        põrand1 = Põrand(0,laius,500,kõrgus)
         screenid[scr].append(põrand1)
     
     
@@ -193,7 +193,7 @@ def main_loop():
                 #print(px+lai)
                 #print(px)
                 #print(i.x2)
-                y.append(i.y)
+                y.append(i.y1)
 
         if not y:
             mk = eelm_mk
@@ -216,6 +216,9 @@ def main_loop():
             if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
+
+    def collision(x,y,vel,plat):
+        pass
 
 
     def databar():
@@ -356,10 +359,10 @@ def main_loop():
 
         if Tom.kontr:
             # TOM PAREMALE JA VASAKULE      
-            if keys [pg.K_d] and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+            if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
                 Tom.x += Tom.vel*dt
                 Tom.vaatab = 1
-            if keys [pg.K_a] and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+            if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
                 Tom.x -= Tom.vel*dt
                 Tom.vaatab = -1
             
