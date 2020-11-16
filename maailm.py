@@ -90,6 +90,40 @@ def paused():
         aken.blit(sleep, (100,225))
         
         pg.display.update()
+        
+def rgb():
+    global red 
+    global green
+    global blue
+    global redc
+    global greenc 
+    global bluec 
+    if redc:
+        red -= 25
+        green += 25
+        if red <= 0:
+            red = 0
+            green = 250
+            greenc = True
+            redc = False
+    elif greenc:
+        green -= 25
+        blue += 25
+        if green <= 0:
+            green = 0
+            blue = 250
+            bluec = True
+            greenc = False
+    elif bluec:
+        blue -= 25
+        red += 25
+        if blue <= 0:
+            blue = 0
+            red = 250
+            redc = True
+            bluec = False
+            red = 250    
+    return (red, green, blue)
 
 
 def main_loop():
@@ -128,6 +162,13 @@ def main_loop():
     #Ritaliin buff
     ritaliin = False
     ritaliin_cd = 0
+    global red, green, blue, redc, greenc, bluec
+    red = 250
+    green = 0
+    blue = 0
+    redc = True
+    greenc = False
+    bluec = False
     
     #level layout
     global screen
@@ -160,6 +201,7 @@ def main_loop():
     pos = 0
     global start
     start = 0
+    ritaliin_music = False
     
     def redrawGameWindow():
         aken.fill((21,85,83))
@@ -222,6 +264,11 @@ def main_loop():
 
 
     def databar():
+        
+        ##
+        
+        ##
+
         pg.draw.rect(aken, (25,25,25), (238, 598, 804, 124))
         pg.draw.rect(aken, (50,50,50), (240, 600, 800, 120))
         #healthbar
@@ -236,9 +283,9 @@ def main_loop():
             TextRect.center = ((laius // 2), (615))
             aken.blit(TextSurf, TextRect)
         #ritaliinbar
-        pg.draw.rect(aken, (0,0,100), (340, 630, 600, 20))
+        pg.draw.rect(aken, (30,30,30), (340, 630, 600, 20))
         if ritaliin:
-            pg.draw.rect(aken, (0,0,200), (342, 632, 596 * ((1800 - ritaliin_cd) / 1800 ), 16))
+            pg.draw.rect(aken, (rgb()), (342, 632, 596 * ((900 - ritaliin_cd) / 900 ), 16))
         TextSurf, TextRect = text_objects(("Ritaliin"), databarText)
         TextRect.center = ((laius // 2), (640))
         aken.blit(TextSurf, TextRect)
@@ -507,15 +554,38 @@ def main_loop():
             start = start + pos/1000.0
             pg.mixer.music.play(-1, start)
             paused()
-            
+        
+        #Ritaliin
         if ritaliin:
             ritaliin_cd += 1
-            if ritaliin_cd >= 1800:
+            if ritaliin_cd == 1:
+                laul = randint(1, 2)
+                algne_värv = Tom.värv
+            if 1 < ritaliin_cd < 900:
+                Tom.värv = (rgb())
+            if ritaliin_cd >= 900:
                 ritaliin = False
                 ritaliin_cd = 0
                 Tom.vel -= 7
                 Tom.vh -= 1
                 Tom.initial_vh -= 1
+                Tom.värv = algne_värv
+                
+        if ritaliin and not ritaliin_music:
+            ritaliin_music = True
+            pg.mixer.music.stop()
+            if laul == 1:
+                pg.mixer.music.load(helidir+"/ritaliin.mp3")
+                pg.mixer.music.play(-1, start, 2000)
+            if laul == 2:
+                pg.mixer.music.load(helidir+"/ritaliin1.mp3")
+                pg.mixer.music.play(-1, start, 2000)     
+        if not ritaliin and ritaliin_music:
+            ritaliin_music = False
+            pg.mixer.music.stop()
+            pg.mixer.music.load(helidir+"/game.mp3")
+            pg.mixer.music.play(-1, start, 1000)
+            
                 
         võit()
         if not Tom.elus and Tom.kontr:
