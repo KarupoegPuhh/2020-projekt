@@ -216,9 +216,23 @@ def main_loop():
             if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y1 - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
-
-    def collision(x,y,vel,plat):
-        pass
+    
+    global esimene_col
+    esimene_col = True
+    def collision(x1,x2,y1,y2): #,ex1,ex2,ey1,ey2 VEL LISADA
+        global Tom
+        global ex1
+        global ey1
+        for k in põrandad:
+            #horisontaalne ala kattub
+            if (y1 >= k.y1 and y1 <= k.y2) or (y2 <= k.y2 and y2 >= k.y1):
+                #vertikaalne
+                if (x1 >= k.x1 and x1 <= k.x2) or (x2 <= k.x2 and x2 >= k.x1):
+                    #while collision(Tom.x,Tom.x+Tom.laius,Tom.y,Tom.y+Tom.pikkus):
+                    Tom.x = ex1
+                    Tom.y = ey1
+                    print("ye")
+                    return True
 
 
     def databar():
@@ -307,6 +321,10 @@ def main_loop():
             
         
     vaheta_ekraani()
+    global ex1
+    global ey1
+    ex1 = Tom.x
+    ey1 = Tom.y
     #main loop
     while True:       
         #exit
@@ -354,17 +372,23 @@ def main_loop():
         #eelmine_mk = mk
         #maa_kõrgus(Tom.x,Tom.laius)
         
-        if mk <= Tom.y + Tom.pikkus:
-            Tom.y = mk-Tom.pikkus
+        #if mk <= Tom.y + Tom.pikkus:
+        #    Tom.y = mk-Tom.pikkus
 
+        #collision tom?
+        colliding = collision(Tom.x,Tom.x+Tom.laius,Tom.y,Tom.y+Tom.pikkus)
+        ex1 = Tom.x
+        ey1 = Tom.y
+        
         if Tom.kontr:
-            # TOM PAREMALE JA VASAKULE      
-            if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                Tom.x += Tom.vel*dt
-                Tom.vaatab = 1
-            if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                Tom.x -= Tom.vel*dt
-                Tom.vaatab = -1
+            # TOM PAREMALE JA VASAKULE
+            if not colliding:  
+                if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                    Tom.x += Tom.vel*dt
+                    Tom.vaatab = 1
+                if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                    Tom.x -= Tom.vel*dt
+                    Tom.vaatab = -1
             
             # TOM HÜPPAMINE
             if not Tom.jump:
@@ -385,8 +409,8 @@ def main_loop():
 
                 Tom.vh -= 1 
                 
-                if Tom.y+Tom.pikkus >= mk:
-                    Tom.y = mk-Tom.pikkus
+                if colliding: #Tom.y+Tom.pikkus >= mk:
+                    #Tom.y = mk-Tom.pikkus
                     Tom.jump = False
                     Tom.vh = Tom.initial_vh
         else:
