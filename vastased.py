@@ -44,7 +44,7 @@ class Vastane:
             self.health = self.max_health
         if self.health <= 0:
             for ugu in range(self.raha):
-                #vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus) #viimase argumendi peab ära muutma et raha õhku ei spawniks
+                vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus) #viimase argumendi peab ära muutma et raha õhku ei spawniks
                 maailm.rahad.append(vars()["r"+str(len(maailm.rahad))])
             self.elus = False
             vastane_surm.play()

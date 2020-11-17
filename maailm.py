@@ -33,7 +33,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(vastased_ekraanis[1]) == 0 and len(rahad) == 0:
+    if len(vastased_ekraanis[0][1]) == 0 and len(rahad) == 0:
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
@@ -47,7 +47,7 @@ def võit():
                     quit()
                     
             aken.fill((70,70,70))
-            TextSurf, TextRect = text_objects("Sa said hakkama!", largeText)
+            TextSurf, TextRect = text_objects("Sa said hakkama! Kõik hummid on surnd.", largeText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
@@ -81,7 +81,12 @@ def paused():
         TextRect.center = ((520), (100))
         aken.blit(TextSurf, TextRect)
         
-    
+        #ET SAAKS PAUSIST NUPUGA KA ÄRA MINNA AGA SEE EI TÖÖTAND MILLEGIPÄRST
+        #for event in pg.event.get():
+        #    if event.type == pg.KEYDOWN:
+        #        if event.key == pg.K_ESCAPE or event.key == pg.K_p:
+        #            unpause()
+
         nupp(aken, "Jätkan!", 1050, 150, 200, 100, (100,100,100), (15,113,115), unpause)
         nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
         nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
@@ -135,15 +140,17 @@ def main_loop():
     global screenid
     global vastased_ekraanis
     screenid = screenide_loomine()
-    screen = 0
+    screen = 1
     screen_y = 0
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
     
+    #alumine põrand?
     for kor in screenid:
         for scr in screenid[kor]:
-            põrand1 = Põrand(0,laius,500,kõrgus)
-            screenid[kor][scr].append(põrand1)
+            if kor == 0:
+                põrand1 = Põrand(0,laius,500,kõrgus)
+                screenid[kor][scr].append(põrand1)
     
     
     #Et mängjal oleks alguses relv
@@ -164,13 +171,28 @@ def main_loop():
     global start
     start = 0
     
+    #taustad
+    nobg = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/nobg.png")
+    global bg
+    bg = {}
+    for i in range(1):
+        bg[i] = {}
+        for j in range(6):
+            print(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
+            bg[i][j] = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
+
     def redrawGameWindow():
-        aken.fill((21,85,83))
+        #aken.fill((21,85,83))
+        try:    
+            aken.blit(bg[screen_y][screen],(0,0))
+        except:
+            aken.blit(nobg,(0,0))
 
         for prr in põrandad:
             prr.draw()
 
         Tom.draw()
+        
         for p1 in vastased:
             p1.draw()
         
@@ -220,8 +242,8 @@ def main_loop():
                 return False
         return True
     
-    global esimene_col
-    esimene_col = True
+    #global esimene_col
+    #esimene_col = True
     def collision(x1,x2,y1,y2): #,ex1,ex2,ey1,ey2 VEL LISADA
         global Tom
         global ex1
@@ -317,8 +339,8 @@ def main_loop():
             i.player_väljub(Tom)
         #uued platformide objektid
         põrandad = screenid.get(screen_y, {}).get(screen, []) #screenid[screen_y][screen]
-        vastased = vastased_ekraanis.get(screen,[])
-        itemid = itemid_ekraanis.get(screen,[])
+        vastased = vastased_ekraanis.get(screen_y,{}).get(screen, [])
+        itemid = itemid_ekraanis.get(screen_y,{}).get(screen, [])
         
         for i in vastased:
             i.player_siseneb(Tom)
@@ -330,6 +352,7 @@ def main_loop():
     global ey1
     ex1 = Tom.x
     ey1 = Tom.y
+    
     #main loop
     while True:       
         #exit
@@ -544,7 +567,7 @@ def main_loop():
             vaheta_ekraani()
 
         #PAUSE MENU
-        if keys[pg.K_p]:
+        if keys[pg.K_p]: #or keys[pg.K_ESCAPE]:
             pause = True
             pos = pg.mixer.music.get_pos()
             pg.mixer.music.stop()

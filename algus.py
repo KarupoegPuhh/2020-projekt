@@ -3,6 +3,7 @@ import pygame as pg
 from pygame_init import *
 from abi import *
 from player import *
+from random import randint
 
 mitmes_kord = 0
 tegelane_pilt_menüüs = jeesus1
@@ -74,7 +75,10 @@ def vali_sõdalane():
         nupp(aken, "Deus Vult!", 96, 460, 200, 100, (150,150,150), (250,250,250), esimene_sõdalane)
         nupp(aken, "Tahan olla camo!", 392, 460, 200, 100, (112,130,56), (162,180,106), teine_sõdalane)
         nupp(aken, "Vidi vini vici", 688, 460, 200, 100, (80,5,94), (130,55,144), kolmas_sõdalane)
-        nupp(aken, "Deus Vult!", 984, 460, 200, 100, (150,150,150), (250,250,250), esimene_sõdalane)
+        a1 = randint(0,255)
+        a2 = randint(0,255)
+        a3 = randint(0,255)
+        nupp(aken, "krdi lõng, aja juuksed maha", 984, 460, 200, 100, (a1, a2, a3), (250,250,250), lõngus_sõdalane)
         
         pg.display.update()
         
@@ -131,3 +135,10 @@ def hennoste_sõdalane():
     Player.kangelane_nimi = "Hennoste"
     Player.kangelane_pilt = hennoste
     tegelane_pilt_menüüs = hennoste1
+
+def lõngus_sõdalane():
+    global tegelane_pilt_menüüs
+    Player.kangelane_värv = (255, 0, 128)
+    Player.kangelane_nimi = "lõngus"
+    Player.kangelane_pilt = lõngus
+    tegelane_pilt_menüüs = lõngus1
