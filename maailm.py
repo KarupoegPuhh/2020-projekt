@@ -131,16 +131,19 @@ def main_loop():
     
     #level layout
     global screen
+    global screen_y
     global screenid
     global vastased_ekraanis
     screenid = screenide_loomine()
     screen = 0
+    screen_y = 0
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
     
-    for scr in screenid:
-        põrand1 = Põrand(0,laius,500,kõrgus)
-        screenid[scr].append(põrand1)
+    for kor in screenid:
+        for scr in screenid[kor]:
+            põrand1 = Põrand(0,laius,500,kõrgus)
+            screenid[kor][scr].append(põrand1)
     
     
     #Et mängjal oleks alguses relv
@@ -313,14 +316,16 @@ def main_loop():
         for i in vastased:
             i.player_väljub(Tom)
         #uued platformide objektid
-        põrandad = screenid.get(screen, [])
+        põrandad = screenid.get(screen_y, {}).get(screen, []) #screenid[screen_y][screen]
         vastased = vastased_ekraanis.get(screen,[])
         itemid = itemid_ekraanis.get(screen,[])
+        
         for i in vastased:
             i.player_siseneb(Tom)
             
         
     vaheta_ekraani()
+
     global ex1
     global ey1
     ex1 = Tom.x
@@ -507,19 +512,35 @@ def main_loop():
                 item.collision = True
         
         #vaheta screeni paremale
-        if Tom.x+Tom.laius/2 > laius:
+        if Tom.x+(Tom.laius/2) > laius:
             #tom spawn
-            Tom.x = 0-Tom.laius/2
+            Tom.x = 0-(Tom.laius/2)
             #kuhu poole
             screen += 1
             vaheta_ekraani()
             
         #vaheta screeni vasakule
-        if Tom.x+Tom.laius/2 < 0:
+        if Tom.x+(Tom.laius/2) < 0:
             #tom spawn
-            Tom.x = laius-Tom.laius/2
+            Tom.x = laius-(Tom.laius/2)
             #kuhu poole
             screen -= 1
+            vaheta_ekraani()
+
+        #vaheta screeni üles
+        if Tom.y+(Tom.pikkus/2) < 0:
+            #tom spawn
+            Tom.y = kõrgus-(Tom.pikkus/2)
+            #kuhu poole
+            screen_y += 1
+            vaheta_ekraani()
+            
+        #vaheta screeni alla
+        if Tom.y+(Tom.pikkus/2) > kõrgus:
+            #tom spawn
+            Tom.y = 0-(Tom.pikkus/2)
+            #kuhu poole
+            screen_y -= 1
             vaheta_ekraani()
 
         #PAUSE MENU
