@@ -28,6 +28,8 @@ pg.mixer.Sound.set_volume(raha_drop,0.4)
 pg.mixer.Sound.set_volume(raha_pickup,0.4)
 ost = pg.mixer.Sound(helidir+"/cash.mp3")
 tere = pg.mixer.Sound(helidir+"/shop_e.mp3")
+ritaliin = pg.mixer.Sound(helidir+"/ritaliin.mp3")
+ritaliin1 = pg.mixer.Sound(helidir+"/ritaliin1.mp3")
 
 #Teksdid
 largeText = pg.font.Font(fontdir+"/RL.ttf", 150)
