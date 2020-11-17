@@ -86,7 +86,12 @@ def nupp(aken, text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     #    nupp_hover.play()  
     if x + laius > mouse[0] > x and y + kõrgus > mouse[1] > y:
         #hoverib = True
-        pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
+        pg.draw.rect(aken, (0,0,0), (x-2, y-2, laius+6, kõrgus+6))
+        pg.draw.rect(aken, (0,0,0), (x+1, y-5, laius, kõrgus+12))
+        pg.draw.rect(aken, (0,0,0), (x-5, y+1, laius+12, kõrgus))
+        pg.draw.rect(aken, (150,150,150), (x-5, y-5, laius+6, kõrgus+6))
+        pg.draw.rect(aken, (150,150,150), (x-2, y-8, laius, kõrgus+12))
+        pg.draw.rect(aken, (150,150,150), (x-8, y-2, laius+12, kõrgus))
         pg.draw.rect(aken, värv_hele, (x-2, y-2, laius, kõrgus))
         hiir_vabastatud = False
         if hiir_all and not click[0]:
@@ -97,7 +102,9 @@ def nupp(aken, text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
             action()
 
     else:
-        pg.draw.rect(aken, (0,0,0), (x-2, y-1, laius+4, kõrgus+2))
+        pg.draw.rect(aken, (150,150,150), (x-3, y-3, laius+6, kõrgus+6))
+        pg.draw.rect(aken, (150,150,150), (x, y-6, laius, kõrgus+12))
+        pg.draw.rect(aken, (150,150,150), (x-6, y, laius+12, kõrgus))
         pg.draw.rect(aken, värv_tuhm, (x, y, laius, kõrgus))
         #hoverib = False
     textSurf, textRect = text_objects(text, smallText)
