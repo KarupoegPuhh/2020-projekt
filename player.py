@@ -14,6 +14,9 @@ class Player:
         self.kukub = True
         self.m = 1
         self.vel = 10
+        self.velx = 0
+        self.vely = 0
+        self.põrandal = False
         self.initial_vh = 10
         self.vh = 0 #hüppe vel
         self.health = 7

@@ -187,11 +187,11 @@ def main_loop():
     itemid_ekraanis = itemite_loomine()
     
     #alumine põrand?
-    for kor in screenid:
+    """for kor in screenid:
         for scr in screenid[kor]:
             if kor == 0:
                 põrand1 = Põrand(0,laius,500,kõrgus)
-                screenid[kor][scr].append(põrand1)
+                screenid[kor][scr].append(põrand1)"""
     
     
     #Et mängjal oleks alguses relv
@@ -286,22 +286,28 @@ def main_loop():
     
     #global esimene_col
     #esimene_col = True
-    def collision(x1,x2,y1,y2): #,ex1,ex2,ey1,ey2 VEL LISADA
+    def collision():
         global Tom
-        global ex1
-        global ey1
-        for k in põrandad:
-            #horisontaalne ala kattub
-            if (y1 >= k.y1 and y1 <= k.y2) or (y2 <= k.y2 and y2 >= k.y1):
-                #vertikaalne
-                if (x1 >= k.x1 and x1 <= k.x2) or (x2 <= k.x2 and x2 >= k.x1):
-                    #while collision(Tom.x,Tom.x+Tom.laius,Tom.y,Tom.y+Tom.pikkus):
-                    Tom.x = ex1
-                    Tom.y = ey1
-                    print("ye")
+        for plat in põrandad:
+            # Kas tom on platvormiga samas vahes y telje mõttes
+            if Tom.x <= plat.x2 - 1 and Tom.x + Tom.laius >= plat.x1 + 1:
+                if Tom.y + Tom.pikkus > plat.y1 and Tom.vh < 0:
+                    Tom.y = plat.y1 - Tom.pikkus
                     return True
-
-
+                elif Tom.y < plat.y2 and Tom.vh > 0:
+                    Tom.y = plat.y2 + 5
+                    Tom.jump = False
+                    Tom.vh = 0
+            elif Tom.y <= plat.y2 and Tom.y + Tom.pikkus >= plat.y1:
+                if Tom.x + Tom.laius > plat.x1 and Tom.x < plat.x1:
+                    print("sein")
+                    Tom.x = plat.x1 - Tom.laius
+                    return True
+                elif Tom.x < plat.x2 and Tom.x + Tom.laius > plat.x2:
+                    print("sein")
+                    Tom.x = plat.x2
+                    return True
+            
     def databar():
         
         ##
@@ -443,74 +449,36 @@ def main_loop():
                         kuulid.pop(kuulid.index(kuul))
         
         keys = pg.key.get_pressed()
-        
-        #eelmine_mk = mk
-        #maa_kõrgus(Tom.x,Tom.laius)
-        
-        #if mk <= Tom.y + Tom.pikkus:
-        #    Tom.y = mk-Tom.pikkus
 
-        #collision tom?
-        colliding = collision(Tom.x,Tom.x+Tom.laius,Tom.y,Tom.y+Tom.pikkus)
-        ex1 = Tom.x
-        ey1 = Tom.y
+        """#collision tom?
+        colliding = collision()"""
         
         if Tom.kontr:
+            Tom.velx = 0
             # TOM PAREMALE JA VASAKULE
             if not colliding:  
                 if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                    Tom.x += Tom.vel*dt
+                    Tom.velx += Tom.vel*dt
                     Tom.vaatab = 1
                 if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                    Tom.x -= Tom.vel*dt
+                    Tom.velx -= Tom.vel*dt
                     Tom.vaatab = -1
             
             # TOM HÜPPAMINE
-            if not Tom.jump:
+            if Tom.põrandal:
                 if keys [pg.K_w]:
+                    Tom.vely = -50
                     if randint(0,2):
                         hop.play()
                     else:
                         hop2.play()
-                    Tom.jump = True
-            if Tom.jump:
-                #F = 1 / 2 * mass * velocity ^ 2
-                if Tom.vh > 0:
-                    F = (0.5*Tom.m*(Tom.vh**2)) #/2
-                else:
-                    F = -(0.5*Tom.m*(Tom.vh**2)) #/2
-                
-                Tom.y -= F*dt
-
-                Tom.vh -= 1 
-                
-                if colliding: #Tom.y+Tom.pikkus >= mk:
-                    #Tom.y = mk-Tom.pikkus
-                    Tom.jump = False
-                    Tom.vh = Tom.initial_vh
-        else:
-            Tom.jump = False
-            #Tom.vh = Tom.initial_vh
-
-        #tom kukkumine
-        if mk > eelmine_mk and not Tom.jump:
-            Tom.kukub = True
-            Tom.vh = 0
-        if Tom.kukub:
-            F = 0.5*Tom.m*(Tom.vh**2) #/2
-            Tom.y += F*dt
-            Tom.vh -= 1
-            if Tom.y+Tom.pikkus >= mk:
-                Tom.y = mk-Tom.pikkus
-                Tom.kukub = False
-                Tom.vh = Tom.initial_vh
+                        
+            
         
         #TOM SAAB PIHTA
-        for kuri in vastased:
-            lükkaja_v = Tom.põrkub(kuri, dt)
+        
         #if lükkaja_v < 0:  #lükkaja mõte oli knockback teha vastavaks vastase velocytiga aga see läks segaseks ja ei töötand
         #    lükkaja_v = -lükkaja_v
-        lükkaja_v = Tom.vh
         #knockback
 
         #if pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus) and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
@@ -580,6 +548,9 @@ def main_loop():
         for item in itemid:
             if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus <= item.y + item.kõrgus*2:
                 item.collision = True
+                
+        for kuri in vastased:
+            Tom.põrkub(kuri, dt)
         
         #vaheta screeni paremale
         if Tom.x+(Tom.laius/2) > laius:
