@@ -87,7 +87,7 @@ def pood():
         aken.blit(TextSurf, TextRect)
         
         if not maailm.kiiver.unlocked:
-            nupp(aken, "Kiiver! -4₽", 950 , 340, 200, 70, (100,100,100), (15,113,115), kiiver_ost)
+            nupp(aken, "Näomask! -4₽", 950 , 340, 200, 70, (100,100,100), (15,113,115), kiiver_ost)
             
         
         #aken rahale ja raha

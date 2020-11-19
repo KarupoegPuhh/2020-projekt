@@ -180,19 +180,17 @@ def main_loop():
     global screen_y
     global screenid
     global vastased_ekraanis
-    screenid = screenide_loomine()
     screen = 1
     screen_y = 0
+    screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
     
-    #alumine põrand?
-    """for kor in screenid:
-        for scr in screenid[kor]:
-            if kor == 0:
-                põrand1 = Põrand(0,laius,500,kõrgus)
-                screenid[kor][scr].append(põrand1)"""
-    
+    def hangi_y(plat):
+        return plat.y1
+    for y in screenid:
+        for x in screenid[y]:
+            screenid[y][x].sort(reverse=True, key=hangi_y)
     
     #Et mängjal oleks alguses relv
     Tom = Player(580, 100, 40, 60, ling)
@@ -200,10 +198,10 @@ def main_loop():
     clock = pg.time.Clock()
     global dt
     dt = 1
-    global mk #maa kõrgus (suurem arv = madalam kõrgus)
-    mk = 500
-    global eelmine_mk
-    eelmine_mk = 500
+    #global mk #maa kõrgus (suurem arv = madalam kõrgus)
+    #mk = 500
+    #global eelmine_mk
+    #eelmine_mk = 500
 
     #taustamuusika
     pg.mixer.music.load(helidir+"/game.mp3")
@@ -224,11 +222,11 @@ def main_loop():
             bg[i][j] = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
 
     def redrawGameWindow():
-        #aken.fill((21,85,83))
-        try:    
-            aken.blit(bg[screen_y][screen],(0,0))
-        except:
-            aken.blit(nobg,(0,0))
+        aken.fill((21,85,83))
+        #try:    
+        #    aken.blit(bg[screen_y][screen],(0,0))
+        #except:
+        #    aken.blit(nobg,(0,0))
 
         for prr in põrandad:
             prr.draw()
@@ -250,7 +248,7 @@ def main_loop():
         pg.display.update()
         dt = clock.tick(30)
         
-    def maa_kõrgus(px,lai):
+    """def maa_kõrgus(px,lai):
         global mk
         eelm_mk = mk
         y = []
@@ -265,7 +263,7 @@ def main_loop():
         if not y:
             mk = eelm_mk
         else:
-            mk = (min(y))
+            mk = (min(y))"""
 
     def pole_sein_v(dt,v,x,y,lai,pikk,umb=0):
         #absoluutväärtus vel
@@ -286,27 +284,34 @@ def main_loop():
     
     #global esimene_col
     #esimene_col = True
-    def collision():
-        global Tom
+    def collision(ent):
+        ent.põrandal = False
+        ent.laes = False
         for plat in põrandad:
-            # Kas tom on platvormiga samas vahes y telje mõttes
-            if Tom.x <= plat.x2 - 1 and Tom.x + Tom.laius >= plat.x1 + 1:
-                if Tom.y + Tom.pikkus > plat.y1 and Tom.vh < 0:
-                    Tom.y = plat.y1 - Tom.pikkus
-                    return True
-                elif Tom.y < plat.y2 and Tom.vh > 0:
-                    Tom.y = plat.y2 + 5
-                    Tom.jump = False
-                    Tom.vh = 0
-            elif Tom.y <= plat.y2 and Tom.y + Tom.pikkus >= plat.y1:
-                if Tom.x + Tom.laius > plat.x1 and Tom.x < plat.x1:
-                    print("sein")
-                    Tom.x = plat.x1 - Tom.laius
-                    return True
-                elif Tom.x < plat.x2 and Tom.x + Tom.laius > plat.x2:
-                    print("sein")
-                    Tom.x = plat.x2
-                    return True
+            # Collidib?
+            if ent.x + ent.laius > plat.x1 and ent.x < plat.x2 and ent.y + ent.pikkus > plat.y1 and ent.y < plat.y2:
+                targetx = 0
+                targety = 0
+                
+                if ent.velx > 0:
+                    targetx = plat.x1 - ent.laius
+                elif ent.velx < 0:
+                    targetx = plat.x2
+                
+                if ent.vely > 0:
+                    targety = plat.y1 - ent.pikkus
+                elif ent.vely < 0:
+                    targety = plat.y2
+                
+                if abs(targety - ent.y) <= abs(ent.vely) + 0.01:
+                    ent.y = targety
+                    if ent.vely > 0:
+                        ent.põrandal = True
+                    elif ent.vely < 0:
+                        ent.laes = True
+                elif abs(targetx - ent.x) <= abs(ent.velx * 2) + 0.01:
+                    ent.x = targetx
+                        
             
     def databar():
         
@@ -449,33 +454,39 @@ def main_loop():
                         kuulid.pop(kuulid.index(kuul))
         
         keys = pg.key.get_pressed()
-
-        """#collision tom?
-        colliding = collision()"""
+        
+        Tom.velx = 0
+        Tom.vely = 0
         
         if Tom.kontr:
-            Tom.velx = 0
             # TOM PAREMALE JA VASAKULE
-            if not colliding:  
-                if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                    Tom.velx += Tom.vel*dt
-                    Tom.vaatab = 1
-                if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
-                    Tom.velx -= Tom.vel*dt
-                    Tom.vaatab = -1
+            if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                Tom.velx += Tom.vel*dt
+                Tom.vaatab = 1
+            if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+                Tom.velx -= Tom.vel*dt
+                Tom.vaatab = -1
             
-            # TOM HÜPPAMINE
-            if Tom.põrandal:
-                if keys [pg.K_w]:
-                    Tom.vely = -50
-                    if randint(0,2):
-                        hop.play()
-                    else:
-                        hop2.play()
-                        
-            
-        
-        #TOM SAAB PIHTA
+            if Tom.kb == 0:
+                Tom.vh -= 1
+                
+                # TOM HÜPPAMINE
+                if Tom.põrandal:
+                    if keys [pg.K_w]:
+                        Tom.vh = Tom.initial_vh
+                        if randint(0,2):
+                            hop.play()
+                        else:
+                            hop2.play()
+                
+                #F = 1 / 2 * mass * velocity ^ 2
+                if Tom.vh > 0:
+                    F = (0.5*Tom.m*(Tom.vh**2)) #/2
+                else:
+                    F = -(0.5*Tom.m*(Tom.vh**2)) #/2
+                
+                Tom.vely -= F*dt
+
         
         #if lükkaja_v < 0:  #lükkaja mõte oli knockback teha vastavaks vastase velocytiga aga see läks segaseks ja ei töötand
         #    lükkaja_v = -lükkaja_v
@@ -485,36 +496,27 @@ def main_loop():
         #    lükkab_seina = False KB FIX PROOV
         #else:
         #    lükkab_seina = True
-
         if Tom.kb != 0:
             #if Tom.kukub:
             #    Tom.kukub = False
             #    Tom.vh = vh
-            Tom.värv = (255, 0, 0)
             if Tom.vh > 0:
-                F = -(0.5*Tom.m*(lükkaja_v**2)) #/2
-                if F < 0 and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus,3):
-                    Tom.x += (F*dt*Tom.kb)/3
-                if F > 0 and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus,3):
-                #if not lükkab_seina: KB FIX PROOV
-                    Tom.x += (F*dt*Tom.kb)/3
+                F = -(0.5*Tom.m*(Tom.vh**2)) #/2
+                if F < 0:
+                    Tom.velx += (F*dt*Tom.kb)/3
+                if F > 0:
+                    Tom.velx += (F*dt*Tom.kb)/3
             else:
                 F = (0.5*Tom.m*(Tom.vh**2)) #/2
                 Tom.kontr = True
             
-            Tom.y += (F*dt)/2
+            Tom.vely += (F*dt)/2
             
             Tom.vh -= 1
-            lükkaja_v -= 1
-            if Tom.y+Tom.pikkus >= mk:
-                Tom.y = mk-Tom.pikkus
+            
+            if Tom.vely >= 0 and Tom.põrandal:
                 Tom.kb = 0
-                Tom.vh = Tom.initial_vh
-                Tom.värv = värvike
-        else:
-            värvike = Tom.värv
-            eelmine_mk = mk
-            maa_kõrgus(Tom.x,Tom.laius) #POSSIBLE KB PLATFORMI OTSA FIX AGA VÕIBOLLA TEEB MINGEID BUGE (muidu need kaks rida jooksid iga frame)
+                Tom.värv = Player.kangelane_värv
 
         #TULISTAMINE
         if keys[pg.K_SPACE] and kuulide_cd == 0:
@@ -548,7 +550,17 @@ def main_loop():
         for item in itemid:
             if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus <= item.y + item.kõrgus*2:
                 item.collision = True
-                
+        
+        # COLLISION HANDLING
+        Tom.x += Tom.velx
+        Tom.y += Tom.vely
+        collision(Tom)
+        if Tom.põrandal or Tom.laes:
+            Tom.vh = 0
+        
+        #print(Tom.vh, Tom.põrandal, Tom.laes, Tom.kb, Tom.kontr, Tom.velx, Tom.vely, Tom.x)
+        
+        #TOM SAAB PIHTA
         for kuri in vastased:
             Tom.põrkub(kuri, dt)
         
@@ -625,7 +637,7 @@ def main_loop():
             pg.mixer.music.load(helidir+"/game.mp3")
             pg.mixer.music.play(-1, start, 1000)
             
-                
+        
         võit()
         if not Tom.elus and Tom.kontr:
             surm()
