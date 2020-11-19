@@ -10,14 +10,15 @@ class Player:
         self.värv = Player.kangelane_värv
         self.vaatab = 1
         self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
-        self.jump = False
-        self.kukub = True
+        #self.jump = False
+        #self.kukub = True
         self.m = 1
         self.vel = 10
         self.velx = 0
         self.vely = 0
         self.põrandal = False
-        self.initial_vh = 10
+        self.laes = False
+        self.initial_vh = 10.5
         self.vh = 0 #hüppe vel
         self.health = 7
         self.max_health = 100
@@ -37,7 +38,6 @@ class Player:
     def hit(self, vastane):    
         if self.health > 0:
             self.health = round(self.health - vastane.dmg / self.armor, 2)
-            self.x -= 20
         if self.health <= 0:
             self.elus = False
         
@@ -65,19 +65,20 @@ class Player:
     def põrkub(self, vastane, dt):
         #kui vastane (s) läheb sulle (t) pihta saad knockback ja kaotad elud
         if self.kb == 0 and self.y + self.pikkus > vastane.y and vastane.y + vastane.pikkus > self.y: #knockbacki ajal surematu
-            if self.x+self.laius+(self.vel*dt) >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2:
+            if self.x+self.laius >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2:
                 self.kb = 1
+                self.vh = self.initial_vh
+                self.värv = (255, 0, 0)
                 self.kontr = False
                 self.hit(vastane)
                 valu.play()
-                return vastane.vel
-            elif self.x <= vastane.x+vastane.laius+(self.vel*dt) and self.x > vastane.x+vastane.laius/2:
+                #return vastane.vel
+            elif self.x <= vastane.x+vastane.laius and self.x > vastane.x+vastane.laius/2:
                 self.kb = -1
+                self.vh = self.initial_vh
+                self.värv = (255, 0, 0)
                 self.kontr = False
                 self.hit(vastane)
                 valu.play()
-                return vastane.vel
-            else:
-                self.kb = 0
-                return self.vh
+                #return vastane.vel
         

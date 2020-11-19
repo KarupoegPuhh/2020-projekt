@@ -90,7 +90,7 @@ class Jälitaja(Vastane):
             self.tagane = False
         if self.jälitab:
             #lõpetab jälitamise
-            if abs((self.x+self.laius/2) - (Tom.x+Tom.laius/2)) >= self.nägemiskaugus or not(-30 < (self.y - Tom.y + self.pikkus - Tom.pikkus) <= 0) and not Tom.jump: #and self.seisab:
+            if abs((self.x+self.laius/2) - (Tom.x+Tom.laius/2)) >= self.nägemiskaugus or not(-30 < (self.y - Tom.y + self.pikkus - Tom.pikkus) <= 0) and Tom.põrandal: #and self.seisab:
                 self.jälitab = False
                 self.oota = 30*5
         #jälitab
