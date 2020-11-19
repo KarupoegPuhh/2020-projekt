@@ -33,7 +33,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(vastased_ekraanis[0][1]) == 0 and len(rahad) == 0:
+    if len(vastased_ekraanis[0][0]) == 0 and len(rahad) == 0:
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
