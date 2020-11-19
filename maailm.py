@@ -159,10 +159,10 @@ def main_loop():
     kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
     railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
     #Varustus
-    kasukas = Varustus(0, 5, False, False, "vammus")
-    kiiver = Varustus(1, 2, False, False, "rattakiiver")
-    püksid = Varustus(2, 1, False, True, "viigipüksid")
-    sandaalid = Varustus(5, 0, False, True, "sandaalid")
+    kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
+    kiiver = Varustus(1, 2, False, False, "Näomask")
+    püksid = Varustus(2, 1, False, True, "Viigipüksid")
+    sandaalid = Varustus(5, 0, False, True, "Sandaalid")
     
     #Ritaliin buff
     ritaliin = False
@@ -314,47 +314,49 @@ def main_loop():
                         
             
     def databar():
-        
-        ##
-        
-        ##
-
-        pg.draw.rect(aken, (25,25,25), (238, 598, 804, 124))
-        pg.draw.rect(aken, (50,50,50), (240, 600, 800, 120))
+        databar_nihe = 0
+        pildi_nihe = 0
+        parabooli_nihe = 0
+        if Tom.y > 550:
+            databar_nihe = 600
+            pildi_nihe = 450
+            parabooli_nihe = 640
+        pg.draw.rect(aken, (25,25,25), (238, 598 - databar_nihe, 804, 124))
+        pg.draw.rect(aken, (50,50,50), (240, 600 - databar_nihe, 800, 120))
         #healthbar
-        pg.draw.rect(aken, (100,0,0), (340, 605, 600, 20))
+        pg.draw.rect(aken, (100,0,0), (340, 605 - databar_nihe, 600, 20))
         if Tom.health >= 0:
-            pg.draw.rect(aken, (200,0,0), (342, 607, 596 * (Tom.health / Tom.max_health), 16))
+            pg.draw.rect(aken, (200,0,0), (342, 607 - databar_nihe, 596 * (Tom.health / Tom.max_health), 16))
             TextSurf, TextRect = text_objects(str(round(Tom.health, 2)) + " / " + str(Tom.max_health), databarText)
-            TextRect.center = ((laius // 2), (615))
+            TextRect.center = ((laius // 2), (615 - databar_nihe))
             aken.blit(TextSurf, TextRect)
         else:
             TextSurf, TextRect = text_objects("0" + " / " + str(Tom.max_health), databarText)
-            TextRect.center = ((laius // 2), (615))
+            TextRect.center = ((laius // 2), (615 - databar_nihe))
             aken.blit(TextSurf, TextRect)
         #ritaliinbar
-        pg.draw.rect(aken, (30,30,30), (340, 630, 600, 20))
+        pg.draw.rect(aken, (30,30,30), (340, 630 - databar_nihe, 600, 20))
         if ritaliin:
-            pg.draw.rect(aken, (rgb()), (342, 632, 596 * ((900 - ritaliin_cd) / 900 ), 16))
+            pg.draw.rect(aken, (rgb()), (342, 632 - databar_nihe, 596 * ((900 - ritaliin_cd) / 900 ), 16))
         TextSurf, TextRect = text_objects(("Ritaliin"), databarText)
-        TextRect.center = ((laius // 2), (640))
+        TextRect.center = ((laius // 2), (640 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         
         #Pilt tegelase jaoks
-        pg.draw.rect(aken, (25,25,25), (0, 570, 124, 200))
-        pg.draw.rect(aken, (50,50,50), (2, 600, 120, 120))
-        aken.blit(Player.kangelane_pilt, (2,600))
+        pg.draw.rect(aken, (25,25,25), (0, 570 - databar_nihe, 124, 180))
+        pg.draw.rect(aken, (50,50,50), (2, 600 - databar_nihe, 120, 120))
+        aken.blit(Player.kangelane_pilt, (2,600 - databar_nihe))
         ##Tegelase nimi
         nimi = databarText.render(Player.kangelane_nimi, True, (200,200,200))
         nimi_kord = nimi.get_rect()
-        nimi_kord.center = (60, 585)
+        nimi_kord.center = (60, 585 - pildi_nihe)
         aken.blit(nimi, nimi_kord)
         
         #Üleminek pildilt healtbarile
         #pilt joonistatakse paraboolide abil
         a = -2
         x_laius = 123
-        y_kõrgus = 600
+        y_kõrgus = 600 - parabooli_nihe
         while -2 <= a <= 2:
             while -2 <= a <= 0:
                 pg.draw.rect(aken, (25, 25, 25), (x_laius, y_kõrgus, 2, 125))
@@ -371,22 +373,22 @@ def main_loop():
         #Displayb tegelase suurused
         #Kiirus
         TextSurf, TextRect = text_objects("Kiirus : " + str(Tom.vel), databarText)
-        TextRect.center = ((laius // 2), (660))
+        TextRect.center = ((laius // 2), (660 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Relv
         TextSurf, TextRect = text_objects("Relv : " + str(Tom.relv.nimi), databarText)
-        TextRect.center = ((laius // 2), (680))
+        TextRect.center = ((laius // 2), (680 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Raha
         raha = databarText.render(str(Tom.raha)+" рубль", True, (255,215,0))
-        aken.blit(raha, (915, 650))
-        nupp(aken, "Konsumisse", 875, 675, 150, 25, (100,100,100), (200,200,200), pood)
+        aken.blit(raha, (915, 650 - databar_nihe))
+        nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Turvis
         TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText)
-        TextRect.center = ((laius // 2), (700))
+        TextRect.center = ((laius // 2), (700 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Nupp inventoryle
-        nupp(aken, "Seljakott", 260, 675, 150, 25, (100,100,100), (200,200,200), seljakott)
+        nupp(aken, "Seljakott", 260, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), seljakott)
     
     def vaheta_ekraani():
         global põrandad

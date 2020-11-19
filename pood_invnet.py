@@ -60,23 +60,10 @@ def pood():
         aken.blit(TextSurf, TextRect)
                 
         if not maailm.hernepüss.unlocked:    
-            nupp(aken, "Hernepüssi! -3₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)
-            if 540 < mouse[0] < 740 and 250 < mouse[1] < 310:   
-                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
-                hernepüss_txt = smallText.render("Püstolkuulipilduja", True, (200,200,200))
-                hernepüss_txt_kord = hernepüss_txt.get_rect()
-                hernepüss_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
-                aken.blit(hernepüss_txt, hernepüss_txt_kord)
-                
+            nupp(aken, "Hernepüssi! -3₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)   
             
         if not maailm.kartulikahur.unlocked:
             nupp(aken, "kartul! -4₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
-            if 540 < mouse[0] < 740 and 340 < mouse[1] < 410:
-                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
-                potato_txt = smallText.render("SeE oN hIigLasLiK!", True, (200,200,200))
-                potato_txt_kord = potato_txt.get_rect()
-                potato_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
-                aken.blit(potato_txt, potato_txt_kord)
                 
         #Riiete valik
         pg.draw.rect(aken, (148, 82, 74), (867,127,366,486))
@@ -98,6 +85,21 @@ def pood():
         
         #Ostud tehtud
         nupp(aken, "Ostud tehtud!", 540, 630, 200, 70, (148, 82, 74), (168, 102, 94), pood_done)
+        
+        #Joonistame kastid dataga
+        #relvad
+        if maailm.hernepüss.unlocked == False:
+            nupu_hover_txt(maailm.hernepüss, 540, 250, 200, 70, (200,200,200))
+        if maailm.kartulikahur.unlocked == False:
+            nupu_hover_txt(maailm.kartulikahur, 540 , 340, 200, 70, (21,244,238))
+        #riided
+        if maailm.kiiver.unlocked == False:
+            rõiva_hover_txt(maailm.kiiver,950 , 340, 200, 70, (200,200,200))
+        #söök
+        if maailm.Tom.health < maailm.Tom.max_health:
+            eat_hover_txt("Jõujook","Annab sulle", "ühe elupukti", 130, 340, 200, 70, (200,200,200))
+        if not maailm.ritaliin:
+            eat_hover_txt("Ritalin","KIIRUS!!!", "JÕUD!!!", 130 , 250, 200, 70, (21,244,238))
         
         pg.display.update()
     
@@ -181,40 +183,40 @@ def seljakott():
         ##Riided nupud
         if maailm.kiiver.unlocked:
             if not maailm.kiiver.equipped:
-                nupp(aken, "Aero kiiver", 70, 250, 200, 70, (100,0,0), (200,0,0), kiiver_equip_fun)
+                nupp(aken, maailm.kiiver.nimi, 70, 250, 200, 70, (100,0,0), (200,0,0), kiiver_equip_fun)
                 aken.blit(pea, (325,250))
             if maailm.kiiver.equipped:
-                nupp(aken, "Aero kiiver", 70, 250, 200, 70, (0,100,0), (0,200,0), kiiver_unequip_fun)
+                nupp(aken, maailm.kiiver.nimi, 70, 250, 200, 70, (0,100,0), (0,200,0), kiiver_unequip_fun)
                 aken.blit(pea1, (325,250))
         else:
             aken.blit(pea, (325,250))
             
         if maailm.kasukas.unlocked:
             if not maailm.kasukas.equipped:
-                nupp(aken, "Abramovi kasukas", 70, 340, 200, 70, (100,0,0), (200,0,0), kasukas_equip_fun)
+                nupp(aken, maailm.kasukas.nimi, 70, 340, 200, 70, (100,0,0), (200,0,0), kasukas_equip_fun)
                 aken.blit(keha, (325,340))
             if maailm.kasukas.equipped:
-                nupp(aken, "Abramovi kasukas", 70, 340, 200, 70, (0,100,0), (0,200,0), kasukas_unequip_fun)
+                nupp(aken, maailm.kasukas.nimi, 70, 340, 200, 70, (0,100,0), (0,200,0), kasukas_unequip_fun)
                 aken.blit(keha1, (325,340))
         else:
             aken.blit(keha, (325,340))
             
         if maailm.püksid.unlocked:
             if not maailm.püksid.equipped:
-                nupp(aken, "Viigipüksid", 70, 430, 200, 70, (100,0,0), (200,0,0), püksid_equip_fun)
+                nupp(aken, maailm.püksid.nimi, 70, 430, 200, 70, (100,0,0), (200,0,0), püksid_equip_fun)
                 aken.blit(jalad, (325,430))
             if maailm.püksid.equipped:
-                nupp(aken, "Viigipüksid", 70, 430, 200, 70, (0,100,0), (0,200,0), püksid_unequip_fun)
+                nupp(aken, maailm.püksid.nimi, 70, 430, 200, 70, (0,100,0), (0,200,0), püksid_unequip_fun)
                 aken.blit(jalad1, (325,430))
         else:
             aken.blit(jalad, (325,430))
             
         if maailm.sandaalid.unlocked:
             if not maailm.sandaalid.equipped:
-                nupp(aken, "Sandaalid", 70, 520, 200, 70, (100,0,0), (200,0,0), sandaalid_equip_fun)
+                nupp(aken, maailm.sandaalid.nimi, 70, 520, 200, 70, (100,0,0), (200,0,0), sandaalid_equip_fun)
                 aken.blit(tossud, (325,520))
             if maailm.sandaalid.equipped:
-                nupp(aken, "Sandaalid", 70, 520, 200, 70, (0,100,0), (0,200,0), sandaalid_unequip_fun)
+                nupp(aken, maailm.sandaalid.nimi, 70, 520, 200, 70, (0,100,0), (0,200,0), sandaalid_unequip_fun)
                 aken.blit(tossud1, (325,520))
         else:
             aken.blit(tossud, (325,520))
@@ -240,10 +242,24 @@ def seljakott():
             nupp(aken, "EMP gun", 1005, 430, 200, 70, (100,100,100), (15,113,115), railgun_equip)
                
         ###joonistame kasti, et infot lugeda
-        nupu_hover_txt(maailm.ling, 555, 250, 200, 70, (200,200,200))
-        nupu_hover_txt(maailm.hernepüss, 780, 250, 200, 70, (200,200,200))
-        nupu_hover_txt(maailm.kartulikahur, 1005, 250, 200, 70, (21,244,238))
-        nupu_hover_txt(maailm.railgun, 1005, 430, 200, 70, (191,0,255))
+        #Relvad
+        if maailm.ling.unlocked == True:
+            nupu_hover_txt(maailm.ling, 555, 250, 200, 70, (200,200,200))
+        if maailm.hernepüss.unlocked == True:
+            nupu_hover_txt(maailm.hernepüss, 780, 250, 200, 70, (200,200,200))
+        if maailm.kartulikahur.unlocked == True:
+            nupu_hover_txt(maailm.kartulikahur, 70, 430, 200, 70, 70, (21,244,238))
+        if maailm.railgun.unlocked == True:
+            nupu_hover_txt(maailm.railgun, 1005, 430, 200, 70, (191,0,255))
+        #Riided
+        if maailm.kiiver.unlocked == True:
+            rõiva_hover_txt(maailm.kiiver, 70, 250, 200, 70, (200,200,200))
+        if maailm.kasukas.unlocked == True:
+            rõiva_hover_txt(maailm.kasukas, 70, 340, 200, 70, (200,200,200))
+        if maailm.püksid.unlocked == True:
+            rõiva_hover_txt(maailm.püksid, 70, 430, 200, 70, (200,200,200))
+        if maailm.sandaalid.unlocked == True:
+            rõiva_hover_txt(maailm.sandaalid, 70, 520, 200, 70, (200,200,200))
         
         TextSurf, TextRect = text_objects("(Sul on käes "+str(maailm.Tom.relv.nimi)+")", smallText)
         TextRect.center = (880, 570)

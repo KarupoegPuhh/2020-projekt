@@ -120,7 +120,7 @@ def nupp(aken, text, x, y, laius, kõrgus, värv_tuhm, värv_hele, action=None):
     
 def nupu_hover_txt(item, x,y,laius,kõrgus, txt_värv):
     mouse = pg.mouse.get_pos()
-    if x < mouse[0] < x + laius and y < mouse[1] < y + kõrgus and item.unlocked:
+    if x < mouse[0] < x + laius and y < mouse[1] < y + kõrgus:
         #infoleht
         pg.draw.rect(aken, (10,10,10), (mouse[0], mouse[1], 200, 135))
         #nimi
@@ -129,17 +129,59 @@ def nupu_hover_txt(item, x,y,laius,kõrgus, txt_värv):
         nupp_hover_tekst_kord.center = (mouse[0] + 100, mouse[1] + 15)
         aken.blit(nupp_hover_tekst, nupp_hover_tekst_kord)
         #dmg
-        relv_dmg_txt = smallText.render("võimsus : " + str(item.dmg), True, txt_värv)
+        relv_dmg_txt = smallText.render("Võimsus : " + str(item.dmg), True, txt_värv)
         relv_dmg_txt_kord = relv_dmg_txt.get_rect()
         relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
         aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
         #kiirus
-        relv_dmg_txt = smallText.render("kiirus : " + str(item.vel), True, txt_värv)
+        relv_dmg_txt = smallText.render("Kiirus : " + str(item.vel), True, txt_värv)
         relv_dmg_txt_kord = relv_dmg_txt.get_rect()
         relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
         aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
         #cd
-        relv_dmg_txt = smallText.render("laadimisaeg : " + str(item.cd), True, txt_värv)
+        relv_dmg_txt = smallText.render("Laadimisaeg : " + str(item.cd), True, txt_värv)
         relv_dmg_txt_kord = relv_dmg_txt.get_rect()
         relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 105)
+        aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+        
+def rõiva_hover_txt(item, x,y,laius,kõrgus, txt_värv):
+    mouse = pg.mouse.get_pos()
+    if x < mouse[0] < x + laius and y < mouse[1] < y + kõrgus:
+        #infoleht
+        pg.draw.rect(aken, (10,10,10), (mouse[0], mouse[1], 200, 100))
+        #nimi
+        nupp_hover_tekst = smallText.render(str(item.nimi), True, txt_värv)
+        nupp_hover_tekst_kord = nupp_hover_tekst.get_rect()
+        nupp_hover_tekst_kord.center = (mouse[0] + 100, mouse[1] + 15)
+        aken.blit(nupp_hover_tekst, nupp_hover_tekst_kord)
+        #armor
+        relv_dmg_txt = smallText.render("Turvis : " + str(item.armor), True, txt_värv)
+        relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+        relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
+        aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+        #kiirus
+        relv_dmg_txt = smallText.render("Väledus : " + str(item.speed), True, txt_värv)
+        relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+        relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
+        aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+        
+def eat_hover_txt(nimi, tekst1, tekst2, x,y,laius,kõrgus, txt_värv):
+    mouse = pg.mouse.get_pos()
+    if x < mouse[0] < x + laius and y < mouse[1] < y + kõrgus:
+        #infoleht
+        pg.draw.rect(aken, (10,10,10), (mouse[0], mouse[1], 200, 100))
+        #nimi
+        nupp_hover_tekst = smallText.render(nimi, True, txt_värv)
+        nupp_hover_tekst_kord = nupp_hover_tekst.get_rect()
+        nupp_hover_tekst_kord.center = (mouse[0] + 100, mouse[1] + 15)
+        aken.blit(nupp_hover_tekst, nupp_hover_tekst_kord)
+        #rida 1
+        relv_dmg_txt = smallText.render(tekst1, True, txt_värv)
+        relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+        relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 45)
+        aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
+        #rida 2
+        relv_dmg_txt = smallText.render(tekst2, True, txt_värv)
+        relv_dmg_txt_kord = relv_dmg_txt.get_rect()
+        relv_dmg_txt_kord.center = (mouse[0] + 100, mouse[1] + 75)
         aken.blit(relv_dmg_txt, relv_dmg_txt_kord)
