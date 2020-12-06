@@ -148,6 +148,7 @@ def main_loop():
     global hernepüss, kartulikahur, ling, railgun
     global kasukas, kiiver, püksid, sandaalid
     global ritaliin, ritaliin_cd
+    global delta_uksed
     
     #vars
     kuulid = []
@@ -168,6 +169,8 @@ def main_loop():
     kiiver = Varustus(1, 2, False, False, "Näomask")
     püksid = Varustus(2, 1, False, True, "Viigipüksid")
     sandaalid = Varustus(5, 0, False, True, "Sandaalid")
+    #UnlockedCheck
+    delta_uksed= Unlockable(False)
     
     #Ritaliin buff
     ritaliin = False
@@ -236,6 +239,9 @@ def main_loop():
         for prr in põrandad:
             prr.draw()
 
+        for item in itemid:
+            item.draw()
+
         Tom.draw()
         
         for p1 in vastased:
@@ -247,28 +253,9 @@ def main_loop():
             kuul.draw()
             
         databar()
-        for item in itemid:
-            item.draw()
         
         pg.display.update()
         dt = clock.tick(30)
-        
-    """def maa_kõrgus(px,lai):
-        global mk
-        eelm_mk = mk
-        y = []
-        for i in põrandad:
-            if px >= i.x1-lai and px <= i.x2:
-                #print(i.x1)
-                #print(px+lai)
-                #print(px)
-                #print(i.x2)
-                y.append(i.y1)
-
-        if not y:
-            mk = eelm_mk
-        else:
-            mk = (min(y))"""
 
     def pole_sein_v(dt,v,x,y,lai,pikk,umb=0):
         #absoluutväärtus vel
@@ -555,7 +542,7 @@ def main_loop():
                 
         #Collision varustusega
         for item in itemid:
-            if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus <= item.y + item.kõrgus*2:
+            if Tom.x < (item.x + item.laius / 2) < Tom.x + Tom.laius and Tom.y < item.y + item.kõrgus/2 <= Tom.y + Tom.pikkus:
                 item.collision = True
         
         # COLLISION HANDLING

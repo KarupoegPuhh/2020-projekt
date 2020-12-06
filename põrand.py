@@ -17,3 +17,14 @@ class Põrand:
         #seinad
         pg.draw.line(aken, (255, 0, 0), (self.x1,self.y1),(self.x1,self.y2))
         pg.draw.line(aken, (255, 0, 0), (self.x2,self.y1),(self.x2,self.y2))
+
+class Trapdoor(Põrand):
+    def __init__(self,x1,x2,y1,y2, unlockable, min):
+        Põrand.__init__(self,x1,x2,y1,y2)
+        self.unlockable = unlockable
+        self.min = min
+
+    def draw(self):
+        Põrand.draw(self)
+        if self.unlockable.unlocked and self.x2 - self.x1 > self.min:
+            self.x1 += 2

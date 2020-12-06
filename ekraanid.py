@@ -19,7 +19,7 @@ def screenide_loomine():
             4:[Põrand(0,1280,500,720),Põrand(938,975,288,358),Põrand(975,1120,288,327),Põrand(1120,1136,288,500),Põrand(749,786,290,360),Põrand(604,749,290,327),Põrand(588,604,290,500),Põrand(191,228,288,358),Põrand(228,373,288,327),Põrand(373,389,288,500),Põrand(0,1280,0,1),Põrand(-106,40,96,163)],
             3:[Põrand(910,1280,500,720),Põrand(0,640,500,720),Põrand(226,799,300,320),Põrand(1134,1374,96,163),Põrand(0,1280,0,1),Põrand(0,15,-9,351),Põrand(820,1114,712,741)],
             2:[Põrand(-23,1300,500,735),Põrand(0,132,0,360),Põrand(1123,1280,-12,348)],
-            1:[Põrand(0, 36, 0, 500), Põrand(584, 638, -16, 344), Põrand(853, 1148, 305, 360), Põrand(638, 840, 258, 313), Põrand(1005, 1148, 137, 192), Põrand(713, 878, 52, 107), Põrand(1148, 1280, -7, 360), Põrand(36, 713, -27, 0), Põrand(1021, 1280, -27, -1), Põrand(-23, 1300, 500, 735), Põrand(638, 713, -7, 107)],
+            1:[Põrand(0, 36, 0, 500), Põrand(584, 638, -16, 344), Trapdoor(853, 1148, 305, 360,maailm.delta_uksed, 200), Põrand(638, 840, 258, 313), Põrand(1005, 1148, 137, 192), Põrand(713, 878, 52, 107), Põrand(1148, 1280, -7, 360), Põrand(36, 713, -27, 0), Põrand(1021, 1280, -27, -1), Põrand(-23, 1300, 500, 735), Põrand(638, 713, -7, 107)],
             6:[Põrand(353,473,505,551),Põrand(1031,1151,505,551),Põrand(845,965,360,406),Põrand(487,607,360,406),Põrand(650,770,213,259),Põrand(-31,96,360,500),Põrand(0,1280,0,1)]
         },
         2:{
@@ -50,9 +50,13 @@ def itemite_loomine():
     return {0:{#korrus
         -1: [NPC_inimene(100, 500, 30, 60, (200,200,0),["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
         1:[Item(120, 395, 20, 20, maailm.kasukas, "Sa leidsid rõivaid!", (200,200,0))],
-        2:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))]
+        2:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))],
+        5:[NPC_inimene(1000, 500, 30, 60, (200,200,0), ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },
         1:{1:[NPC_arvut(100, 500, 100, 100, (200,100,0),None)]
+
+        },
+        3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sa ei saa siseneda", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sa ei saa siseneda", 1100, 365)]
 
         }
         }

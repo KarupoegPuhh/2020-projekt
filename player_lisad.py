@@ -149,22 +149,21 @@ class NPC_arvut(NPC):
         self.kasutaja_parool = []
         self.tekst = "Sisestage parool!"
         self.aeg = 0
-        self.access = False
+        self.access = maailm.delta_uksed
 
     def hacking(self):
         aeg = pg.time.get_ticks()
         parool = [pg.K_2, pg.K_0, pg.K_2, pg.K_0]
         if len(self.kasutaja_parool) > 4:
             self.kasutaja_parool = []
-        if maailm.klahv != None and self.access == False:
+        if maailm.klahv != None and self.access.unlocked == False:
             self.kasutaja_parool.append(maailm.klahv)
             if len(self.kasutaja_parool) == len(parool):
                 if self.kasutaja_parool == parool:
                     self.tekst = "Juurdepääs lubatud!"
                     self.värv = (0,255,0)
-                    self.access = True
-                    maailm.screenid[1][1] = maailm.screenid[1][1337]
-                    maailm.põrandad = maailm.screenid[1][1337]
+                    self.access.unlocked = True
+
                     #Siia animatsioonid
                 else:
                     self.tekst = "Vale parool!"
@@ -175,9 +174,6 @@ class NPC_arvut(NPC):
                 self.kasutaja_parool = []
                 self.tekst = "Sisestage parool!"
                 self.aeg = 0
-                
-
-
 
 
     def NPC_räägib(self):
@@ -195,6 +191,33 @@ class NPC_arvut(NPC):
             TextRect.center = (laius / 2, 300)
             aken.blit(TextSurf, TextRect)
 
+class NPC_portaal(NPC):
+    def __init__(self, x, y, laius, kõrgus, värv, tekst, siht_x, siht_y):
+        NPC.__init__(self, x, y, laius, kõrgus, värv, tekst)
+        self.siht_x = siht_x
+        self.siht_y = siht_y
+        self.aeg = 0
 
+    def teleport(self):
+        aeg = pg.time.get_ticks()
+        if self.x < (maailm.Tom.x + maailm.Tom.laius / 2) < self.x + self.laius and self.y < (maailm.Tom.y + maailm.Tom.pikkus/2) < self.y + self.kõrgus:
+            if maailm.sandaalid.equipped:
+                if self.aeg == 0:
+                    self.aeg = aeg
+                if self.aeg + 2000 <= aeg:
+                    maailm.Tom.x = self.siht_x
+                    maailm.Tom.y = self.siht_y
+            else:
+                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 300, 0, 600, 200))
+                TextSurf, TextRect = text_objects((self.tekst), menu_head2Text)
+                TextRect.center = (laius / 2, 100)
+                aken.blit(TextSurf, TextRect)
+        else:
+            self.aeg = 0
 
+    def NPC_räägib(self):
+        self.teleport()
 
+class Unlockable:
+    def __init__(self, unlocked):
+        self.unlocked = unlocked
