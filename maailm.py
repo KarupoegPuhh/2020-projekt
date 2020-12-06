@@ -3,14 +3,19 @@ from põrand import *
 from player import *
 from vastased import *
 from ekraanid import *
-
+global pole_sein_p, pole_sein_v
+global Tom
+global kuulid, vastased, põrandad, rahad, itemid
+global hernepüss, kartulikahur, ling, railgun
+global kasukas, kiiver, püksid, sandaalid
+global ritaliin, ritaliin_cd
 
 def surm():
     psurm.play()
     pg.mixer.music.stop()
     #Väike paus ja ütleb, et surid
     TextSurf, TextRect = text_objects("Sa said surma...lol", mediumText)
-    TextRect.center = ((laius // 2), (170))
+    TextRect.center = ((laius // 2), 170)
     aken.blit(TextSurf, TextRect)
     pg.display.update()
     pg.time.wait(3000)
@@ -154,10 +159,10 @@ def main_loop():
     itemid = None
     
     #Relvad
-    ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
-    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss", "AK-47")
-    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
-    railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
+    ling = Relvad(2, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
+    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
+    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+    railgun = Relvad(0.2, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
     #Varustus
     kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
     kiiver = Varustus(1, 2, False, False, "Näomask")
@@ -181,7 +186,7 @@ def main_loop():
     global screenid
     global vastased_ekraanis
     screen = 1
-    screen_y = 0
+    screen_y = 1
     screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
@@ -408,18 +413,18 @@ def main_loop():
         
     vaheta_ekraani()
 
-    global ex1
-    global ey1
-    ex1 = Tom.x
-    ey1 = Tom.y
-    
+    global klahv
+
     #main loop
     while True:       
         #exit
+        klahv = None
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 quit()
+            if event.type == pg.KEYDOWN:
+                klahv = event.key
 
         #KUULID
         if True: #lihtsalt et saaks collapsida seda
