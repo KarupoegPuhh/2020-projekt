@@ -150,6 +150,8 @@ class NPC_arvut(NPC):
         self.tekst = "Sisestage parool!"
         self.aeg = 0
         self.access = maailm.delta_uksed
+        self.vilgub = 0
+        self.loading = 0
 
     def hacking(self):
         aeg = pg.time.get_ticks()
@@ -162,9 +164,6 @@ class NPC_arvut(NPC):
                 if self.kasutaja_parool == parool:
                     self.tekst = "Juurdepääs lubatud!"
                     self.värv = (0,255,0)
-                    self.access.unlocked = True
-
-                    #Siia animatsioonid
                 else:
                     self.tekst = "Vale parool!"
                     self.värv = (255,0,0)
@@ -174,22 +173,77 @@ class NPC_arvut(NPC):
                 self.kasutaja_parool = []
                 self.tekst = "Sisestage parool!"
                 self.aeg = 0
+                self.värv = (200,200,200)
+
+
 
 
     def NPC_räägib(self):
         if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
             self.hacking()
 
-            pg.draw.rect(aken, (50, 50, 50), (200 , 100, laius - 400, kõrgus - 200))
-            pg.draw.rect(aken, (50, 50, 50), (laius/2 - 200, 400, 400, 200))
+            pg.draw.rect(aken, (0, 0, 0), (50, 50, 520, 300))
+            pg.draw.rect(aken, (50, 50, 50), (52 , 52, 516, 296))
+            pg.draw.rect(aken, self.värv, (255, 275, 100, 40))
             #Parooli display
             parool_ekraanil = "* " * len(self.kasutaja_parool)
             TextSurf, TextRect = text_objects(parool_ekraanil, menu_head2Text)
-            TextRect.center = (laius / 2, 500)
+            TextRect.center = (310, 300)
             aken.blit(TextSurf, TextRect)
             TextSurf, TextRect = text_objects(self.tekst, menu_head2Text)
-            TextRect.center = (laius / 2, 300)
+            TextRect.center = (310, 100)
             aken.blit(TextSurf, TextRect)
+
+            # Animatsioonid
+            if self.värv == (0, 255, 0):
+                self.animatsioonid()
+
+    def animatsioonid(self):
+        if self.värv == (0, 255, 0) and self.loading < 3:
+            pg.draw.rect(aken, (50, 50, 50), (50, 50, 520, 300))
+            if 0 <= self.vilgub < 10:
+                TextSurf, TextRect = text_objects("LOADING", menu_head2Text)
+                TextRect.center = (310, 100)
+                aken.blit(TextSurf, TextRect)
+                self.vilgub += 1
+            elif 10 <= self.vilgub < 20:
+                TextSurf, TextRect = text_objects("LOADING.", menu_head2Text)
+                TextRect.center = (310, 100)
+                aken.blit(TextSurf, TextRect)
+                self.vilgub += 1
+            elif 20 <= self.vilgub < 30:
+                TextSurf, TextRect = text_objects("LOADING..", menu_head2Text)
+                TextRect.center = (310, 100)
+                aken.blit(TextSurf, TextRect)
+                self.vilgub += 1
+            elif 30 <= self.vilgub <= 40:
+                TextSurf, TextRect = text_objects("LOADING...", menu_head2Text)
+                TextRect.center = (310, 100)
+                aken.blit(TextSurf, TextRect)
+                self.vilgub += 1
+                if self.vilgub > 40:
+                    self.vilgub = 0
+                    self.loading += 1
+
+        if 20 > self.loading >= 3:
+            pg.draw.rect(aken, (0, 0, 0), (50, 50, 520, 300))
+            if 8 >= self.vilgub >= 5:
+                inprogress = smallText.render("HACKING IN PROGRESS...", True, (0, 255, 0))
+                aken.blit(inprogress, (190, 70))
+                self.vilgub += 1
+                if self.vilgub > 8:
+                    self.vilgub = 0
+                    self.loading += 1
+            else:
+                self.vilgub += 1
+            pg.draw.rect(aken, (20, 20, 20), (80, 250, 460, 30))
+            if self.loading <= 20:
+                pg.draw.rect(aken, (0, 250, 0), (81, 251, 460 * (self.loading-2) / 18, 30))
+        if self.loading == 20:
+            pg.draw.rect(aken, (0, 0, 0), (50, 50, 520, 300))
+            inprogress = menu_headText.render("ACCESS GRANTED", True, (0, 255, 0))
+            aken.blit(inprogress, (90, 170))
+            self.access.unlocked = True
 
 class NPC_portaal(NPC):
     def __init__(self, x, y, laius, kõrgus, värv, tekst, siht_x, siht_y):

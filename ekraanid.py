@@ -53,7 +53,7 @@ def itemite_loomine():
         2:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))],
         5:[NPC_inimene(1000, 500, 30, 60, (200,200,0), ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },
-        1:{1:[NPC_arvut(100, 500, 100, 100, (200,100,0),None)]
+        1:{1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None)]
 
         },
         3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sa ei saa siseneda", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sa ei saa siseneda", 1100, 365)]
