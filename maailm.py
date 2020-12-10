@@ -38,7 +38,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(vastased_ekraanis[0][0]) == 0 and len(rahad) == 0:
+    if len(vastased_ekraanis[1][4]) == 0 and len(rahad) == 0:
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
@@ -190,8 +190,8 @@ def main_loop():
     global screen_y
     global screenid
     global vastased_ekraanis
-    screen = 1
-    screen_y = 1
+    screen = -1
+    screen_y = 0
     screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
