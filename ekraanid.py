@@ -48,10 +48,10 @@ def vastaste_loomine():
 
 def itemite_loomine():
     return {0:{#korrus
-        -1: [NPC_inimene(100, 500, 30, 60, (200,200,0),["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
+        -1: [NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
         1:[Item(120, 395, 20, 20, maailm.kasukas, "Sa leidsid rõivaid!", (200,200,0)), NPC_info(394, 500, 162, 62, (200,200,200), [100, 50, 800, 300], ["Tere tulemast Deltasse!", "Liikumiseks vajuta 'A' ja 'D' klahve", "Hüppamiseks vajuta 'W' klahvi", "Tulistamiseks vajuta 'SPACE' klahvi", "Vajuta 'P' ,et hinge tõmmata", "Vajuta 'ENTER' ,kui sa kellegagi räägid ", "---------------------", "Keegi on kohvikus . . ."])],
         2:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))],
-        5:[NPC_inimene(1000, 500, 30, 60, (200,200,0), ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
+        5:[NPC_inimene(1050, 500, 30, 60, (200,200,0), söökla, ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },
         1:{1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None)]
 

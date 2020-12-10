@@ -68,6 +68,8 @@ hennoste = pg.image.load(piltdir+"/hennoste.png")
 hennoste1 = pg.image.load(piltdir+"/hennoste1.png")
 lõngus = pg.image.load(piltdir+"/tolgus.png")
 lõngus1 = pg.image.load(piltdir+"/tolgus1.png")
+konsum = pg.image.load(piltdir+"/konsum.png")
+söökla = pg.image.load(piltdir+"/söökla.png")
 
 
 

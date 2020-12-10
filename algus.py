@@ -27,16 +27,6 @@ def intro():
         TextSurf, TextRect = text_objects("D-day", largeText)
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
-
-        #kontrollid
-        kontrollid = smallText.render("liigu: wasd", True, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 20))
-        kontrollid = smallText.render("tulista: space", True, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 40))
-        kontrollid = smallText.render("menüü: p", True, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 60))
-        kontrollid = smallText.render("KONTROLLID:", True, (0,0,0))
-        aken.blit(kontrollid, (laius-300, 0))
         
         nupp(aken, "Minek!",laius/2-100, 300, 200, 100, (155,114,98), (185,144,128), maailm.main_loop)
         nupp(aken, "Vali oma sõdalane!", laius/2-100, 425, 200, 100, (72,58,78), (102,88,108), vali_sõdalane)

@@ -90,7 +90,6 @@ class Item():
             TextSurf, TextRect = text_objects(self.tekst, largeText)
             TextRect.center = ((laius // 2), 170)
             aken.blit(TextSurf, TextRect)
-            pg.display.update()
 
 nupp_all = False
 class NPC():
@@ -114,19 +113,19 @@ class NPC():
 
 
 class NPC_inimene(NPC):
-    def __init__(self, x, y, laius, kõrgus, värv, tekst):
+    def __init__(self, x, y, laius, kõrgus, värv, pic, tekst):
         NPC.__init__(self, x, y, laius, kõrgus, värv, tekst)
+        self.pic = pic
 
     def NPC_räägib(self):
         global nupp_all
         if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
             if self.page <= len(self.tekst) and self.räägitud == False:
-                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 300, 0, 600, 200))
+                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 500, 0, 900, 220))
                 TextSurf, TextRect = text_objects((self.tekst[self.page])[0:self.i], menu_head2Text)
                 TextRect.center = (laius / 2, 100)
                 aken.blit(TextSurf, TextRect)
                 self.i += 1
-
                 keys = pg.key.get_pressed()
                 if keys[pg.K_RETURN]:
                     nupp_all = True
@@ -137,10 +136,11 @@ class NPC_inimene(NPC):
                 if self.page == len(self.tekst):
                     self.räägitud = True
             else:
-                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 300, 0, 600, 200))
+                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 500, 0, 900, 220))
                 TextSurf, TextRect = text_objects(self.tekst[0], menu_head2Text)
                 TextRect.center = (laius / 2, 100)
                 aken.blit(TextSurf, TextRect)
+            aken.blit(self.pic, (laius / 2 - 490, 10))
         if self.tekst[0] == "Kuidas ma saan kasulik olla?" and self.page == len(self.tekst):
             maailm.pood_unlocked.unlocked = True
 
@@ -155,26 +155,28 @@ class NPC_arvut(NPC):
         self.loading = 0
 
     def hacking(self):
+        mouse = pg.mouse.get_pos()
         aeg = pg.time.get_ticks()
         parool = [pg.K_2, pg.K_0, pg.K_2, pg.K_0]
-        if len(self.kasutaja_parool) > 4:
-            self.kasutaja_parool = []
-        if maailm.klahv != None and self.access.unlocked == False:
-            self.kasutaja_parool.append(maailm.klahv)
-            if len(self.kasutaja_parool) == len(parool):
-                if self.kasutaja_parool == parool:
-                    self.tekst = "Juurdepääs lubatud!"
-                    self.värv = (0,255,0)
-                else:
-                    self.tekst = "Vale parool!"
-                    self.värv = (255,0,0)
-                    self.aeg = pg.time.get_ticks()
-        if self.aeg != 0:
-            if self.aeg + 2000 <= aeg:
+        if 255 < mouse[0] < 355 and 275 < mouse[1] < 315:
+            if len(self.kasutaja_parool) > 4:
                 self.kasutaja_parool = []
-                self.tekst = "Sisestage parool!"
-                self.aeg = 0
-                self.värv = (200,200,200)
+            if maailm.klahv != None and self.access.unlocked == False:
+                self.kasutaja_parool.append(maailm.klahv)
+                if len(self.kasutaja_parool) == len(parool):
+                    if self.kasutaja_parool == parool:
+                        self.tekst = "Juurdepääs lubatud!"
+                        self.värv = (0,255,0)
+                    else:
+                        self.tekst = "Vale parool!"
+                        self.värv = (255,0,0)
+                        self.aeg = pg.time.get_ticks()
+            if self.aeg != 0:
+                if self.aeg + 2000 <= aeg:
+                    self.kasutaja_parool = []
+                    self.tekst = "Sisestage parool!"
+                    self.aeg = 0
+                    self.värv = (200,200,200)
 
     def NPC_räägib(self):
         if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
@@ -190,6 +192,12 @@ class NPC_arvut(NPC):
             aken.blit(TextSurf, TextRect)
             TextSurf, TextRect = text_objects(self.tekst, menu_head2Text)
             TextRect.center = (310, 100)
+            aken.blit(TextSurf, TextRect)
+            TextSurf, TextRect = text_objects("Lohistage kursor parooli aknale," , smallText)
+            TextRect.center = (310, 200)
+            aken.blit(TextSurf, TextRect)
+            TextSurf, TextRect = text_objects("et tuvastada klahve", smallText)
+            TextRect.center = (310, 225)
             aken.blit(TextSurf, TextRect)
 
             # Animatsioonid
