@@ -189,7 +189,7 @@ def main_loop():
     global screenid
     global vastased_ekraanis
     screen = 1
-    screen_y = 1
+    screen_y = 0
     screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
@@ -309,7 +309,7 @@ def main_loop():
         databar_nihe = 0
         pildi_nihe = 0
         parabooli_nihe = 0
-        if Tom.y > 550:
+        if Tom.y > 520:
             databar_nihe = 600
             pildi_nihe = 450
             parabooli_nihe = 640

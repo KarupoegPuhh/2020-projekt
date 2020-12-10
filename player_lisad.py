@@ -129,9 +129,9 @@ class NPC_inimene(NPC):
                 self.i += 1
 
                 keys = pg.key.get_pressed()
-                if keys[pg.K_n]:
+                if keys[pg.K_RETURN]:
                     nupp_all = True
-                if nupp_all == True and keys[pg.K_n] == False:
+                if nupp_all == True and keys[pg.K_RETURN] == False:
                     self.page += 1
                     self.i = 1
                     nupp_all = False
@@ -275,3 +275,31 @@ class NPC_portaal(NPC):
 class Unlockable:
     def __init__(self, unlocked):
         self.unlocked = unlocked
+
+class NPC_info(NPC):
+    def __init__(self, x, y, laius, kõrgus, värv, suurus, tekst):
+        NPC.__init__(self, x, y, laius, kõrgus, värv, tekst)
+        self.akna_suurus = suurus
+        self.tekst = tekst
+        self.tekst_x = suurus[0] + 20
+        self.tekst_y = suurus[1] + 100
+
+    def NPC_räägib(self):
+        if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y - 200 < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
+            pg.draw.rect(aken, (50,50,50), (self.akna_suurus[0], self.akna_suurus[1],self.akna_suurus[2],self.akna_suurus[3]))
+            #pealkiri
+            TextSurf, TextRect = text_objects(self.tekst[0], menu_head2Text)
+            TextRect.center = (self.akna_suurus[2]/2 + self.akna_suurus[0], self.akna_suurus[1] + 30)
+            aken.blit(TextSurf, TextRect)
+            #Tekst
+            self.tekst_y = self.akna_suurus[1] + 70
+            for i in range(len(self.tekst)):
+                if i == 0:
+                    i += 1
+                else:
+                    inprogress = smallText.render(self.tekst[i], True, (0, 255, 0))
+                    aken.blit(inprogress, (self.tekst_x, self.tekst_y))
+                    self.tekst_y += 30
+                    i += 1
+
+
