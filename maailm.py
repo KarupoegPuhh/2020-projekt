@@ -94,7 +94,8 @@ def paused():
 
         nupp(aken, "Jätkan!", 1050, 150, 200, 100, (100,100,100), (15,113,115), unpause)
         nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
-        nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
+        if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
         nupp(aken, "Annan alla", 1050, 600, 200, 100, (100,100,100), (15,113,115), intro)
         
         aken.blit(sleep, (100,225))
@@ -148,7 +149,7 @@ def main_loop():
     global hernepüss, kartulikahur, ling, railgun
     global kasukas, kiiver, püksid, sandaalid
     global ritaliin, ritaliin_cd
-    global delta_uksed
+    global delta_uksed, pood_unlocked
     
     #vars
     kuulid = []
@@ -170,7 +171,8 @@ def main_loop():
     püksid = Varustus(2, 1, False, True, "Viigipüksid")
     sandaalid = Varustus(5, 0, False, True, "Sandaalid")
     #UnlockedCheck
-    delta_uksed= Unlockable(False)
+    delta_uksed = Unlockable(False)
+    pood_unlocked = Unlockable(False)
     
     #Ritaliin buff
     ritaliin = False
@@ -374,7 +376,8 @@ def main_loop():
         #Raha
         raha = databarText.render(str(Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (915, 650 - databar_nihe))
-        nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
+        if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Turvis
         TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText)
         TextRect.center = ((laius // 2), (700 - databar_nihe))

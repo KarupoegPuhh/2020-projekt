@@ -119,8 +119,7 @@ class NPC_inimene(NPC):
 
     def NPC_räägib(self):
         global nupp_all
-        if self.x + self.laius + 200 > (
-                maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
+        if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
             if self.page <= len(self.tekst) and self.räägitud == False:
                 pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 300, 0, 600, 200))
                 TextSurf, TextRect = text_objects((self.tekst[self.page])[0:self.i], menu_head2Text)
@@ -142,6 +141,8 @@ class NPC_inimene(NPC):
                 TextSurf, TextRect = text_objects(self.tekst[0], menu_head2Text)
                 TextRect.center = (laius / 2, 100)
                 aken.blit(TextSurf, TextRect)
+        if self.tekst[0] == "Kuidas ma saan kasulik olla?" and self.page == len(self.tekst):
+            maailm.pood_unlocked.unlocked = True
 
 class NPC_arvut(NPC):
     def __init__(self, x, y, laius, kõrgus, värv, tekst):
@@ -174,9 +175,6 @@ class NPC_arvut(NPC):
                 self.tekst = "Sisestage parool!"
                 self.aeg = 0
                 self.värv = (200,200,200)
-
-
-
 
     def NPC_räägib(self):
         if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
