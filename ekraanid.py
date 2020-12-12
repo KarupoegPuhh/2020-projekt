@@ -58,38 +58,38 @@ def vastaste_loomine():
             0: [Zombie(861, 500, 92, 73, 2, 1, 5, 400), Zombie(639, 500, 92, 73, 2, 1, 5, 300)],
             1: [],
             2: [Zombie(792, 500, 92, 73, 5, 1, 7, 400)],
-            3: [Zombie(383, 303, 92, 73, 4, 2, 2, 50), Zombie(1156, 500, 92, 73, 5, 2, 2, 50)],
+            3: [Zombie(341, 303, 92, 73, 4, 2, 2, 170), Zombie(1081, 500, 92, 73, 5, 2, 2, 200)],
             4: [Zombie(826, 424, 92, 73, 5, 2, 6, 380), Zombie(231, 497, 92, 73, 5, 2, 6,250)],
             5: [Jälitaja(826, 500, 73, 73, 5, 2, 5), Zombie(939, 305, 29, 24, 3, 1, 12, 100)]
         },
         1:{
             1: [],
-            2: [Lind(840, 188, 54, 40, 3, 2, 8, 300, 10, 500), Lind(350, 284, 54, 40, 3, 2, 8, 300, 10, 500)],
+            2: [Lind(840, 188, 54, 40, 3, 2, 8, 400, 10, 300), Lind(350, 284, 54, 40, 3, 2, 8, 400, 10, 300)],
             3: [Zombie(226, 300, 92, 73, 5, 1, 5, 300), Zombie(180, 500, 92, 73, 5, 1, 7, 200)],
             4: [Jälitaja(255, 500, 92, 73, 5, 2, 5), Zombie(613, 500, 92, 73, 5, 3, 8, 400)],
-            5: [Lind(951, 163, 54, 40, 3, 2, 8, 300, 10, 500), Zombie(839, 500, 92, 73, 5, 3, 8, 300), Zombie(414, 500, 92, 73, 5, 3, 5, 300)],
+            5: [Lind(951, 163, 54, 40, 3, 2, 8, 400, 10, 300), Zombie(839, 500, 92, 73, 5, 3, 8, 300), Zombie(414, 500, 92, 73, 5, 3, 5, 300)],
             6: []
         },
         2:{
             1: [Zombie(153, 233, 92, 73, 5, 3, 8, 200), Vampiir(39, 501, 56, 46, 8, 3, 8, 300, 1)],
-            2: [Lind(874, 244, 54, 40, 3, 2, 8, 300, 10, 500), Lind(279, 156, 54, 40, 3, 2, 8, 300, 10, 500)],
-            3: [Jälitaja(730, 640, 92, 73, 8, 4, 8), Preester(594, 219, 92, 73, 4, 1, 3, -2, 2), Vampiir(487, 500, 56, 46, 10, 3, 7, 300, 2), Vampiir(353,400, 56, 46, 10, 3, 7, 400, 2), Zombie(431, 317, 92, 73, 10, 4, 10, 300)],
+            2: [Lind(874, 244, 54, 40, 3, 2, 8, 400, 10, 300), Lind(279, 156, 54, 40, 3, 2, 8, 400, 10, 300)],
+            3: [Jälitaja(730, 640, 92, 73, 8, 4, 8), Preester(594, 219, 92, 73, 4, 1, 3, 2, 0.5), Vampiir(487, 500, 56, 46, 10, 3, 7, 300, 2), Vampiir(353,400, 56, 46, 10, 3, 7, 400, 2), Zombie(431, 317, 92, 73, 10, 4, 10, 300)],
             4: [Jälitaja(640, 496, 92, 73, 12, 3, 12), Vampiir(96, 298, 56, 46, 12, 4, 7, 300, 2), Vampiir(781, 298, 56, 46, 12, 4, 5, 300, 2), Vampiir(369,298,56,46, 12, 4, 12, 300, 2)],
             5: [Jälitaja(359, 500, 92, 73, 14, 4, 8), Zombie(405, 298, 92, 73, 14, 3, 5, 200), Zombie(96, 298, 92, 73, 14, 3, 7, 200)]
         },
         3:{
             1: [],
-            2: [Lind(586, 483, 54, 40, 3, 2, 8, 300, 10, 500), Preester(30, 500, 92, 73, 4, 1, 3, -2, 2)],
+            2: [Lind(586, 483, 54, 40, 3, 2, 8, 400, 10, 300), Preester(30, 500, 92, 73, 4, 1, 3, 2, 0.5)],
             3: [Vampiir(195, 98, 56, 46, 15, 5, 15, 500, 2), Jälitaja(626, 500, 92, 73, 14, 4, 10), Vampiir(141, 333, 56, 46, 20, 5, 9, 300, 3), Vampiir(999,310, 56,46, 17, 5, 8, 200, 3)],
             4: [Jälitaja(611, 670, 92, 73, 10, 4, 8), Jälitaja(565, 300, 92, 73, 12, 4, 8), Jälitaja(657, 500, 92, 73, 15, 4, 8), Vampiir(458,125,56,46, 15, 5, 6, 400, 4), Vampiir(15, 153, 56, 46, 15, 5, 6, 100, 4), Vampiir(31, 500, 56, 46, 15, 5, 6, 200, 4)],
-            5: [Preester(77, 125, 92, 73, 4, 1, 3, -2, 2), Vampiir(288, 339, 56, 46, 15, 5, 6, 300, 4), Jälitaja(407, 500, 92, 73, 15, 4, 8)]
+            5: [Preester(77, 125, 92, 73, 4, 1, 3, 2, 0.5), Vampiir(288, 339, 56, 46, 15, 5, 6, 300, 4), Jälitaja(407, 500, 92, 73, 15, 4, 8)]
         }
         }
 
 def itemite_loomine():
     return {0:{#korrus
         -1: [NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
-        1:[Item(120, 395, 20, 20, maailm.kasukas, "Sa leidsid rõivaid!", (200,200,0)), NPC_info(394, 500, 162, 62, (200,200,200), [100, 50, 800, 300], ["Tere tulemast Deltasse!", "Liikumiseks vajuta 'A' ja 'D' klahve", "Hüppamiseks vajuta 'W' klahvi", "Tulistamiseks vajuta 'SPACE' klahvi", "Vajuta 'P' ,et hinge tõmmata", "Vajuta 'ENTER' ,kui sa kellegagi räägid ", "---------------------", "Keegi on kohvikus . . ."])],
+        1:[Item(120, 395, 20, 20, maailm.kasukas, "Sa leidsid rõivaid!", (200,200,0)), NPC_info(394, 500, 162, 62, (200,200,200), [100, 50, 800, 300], ["Tere tulemast Deltasse!", "Liikumiseks vajuta  'A'  ja  'D'   või   '<-'  ja  '->'  klahve", "Hüppamiseks vajuta 'W' või 'Z' klahvi", "Tulistamiseks vajuta 'SPACE' või 'X' klahvi", "Vajuta 'P' ,et hinge tõmmata", "Vajuta 'ENTER' ,kui sa kellegagi räägid ", "---------------------", "Keegi on kohvikus . . ."])],
         2:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))],
         5:[NPC_inimene(1050, 500, 30, 60, (200,200,0), söökla, ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },

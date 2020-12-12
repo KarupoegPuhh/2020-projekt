@@ -291,7 +291,7 @@ class NPC_info(NPC):
         self.tekst_y = suurus[1] + 100
 
     def NPC_räägib(self):
-        if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200 and self.y - 200 < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
+        if self.x + self.laius + 200 > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x - 200:
             pg.draw.rect(aken, (50,50,50), (self.akna_suurus[0], self.akna_suurus[1],self.akna_suurus[2],self.akna_suurus[3]))
             #pealkiri
             TextSurf, TextRect = text_objects(self.tekst[0], menu_head2Text)

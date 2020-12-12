@@ -221,14 +221,19 @@ class Preester(Vastane):
         self.y_c = self.y
         self.dbkontroll = False
         self.värv = (200,200,0)
+        self.vel_debuff = 100
         
     def player_siseneb(self, Tom):
-        pass
-        
+        self.vel_debuff = 100
+
     def player_väljub(self, Tom):
+        self.debuff_off(Tom)
+
+        
+    def debuff_off(self, Tom):
+        Tom.vel_debuff = 100
         if self.dbkontroll:
             self.dbkontroll = False
-            Tom.vel *= -1
             Tom.armor = Tom.armor / self.armordb
             maailm.ling.dmg += self.dmgdb
             maailm.hernepüss.dmg += self.dmgdb
@@ -238,39 +243,32 @@ class Preester(Vastane):
             maailm.kasukas.armor /= self.armordb
             maailm.püksid.armor /= self.armordb
             maailm.sandaalid.armor /= self.armordb
+
+    def debuff_on(self, Tom):
+        Tom.vel_debuff = 100
+        if not self.dbkontroll:
+            Tom.vel *= -1
+            self.dbkontroll = True
+            Tom.armor *= self.armordb
+            maailm.ling.dmg -= self.dmgdb
+            maailm.hernepüss.dmg -= self.dmgdb
+            maailm.kartulikahur.dmg -= self.dmgdb
+            maailm.railgun.dmg -= self.dmgdb
+            maailm.kiiver.armor *= self.armordb
+            maailm.kasukas.armor *= self.armordb
+            maailm.püksid.armor *= self.armordb
+            maailm.sandaalid.armor *= self.armordb
+
     
     def move(self, dt, Tom):
-        if 200 < Tom.x + Tom.laius/2 < laius -200:
-            if not self.dbkontroll:
-                self.dbkontroll = True
-                Tom.vel *= -1
-                Tom.armor *= self.armordb
-                maailm.ling.dmg -= self.dmgdb
-                maailm.hernepüss.dmg -= self.dmgdb
-                maailm.kartulikahur.dmg -= self.dmgdb
-                maailm.railgun.dmg -= self.dmgdb
-                maailm.kiiver.armor *= self.armordb
-                maailm.kasukas.armor *= self.armordb
-                maailm.püksid.armor *= self.armordb
-                maailm.sandaalid.armor *= self.armordb
-                
-        if 100 > Tom.x + Tom.laius/2 or Tom.x + Tom.laius/2 > laius - 100:
-            if self.dbkontroll:
-                self.dbkontroll = False
-                Tom.vel *= -1
-                Tom.armor = Tom.armor / self.armordb
-                maailm.ling.dmg += self.dmgdb
-                maailm.hernepüss.dmg += self.dmgdb
-                maailm.kartulikahur.dmg += self.dmgdb
-                maailm.railgun.dmg += self.dmgdb
-                maailm.kiiver.armor /= self.armordb
-                maailm.kasukas.armor /= self.armordb
-                maailm.püksid.armor /= self.armordb
-                maailm.sandaalid.armor /= self.armordb
-        
         if not self.y_c > self.y > self.y_c - 30:
             self.vel *= -1
         self.y += self.vel
+
+        if self.vel_debuff > 0:
+            self.vel_debuff -= 1
+        if self.vel_debuff == 0:
+            self.debuff_on(Tom)
     
 class Boss(Vastane):
     def __init__(self):

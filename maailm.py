@@ -190,8 +190,8 @@ def main_loop():
     global screen_y
     global screenid
     global vastased_ekraanis
-    screen = -1
-    screen_y = 0
+    screen = 4
+    screen_y = 2
     screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
@@ -265,14 +265,14 @@ def main_loop():
             v = -v
         #seinad vasakule minnes
         for i in põrandad:
-            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y1 - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and y + pikk >= i.y1 and y <= i.y2: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
         
     def pole_sein_p(dt,v,x,y,lai,pikk,umb=0):
         #seinad paremale minnes
         for i in põrandad:
-            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y1 - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y1 - pikk and y <= i.y2: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
     
@@ -457,10 +457,10 @@ def main_loop():
         
         if Tom.kontr:
             # TOM PAREMALE JA VASAKULE
-            if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+            if keys [pg.K_d] or keys [pg.K_RIGHT]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
                 Tom.velx += Tom.vel*dt
                 Tom.vaatab = 1
-            if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+            if keys [pg.K_a] or keys [pg.K_LEFT]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
                 Tom.velx -= Tom.vel*dt
                 Tom.vaatab = -1
             
@@ -469,7 +469,7 @@ def main_loop():
                 
                 # TOM HÜPPAMINE
                 if Tom.põrandal:
-                    if keys [pg.K_w]:
+                    if keys [pg.K_w] or keys [pg.K_z]:
                         Tom.vh = Tom.initial_vh
                         if randint(0,2):
                             hop.play()
@@ -516,7 +516,7 @@ def main_loop():
                 Tom.värv = Player.kangelane_värv
 
         #TULISTAMINE
-        if keys[pg.K_SPACE] and kuulide_cd == 0:
+        if (keys[pg.K_SPACE] or keys[pg.K_x]) and kuulide_cd == 0:
             shoot.play()
             if Tom.vaatab == 1:
                 suund = 1
@@ -633,7 +633,12 @@ def main_loop():
             pg.mixer.music.stop()
             pg.mixer.music.load(helidir+"/game.mp3")
             pg.mixer.music.play(-1, start, 1000)
-            
+
+        #preester kiiruse debuff
+        if Tom.vel < 0:
+            Tom.vel_debuff -= 1
+            if Tom.vel_debuff == 0:
+                Tom.vel *= -1
         
         võit()
         if not Tom.elus and Tom.kontr:
