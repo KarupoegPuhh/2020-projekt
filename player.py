@@ -30,6 +30,7 @@ class Player:
         self.armor = 1
         self.name = "nimi"
         self.relv = relv
+        self.vel_debuff = 0
     
     kangelane_värv = (0,0,0)
     kangelane_nimi = "nimi"
@@ -65,16 +66,12 @@ class Player:
     def põrkub(self, vastane, dt):
         #kui vastane (s) läheb sulle (t) pihta saad knockback ja kaotad elud
         if self.kb == 0 and self.y + self.pikkus > vastane.y and vastane.y + vastane.pikkus > self.y: #knockbacki ajal surematu
-            if self.x+self.laius >= vastane.x and self.x+self.laius < vastane.x + vastane.laius/2:
-                self.kb = 1
-                self.vh = self.initial_vh
-                self.värv = (255, 0, 0)
-                self.kontr = False
-                self.hit(vastane)
-                valu.play()
-                #return vastane.vel
-            elif self.x <= vastane.x+vastane.laius and self.x > vastane.x+vastane.laius/2:
-                self.kb = -1
+            if self.x + self.laius >= vastane.x and self.x <= vastane.x+vastane.laius:
+                if self.x + self.laius/2 < vastane.x + vastane.laius/2:
+                    self.kb = 1
+                else:
+                    self.kb = -1
+
                 self.vh = self.initial_vh
                 self.värv = (255, 0, 0)
                 self.kontr = False

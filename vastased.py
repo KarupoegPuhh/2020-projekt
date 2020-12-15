@@ -5,13 +5,13 @@ import maailm
 from player_lisad import *
 
 class Vastane:
-    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv):
+    def __init__(self, x, y, laius, pikkus, health, dmg, vel):
         self.laius = laius
         self.pikkus = pikkus
         self.x = x
         self.y = y - self.pikkus
         self.vel = vel
-        self.värv = värv
+        self.värv = (150,150,150)
         self.hitbox = (self.x -1, self.y -1, self.laius+2, self.pikkus+2)
         self.health = health
         self.max_health = health
@@ -57,9 +57,10 @@ class Vastane:
         pass
 
 class Zombie(Vastane):
-    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path):
-        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
+    def __init__(self, x, y, laius, pikkus,  health, dmg, vel,path):
+        Vastane.__init__(self, x, y, laius, pikkus,  health, dmg, vel)
         self.path = [self.x, path + self.x - self.laius]
+        self.värv = (27, 147, 25)
         
     def move(self, dt, Tom):
         if self.vel > 0:
@@ -74,14 +75,15 @@ class Zombie(Vastane):
                 self.vel = -self.vel*dt
     
 class Jälitaja(Vastane):
-    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv):
-        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
+    def __init__(self, x, y, laius, pikkus, health, dmg, vel):
+        Vastane.__init__(self, x, y, laius, pikkus, health, dmg, vel)
         self.jälitab = False
         self.tagane = False
         self.nägemiskaugus = 300
         self.oota = 30*5
         self.xspawn = x
         self.yspawn = self.y
+        self.värv = (103,88,243)
         
     def move(self, dt, Tom):
         #märkab tomi
@@ -121,8 +123,8 @@ class Jälitaja(Vastane):
                     self.tagane = False
 
 class Lind(Vastane):
-    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, range, cd, path):
-        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
+    def __init__(self, x, y, laius, pikkus, health, dmg, vel, range, cd, path):
+        Vastane.__init__(self, x, y, laius, pikkus, health, dmg, vel)
         self.range = range
         self.jälitab = False
         self.tagane = True
@@ -135,6 +137,7 @@ class Lind(Vastane):
         self.xpath = x
         self.path = path
         self.suund = 1
+        self.värv = (100,100,100)
         
     def move(self, dt, Tom):
         
@@ -197,32 +200,40 @@ class Lind(Vastane):
         
     
 class Vampiir(Zombie):
-    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path, health_regen):
-        Zombie.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv, path)
+    def __init__(self, x, y, laius, pikkus, health, dmg, vel, path, health_regen):
+        Zombie.__init__(self, x, y, laius, pikkus, health, dmg, vel, path)
         self.health_regen = health_regen
+        self.värv = (200,0,0)
     def move(self, dt, Tom):
-        if self.health <= self.max_health:
+        if self.health < self.max_health:
             self.health += self.health_regen
+        if self.health > self.max_health:
+            self.health = self.max_health
         Zombie.move(self, dt, Tom)       
     
     
 class Preester(Vastane):
     #db nagu debuff
-    def __init__(self, x, y, laius, pikkus, vel, health, dmg, värv, veldb, dmgdb, armordb):
-        Vastane.__init__(self, x, y, laius, pikkus, vel, health, dmg, värv)
-        self.veldb = veldb
+    def __init__(self, x, y, laius, pikkus, health, dmg, vel, dmgdb, armordb):
+        Vastane.__init__(self, x, y, laius, pikkus, health, dmg, vel)
         self.dmgdb = dmgdb
         self.armordb = armordb
         self.y_c = self.y
         self.dbkontroll = False
+        self.värv = (200,200,0)
+        self.vel_debuff = 100
         
     def player_siseneb(self, Tom):
-        pass
-        
+        self.vel_debuff = 100
+
     def player_väljub(self, Tom):
+        self.debuff_off(Tom)
+
+        
+    def debuff_off(self, Tom):
+        Tom.vel_debuff = 100
         if self.dbkontroll:
             self.dbkontroll = False
-            Tom.vel *= -1
             Tom.armor = Tom.armor / self.armordb
             maailm.ling.dmg += self.dmgdb
             maailm.hernepüss.dmg += self.dmgdb
@@ -232,39 +243,32 @@ class Preester(Vastane):
             maailm.kasukas.armor /= self.armordb
             maailm.püksid.armor /= self.armordb
             maailm.sandaalid.armor /= self.armordb
+
+    def debuff_on(self, Tom):
+        Tom.vel_debuff = 100
+        if not self.dbkontroll:
+            Tom.vel *= -1
+            self.dbkontroll = True
+            Tom.armor *= self.armordb
+            maailm.ling.dmg -= self.dmgdb
+            maailm.hernepüss.dmg -= self.dmgdb
+            maailm.kartulikahur.dmg -= self.dmgdb
+            maailm.railgun.dmg -= self.dmgdb
+            maailm.kiiver.armor *= self.armordb
+            maailm.kasukas.armor *= self.armordb
+            maailm.püksid.armor *= self.armordb
+            maailm.sandaalid.armor *= self.armordb
+
     
     def move(self, dt, Tom):
-        if 200 < Tom.x + Tom.laius/2 < laius -200:
-            if not self.dbkontroll:
-                self.dbkontroll = True
-                Tom.vel *= -1
-                Tom.armor *= self.armordb
-                maailm.ling.dmg -= self.dmgdb
-                maailm.hernepüss.dmg -= self.dmgdb
-                maailm.kartulikahur.dmg -= self.dmgdb
-                maailm.railgun.dmg -= self.dmgdb
-                maailm.kiiver.armor *= self.armordb
-                maailm.kasukas.armor *= self.armordb
-                maailm.püksid.armor *= self.armordb
-                maailm.sandaalid.armor *= self.armordb
-                
-        if 100 > Tom.x + Tom.laius/2 or Tom.x + Tom.laius/2 > laius - 100:
-            if self.dbkontroll:
-                self.dbkontroll = False
-                Tom.vel *= -1
-                Tom.armor = Tom.armor / self.armordb
-                maailm.ling.dmg += self.dmgdb
-                maailm.hernepüss.dmg += self.dmgdb
-                maailm.kartulikahur.dmg += self.dmgdb
-                maailm.railgun.dmg += self.dmgdb
-                maailm.kiiver.armor /= self.armordb
-                maailm.kasukas.armor /= self.armordb
-                maailm.püksid.armor /= self.armordb
-                maailm.sandaalid.armor /= self.armordb
-        
         if not self.y_c > self.y > self.y_c - 30:
             self.vel *= -1
         self.y += self.vel
+
+        if self.vel_debuff > 0:
+            self.vel_debuff -= 1
+        if self.vel_debuff == 0:
+            self.debuff_on(Tom)
     
 class Boss(Vastane):
     def __init__(self):

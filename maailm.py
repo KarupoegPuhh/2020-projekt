@@ -3,14 +3,19 @@ from põrand import *
 from player import *
 from vastased import *
 from ekraanid import *
-
+global pole_sein_p, pole_sein_v
+global Tom
+global kuulid, vastased, põrandad, rahad, itemid
+global hernepüss, kartulikahur, ling, railgun
+global kasukas, kiiver, püksid, sandaalid
+global ritaliin, ritaliin_cd
 
 def surm():
     psurm.play()
     pg.mixer.music.stop()
     #Väike paus ja ütleb, et surid
     TextSurf, TextRect = text_objects("Sa said surma...lol", mediumText)
-    TextRect.center = ((laius // 2), (170))
+    TextRect.center = ((laius // 2), 170)
     aken.blit(TextSurf, TextRect)
     pg.display.update()
     pg.time.wait(3000)
@@ -33,7 +38,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(vastased_ekraanis[0][0]) == 0 and len(rahad) == 0:
+    if len(vastased_ekraanis[1][4]) == 0 and len(rahad) == 0:
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
@@ -89,7 +94,8 @@ def paused():
 
         nupp(aken, "Jätkan!", 1050, 150, 200, 100, (100,100,100), (15,113,115), unpause)
         nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
-        nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
+        if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
         nupp(aken, "Annan alla", 1050, 600, 200, 100, (100,100,100), (15,113,115), intro)
         
         aken.blit(sleep, (100,225))
@@ -143,6 +149,7 @@ def main_loop():
     global hernepüss, kartulikahur, ling, railgun
     global kasukas, kiiver, püksid, sandaalid
     global ritaliin, ritaliin_cd
+    global delta_uksed, pood_unlocked
     
     #vars
     kuulid = []
@@ -154,15 +161,18 @@ def main_loop():
     itemid = None
     
     #Relvad
-    ling = Relvad(2, 30, 5, (255,255,255), 15, 1, True,"ling", "Walter PPK")
-    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, 0, False,"hernepüss", "AK-47")
-    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, 0, False,"kartulikaur", "Käsikahur")
-    railgun = Relvad(0.2, 0, 20, (4,217,255),10 , 0, False,"midagi erakordset", "EMP gun")
+    ling = Relvad(2, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
+    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
+    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+    railgun = Relvad(0.2, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
     #Varustus
     kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
     kiiver = Varustus(1, 2, False, False, "Näomask")
     püksid = Varustus(2, 1, False, True, "Viigipüksid")
     sandaalid = Varustus(5, 0, False, True, "Sandaalid")
+    #UnlockedCheck
+    delta_uksed = Unlockable(False)
+    pood_unlocked = Unlockable(False)
     
     #Ritaliin buff
     ritaliin = False
@@ -180,8 +190,8 @@ def main_loop():
     global screen_y
     global screenid
     global vastased_ekraanis
-    screen = 1
-    screen_y = 0
+    screen = 4
+    screen_y = 2
     screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
@@ -231,6 +241,9 @@ def main_loop():
         for prr in põrandad:
             prr.draw()
 
+        for item in itemid:
+            item.draw()
+
         Tom.draw()
         
         for p1 in vastased:
@@ -242,28 +255,9 @@ def main_loop():
             kuul.draw()
             
         databar()
-        for item in itemid:
-            item.draw()
         
         pg.display.update()
         dt = clock.tick(30)
-        
-    """def maa_kõrgus(px,lai):
-        global mk
-        eelm_mk = mk
-        y = []
-        for i in põrandad:
-            if px >= i.x1-lai and px <= i.x2:
-                #print(i.x1)
-                #print(px+lai)
-                #print(px)
-                #print(i.x2)
-                y.append(i.y1)
-
-        if not y:
-            mk = eelm_mk
-        else:
-            mk = (min(y))"""
 
     def pole_sein_v(dt,v,x,y,lai,pikk,umb=0):
         #absoluutväärtus vel
@@ -271,14 +265,14 @@ def main_loop():
             v = -v
         #seinad vasakule minnes
         for i in põrandad:
-            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and not y < i.y1 - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+            if x <= i.x2+(v*dt)+umb and x > i.x2 + 1-umb and y + pikk >= i.y1 and y <= i.y2: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
         
     def pole_sein_p(dt,v,x,y,lai,pikk,umb=0):
         #seinad paremale minnes
         for i in põrandad:
-            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y1 - pikk: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
+            if x+lai+(v*dt) >= i.x1 and x+lai < i.x1 + 1 and not y < i.y1 - pikk and y <= i.y2: #not v*dt < (i.x1 - x - lai) or y < i.y - pikk:
                 return False
         return True
     
@@ -317,7 +311,7 @@ def main_loop():
         databar_nihe = 0
         pildi_nihe = 0
         parabooli_nihe = 0
-        if Tom.y > 550:
+        if Tom.y > 520:
             databar_nihe = 600
             pildi_nihe = 450
             parabooli_nihe = 640
@@ -382,7 +376,8 @@ def main_loop():
         #Raha
         raha = databarText.render(str(Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (915, 650 - databar_nihe))
-        nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
+        if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Turvis
         TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText)
         TextRect.center = ((laius // 2), (700 - databar_nihe))
@@ -408,18 +403,18 @@ def main_loop():
         
     vaheta_ekraani()
 
-    global ex1
-    global ey1
-    ex1 = Tom.x
-    ey1 = Tom.y
-    
+    global klahv
+
     #main loop
     while True:       
         #exit
+        klahv = None
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
                 quit()
+            if event.type == pg.KEYDOWN:
+                klahv = event.key
 
         #KUULID
         if True: #lihtsalt et saaks collapsida seda
@@ -462,10 +457,10 @@ def main_loop():
         
         if Tom.kontr:
             # TOM PAREMALE JA VASAKULE
-            if keys [pg.K_d]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+            if keys [pg.K_d] or keys [pg.K_RIGHT]: #and pole_sein_p(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
                 Tom.velx += Tom.vel*dt
                 Tom.vaatab = 1
-            if keys [pg.K_a]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
+            if keys [pg.K_a] or keys [pg.K_LEFT]: #and pole_sein_v(dt, Tom.vel,Tom.x,Tom.y,Tom.laius,Tom.pikkus):
                 Tom.velx -= Tom.vel*dt
                 Tom.vaatab = -1
             
@@ -474,7 +469,7 @@ def main_loop():
                 
                 # TOM HÜPPAMINE
                 if Tom.põrandal:
-                    if keys [pg.K_w]:
+                    if keys [pg.K_w] or keys [pg.K_z]:
                         Tom.vh = Tom.initial_vh
                         if randint(0,2):
                             hop.play()
@@ -521,7 +516,7 @@ def main_loop():
                 Tom.värv = Player.kangelane_värv
 
         #TULISTAMINE
-        if keys[pg.K_SPACE] and kuulide_cd == 0:
+        if (keys[pg.K_SPACE] or keys[pg.K_x]) and kuulide_cd == 0:
             shoot.play()
             if Tom.vaatab == 1:
                 suund = 1
@@ -550,7 +545,7 @@ def main_loop():
                 
         #Collision varustusega
         for item in itemid:
-            if item.x < Tom.x + Tom.laius / 2 < item.x + item.laius and item.y < Tom.y + Tom.pikkus <= item.y + item.kõrgus*2:
+            if Tom.x < (item.x + item.laius / 2) < Tom.x + Tom.laius and Tom.y < item.y + item.kõrgus/2 <= Tom.y + Tom.pikkus:
                 item.collision = True
         
         # COLLISION HANDLING
@@ -638,7 +633,12 @@ def main_loop():
             pg.mixer.music.stop()
             pg.mixer.music.load(helidir+"/game.mp3")
             pg.mixer.music.play(-1, start, 1000)
-            
+
+        #preester kiiruse debuff
+        if Tom.vel < 0:
+            Tom.vel_debuff -= 1
+            if Tom.vel_debuff == 0:
+                Tom.vel *= -1
         
         võit()
         if not Tom.elus and Tom.kontr:
