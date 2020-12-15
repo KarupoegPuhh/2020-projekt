@@ -58,6 +58,7 @@ def pood():
                 JJ_kord = JJ.get_rect()
                 JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
                 aken.blit(JJ, JJ_kord)
+        nupp(aken, "Monster! -10₽", 130, 540, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
                 
         #Relvade valik
         pg.draw.rect(aken, (148, 82, 74), (457,127,366,486))
@@ -110,6 +111,8 @@ def pood():
 
         if not maailm.ritaliin:
             eat_hover_txt("Ritalin","KIIRUS!!!", "JÕUD!!!", 130 , 250, 200, 70, (21,244,238))
+
+        eat_hover_txt("Monster", "Max-elud", "+5", 130, 540, 200, 70, (21, 244, 238))
         
         pg.display.update()
     
@@ -147,6 +150,11 @@ def viineripirukas_ost():
         maailm.Tom.health = maailm.Tom.max_health
         ost.play()
 
+def monster_ost():
+    if maailm.Tom.raha >= 10:
+        maailm.Tom.raha -= 10
+        maailm.Tom.max_health += 5
+        ost.play()
         
 def hernepüss_ost():
     if maailm.Tom.raha >= 3:
