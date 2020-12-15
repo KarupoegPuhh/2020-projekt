@@ -50,6 +50,14 @@ def pood():
                 JJ_kord = JJ.get_rect()
                 JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
                 aken.blit(JJ, JJ_kord)
+
+            nupp(aken, "Viineripirukas! -10₽", 130, 440, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
+            if 130 < mouse[0] < 330 and 440 < mouse[1] < 510:
+                pg.draw.rect(aken, (100, 100, 100), (mouse[0], mouse[1], 200, 100))
+                JJ = smallText.render("Saad elud täis", True, (200, 200, 200))
+                JJ_kord = JJ.get_rect()
+                JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
+                aken.blit(JJ, JJ_kord)
                 
         #Relvade valik
         pg.draw.rect(aken, (148, 82, 74), (457,127,366,486))
@@ -98,6 +106,8 @@ def pood():
         #söök
         if maailm.Tom.health < maailm.Tom.max_health:
             eat_hover_txt("Jõujook","Annab sulle", "ühe elupukti", 130, 340, 200, 70, (200,200,200))
+            eat_hover_txt("Viineri pirukas", "Kõtu täis", "nämm!", 130, 440, 200, 70, (200, 200, 200))
+
         if not maailm.ritaliin:
             eat_hover_txt("Ritalin","KIIRUS!!!", "JÕUD!!!", 130 , 250, 200, 70, (21,244,238))
         
@@ -130,6 +140,13 @@ def jõujook_ost():
         else:
             maailm.Tom.health += maailm.Tom.max_health - maailm.Tom.health
         ost.play()
+
+def viineripirukas_ost():
+    if maailm.Tom.raha >= 10 and maailm.Tom.health < maailm.Tom.max_health:
+        maailm.Tom.raha -= 10
+        maailm.Tom.health = maailm.Tom.max_health
+        ost.play()
+
         
 def hernepüss_ost():
     if maailm.Tom.raha >= 3:

@@ -73,16 +73,16 @@ def vastaste_loomine():
         2:{
             1: [Zombie(153, 233, 92, 73, 5, 3, 8, 200), Vampiir(39, 501, 56, 46, 8, 3, 8, 300, 1)],
             2: [Lind(874, 244, 54, 40, 3, 2, 8, 400, 10, 300), Lind(279, 156, 54, 40, 3, 2, 8, 400, 10, 300)],
-            3: [Jälitaja(730, 640, 92, 73, 8, 4, 8), Preester(594, 219, 92, 73, 4, 1, 3, 2, 0.5), Vampiir(487, 500, 56, 46, 10, 3, 7, 300, 2), Vampiir(353,400, 56, 46, 10, 3, 7, 400, 2), Zombie(431, 317, 92, 73, 10, 4, 10, 300)],
-            4: [Jälitaja(640, 496, 92, 73, 12, 3, 12), Vampiir(96, 298, 56, 46, 12, 4, 7, 300, 2), Vampiir(781, 298, 56, 46, 12, 4, 5, 300, 2), Vampiir(369,298,56,46, 12, 4, 12, 300, 2)],
+            3: [Jälitaja(730, 640, 92, 73, 8, 4, 8), Preester(594, 219, 92, 73, 4, 1, 3, 2, 0.5), Vampiir(487, 500, 56, 46, 10, 3, 7, 300, 0.1), Vampiir(353,400, 56, 46, 10, 3, 7, 400, 0.1), Zombie(431, 317, 92, 73, 10, 4, 10, 300)],
+            4: [Jälitaja(640, 496, 92, 73, 12, 3, 12), Vampiir(96, 298, 56, 46, 12, 4, 7, 300, 0.1), Vampiir(781, 298, 56, 46, 12, 4, 5, 300, 0.1), Vampiir(369,298,56,46, 12, 4, 12, 300, 0.1)],
             5: [Jälitaja(359, 500, 92, 73, 14, 4, 8), Zombie(405, 298, 92, 73, 14, 3, 5, 200), Zombie(96, 298, 92, 73, 14, 3, 7, 200)]
         },
         3:{
             1: [],
             2: [Lind(586, 483, 54, 40, 3, 2, 8, 400, 10, 300), Preester(30, 500, 92, 73, 4, 1, 3, 2, 0.5)],
-            3: [Vampiir(195, 98, 56, 46, 15, 5, 15, 500, 2), Jälitaja(626, 500, 92, 73, 14, 4, 10), Vampiir(141, 333, 56, 46, 20, 5, 9, 300, 3), Vampiir(999,310, 56,46, 17, 5, 8, 200, 3)],
-            4: [Jälitaja(611, 670, 92, 73, 10, 4, 8), Jälitaja(565, 300, 92, 73, 12, 4, 8), Jälitaja(657, 500, 92, 73, 15, 4, 8), Vampiir(458,125,56,46, 15, 5, 6, 400, 4), Vampiir(15, 153, 56, 46, 15, 5, 6, 100, 4), Vampiir(31, 500, 56, 46, 15, 5, 6, 200, 4)],
-            5: [Preester(77, 125, 92, 73, 4, 1, 3, 2, 0.5), Vampiir(288, 339, 56, 46, 15, 5, 6, 300, 4), Jälitaja(407, 500, 92, 73, 15, 4, 8)]
+            3: [Vampiir(195, 98, 56, 46, 15, 5, 15, 500, 0.1), Jälitaja(626, 500, 92, 73, 14, 4, 10), Vampiir(141, 333, 56, 46, 20, 5, 9, 300, 3), Vampiir(999,310, 56,46, 17, 5, 8, 200, 3)],
+            4: [Jälitaja(611, 670, 92, 73, 10, 4, 8), Jälitaja(565, 300, 92, 73, 12, 4, 8), Jälitaja(657, 500, 92, 73, 15, 4, 8), Vampiir(458,125,56,46, 15, 5, 6, 400, 0.2), Vampiir(15, 153, 56, 46, 15, 5, 6, 100, 0.2), Vampiir(31, 500, 56, 46, 15, 5, 6, 200, 0.2)],
+            5: [Preester(77, 125, 92, 73, 4, 1, 3, 2, 0.5), Vampiir(288, 339, 56, 46, 15, 5, 6, 300, 0.2), Jälitaja(407, 500, 92, 73, 15, 4, 8)]
         }
         }
 
@@ -91,12 +91,12 @@ def itemite_loomine():
         -1: [NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
         1:[Item(120, 395, 20, 20, maailm.kasukas, "Sa leidsid rõivaid!", (200,200,0)), NPC_info(394, 500, 162, 62, (200,200,200), [100, 50, 800, 300], ["Tere tulemast Deltasse!", "Liikumiseks vajuta  'A'  ja  'D'   või   '<-'  ja  '->'  klahve", "Hüppamiseks vajuta 'W' või 'Z' klahvi", "Tulistamiseks vajuta 'SPACE' või 'X' klahvi", "Vajuta 'P' ,et hinge tõmmata", "Vajuta 'ENTER' ,kui sa kellegagi räägid ", "---------------------", "Keegi on kohvikus . . ."])],
         2:[Item(410, 245, 30, 50, maailm.railgun, "Sa leidsid relva!", (191,0,255))],
-        5:[NPC_inimene(1050, 500, 30, 60, (200,200,0), söökla, ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
+        5:[NPC_inimene(1150, 500, 30, 60, (200,200,0), söökla, ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nii sa neile küll vastu ei saa...", "Mine käi üle tee Konsumis." , "Also, nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },
         1:{1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None)]
 
         },
-        3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sa ei saa siseneda", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sa ei saa siseneda", 1100, 365)]
+        3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sul on vaja sandaale", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sa ei saa siseneda", 1100, 365)]
 
         }
         }
