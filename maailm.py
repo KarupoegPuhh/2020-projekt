@@ -190,8 +190,8 @@ def main_loop():
     global screen_y
     global screenid
     global vastased_ekraanis
-    screen = 4
-    screen_y = 2
+    screen = -1
+    screen_y = 0
     screenid = screenide_loomine()
     vastased_ekraanis = vastaste_loomine()
     itemid_ekraanis = itemite_loomine()
