@@ -233,6 +233,10 @@ class NPC_arvut(NPC):
 
         if 20 > self.loading >= 3:
             pg.draw.rect(aken, (0, 0, 0), (50, 50, 520, 300))
+            #XAXAXA naljakas
+            inprogress = smallText.render("EI KÄPI, EI NÄPI, EI TOPI!", True, (0, 255, 0))
+            aken.blit(inprogress, (190, 300))
+
             if 8 >= self.vilgub >= 5:
                 inprogress = smallText.render("HACKING IN PROGRESS...", True, (0, 255, 0))
                 aken.blit(inprogress, (190, 70))
