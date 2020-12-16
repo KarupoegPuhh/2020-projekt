@@ -191,7 +191,7 @@ def main_loop():
         global screen_y
         global screenid
         global vastased_ekraanis
-        screen = 2
+        screen = 3
         screen_y = 3
         screenid = screenide_loomine()
         vastased_ekraanis = vastaste_loomine()
@@ -307,7 +307,7 @@ def main_loop():
                         ent.põrandal = True
                     elif ent.vely < 0:
                         ent.laes = True
-                elif abs(targetx - ent.x) <= abs(ent.velx * 2) + 0.01:
+                elif abs(targetx - ent.x) <= abs(ent.velx) + 0.01:
                     ent.x = targetx
                         
     def databar():
@@ -400,6 +400,11 @@ def main_loop():
         global vastased
         global itemid
         
+        #tapa kõik kuulid
+        for kulu in kuulid:
+            if kulu in kuulid:
+                kuulid.pop(kuulid.index(kulu))
+
         for i in vastased:
             i.player_väljub(Tom)
         
@@ -550,7 +555,7 @@ def main_loop():
             if ir.kukkumas:
                 raha_drop.play()
                 ir.kukub(dt)
-            if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x and Tom.y+Tom.pikkus > ir.y-3:
+            if Tom.x+Tom.laius >= ir.x and Tom.x <= ir.x and Tom.y+Tom.pikkus > ir.y-3 and Tom.y < ir.y:
                 rahad.remove(ir)
                 raha_pickup.play()
                 Tom.raha += 1
@@ -606,7 +611,7 @@ def main_loop():
             Tom.y = kõrgus-(Tom.pikkus/2)
             #raha
             for raha in rahad:
-                raha.x -= kõrgus
+                raha.y -= kõrgus
             #kuhu poole
             screen_y += 1
             vaheta_ekraani()
@@ -617,7 +622,7 @@ def main_loop():
             Tom.y = 0-(Tom.pikkus/2)
             #raha
             for raha in rahad:
-                raha.x += kõrgus
+                raha.y += kõrgus
             #kuhu poole
             screen_y -= 1
             vaheta_ekraani()
