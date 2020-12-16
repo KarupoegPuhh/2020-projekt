@@ -234,10 +234,13 @@ def main_loop():
 
     def redrawGameWindow():
         aken.fill((21,85,83))
-        #try:    
+        #try:
         #    aken.blit(bg[screen_y][screen],(0,0))
         #except:
         #    aken.blit(nobg,(0,0))
+        textSurf, textRect = text_objects("KORRUS: "+str(screen_y),mediumText,(100,100,100))
+        textRect.center = (laius/2,kõrgus/2)
+        aken.blit(textSurf, textRect)
 
         for prr in põrandad:
             prr.draw()
@@ -572,8 +575,8 @@ def main_loop():
         #print(Tom.vh, Tom.põrandal, Tom.laes, Tom.kb, Tom.kontr, Tom.velx, Tom.vely, Tom.x)
         
         #TOM SAAB PIHTA
-        for kuri in vastased:
-            Tom.põrkub(kuri, dt)
+        #for kuri in vastased:
+        #    Tom.põrkub(kuri, dt)
         
         #vaheta screeni paremale
         if Tom.x+(Tom.laius/2) > laius:
@@ -665,6 +668,8 @@ def main_loop():
             Tom.vel_debuff -= 1
             if Tom.vel_debuff == 0:
                 Tom.vel *= -1
+        else:
+            Tom.vel_debuff = 0
         
         võit()
         if not Tom.elus and Tom.kontr:
