@@ -469,13 +469,13 @@ def main_loop():
                 Tom.vh -= 1
                 
                 # TOM HÜPPAMINE
-                if Tom.põrandal:
-                    if keys [pg.K_w] or keys [pg.K_z]:
-                        Tom.vh = Tom.initial_vh
-                        if randint(0,2):
-                            hop.play()
-                        else:
-                            hop2.play()
+                #if Tom.põrandal:
+                if keys [pg.K_w] or keys [pg.K_z]:
+                    Tom.vh = Tom.initial_vh
+                    if randint(0,2):
+                        hop.play()
+                    else:
+                        hop2.play()
                 
                 #F = 1 / 2 * mass * velocity ^ 2
                 if Tom.vh > 0:

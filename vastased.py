@@ -46,7 +46,7 @@ class Vastane:
         if self.health <= 0:
             mkrr = kõrgus
             for p in maailm.põrandad:
-                if p.x1 < self.x and p.x2 > self.x+self.laius and p.y1 > self.y+self.pikkus and p.y1 < mkrr:
+                if p.x1 < self.x+self.laius and p.x2 > self.x and p.y1 >= self.y+self.pikkus and p.y1 < mkrr:
                     mkrr = p.y1
             if mkrr == kõrgus: #SIIA PANNA ET KUKUB JÄRGMISESSE SCREENI. Praefu läheb automaatselt mängijale 3 raha kui sel screenil raha dropi all pole ühtegi platvormi
                 raha_pickup.play()
