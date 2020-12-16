@@ -171,8 +171,8 @@ def main_loop():
         #Varustus
         kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
         kiiver = Varustus(1, 2, False, False, "Näomask")
-        püksid = Varustus(2, 1, False, True, "Viigipüksid")
-        sandaalid = Varustus(5, 0, False, True, "Sandaalid")
+        püksid = Varustus(2, 1, False, False, "Viigipüksid")
+        sandaalid = Varustus(5, 0, False, False, "Sandaalid")
         #UnlockedCheck
         delta_uksed = Unlockable(False)
         pood_unlocked = Unlockable(True)
