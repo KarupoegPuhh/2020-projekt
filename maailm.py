@@ -6,7 +6,7 @@ from ekraanid import *
 global pole_sein_p, pole_sein_v
 global Tom
 global kuulid, vastased, põrandad, rahad, itemid
-global hernepüss, kartulikahur, ling, railgun
+global hernepüss, kartulikahur, ling, railgun, scar, sau
 global kasukas, kiiver, püksid, sandaalid
 global ritaliin, ritaliin_cd
 
@@ -147,7 +147,7 @@ def main_loop():
         global pole_sein_p, pole_sein_v
         global Tom
         global kuulid, vastased, põrandad, rahad, itemid
-        global hernepüss, kartulikahur, ling, railgun
+        global hernepüss, kartulikahur, ling, railgun, scar, sau
         global kasukas, kiiver, püksid, sandaalid
         global ritaliin, ritaliin_cd
         global delta_uksed, pood_unlocked
@@ -162,10 +162,12 @@ def main_loop():
         itemid = None
         
         #Relvad
-        ling = Relvad(2, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
-        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
-        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
-        railgun = Relvad(0.2, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
+        ling = Relvad(1, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
+        hernepüss = Relvad(3, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
+        kartulikahur = Relvad(30, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+        railgun = Relvad(0.5, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
+        scar = Relvad(5, 6, 4, (0,0,0), 20, False, "FN SCAR", "From US and A")
+        sau = Relvad(100, 100, 100, (0,0,255), 100, False, "Gandalgi tokk", "Võluri sau")
         #Varustus
         kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
         kiiver = Varustus(1, 2, False, False, "Näomask")

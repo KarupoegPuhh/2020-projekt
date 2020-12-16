@@ -110,6 +110,12 @@ def kartulikahur_equip():
 def railgun_equip():
     if maailm.railgun.unlocked:
         maailm.Tom.relv = maailm.railgun
+def scar_equip():
+    if maailm.scar.unlocked:
+        maailm.Tom.relv = maailm.scar
+def sau_equip():
+    if maailm.sau.unlocked:
+        maailm.Tom.relv = maailm.sau
                 
 def pood_done():
     global poes
@@ -247,6 +253,12 @@ def seljakott():
                 
         if maailm.railgun.unlocked:
             nupp(aken, "EMP gun", 1005, 430, 200, 70, (100,100,100), (15,113,115), railgun_equip)
+
+        if maailm.scar.unlocked:
+            nupp(aken, "LF SCAR", 555, 430, 200, 70, (100,100,100), (15,113,115), scar_equip)
+
+        if maailm.sau.unlocked:
+            nupp(aken, "Gandalfi tokk", 780, 430, 200, 70, (100,100,100), (15,113,115), sau_equip)
                
         ###joonistame kasti, et infot lugeda
         #Relvad
@@ -258,6 +270,10 @@ def seljakott():
             nupu_hover_txt(maailm.kartulikahur, 70, 430, 200, 70, (21,244,238))
         if maailm.railgun.unlocked == True:
             nupu_hover_txt(maailm.railgun, 1005, 430, 200, 70, (191,0,255))
+        if maailm.scar.unlocked == True:
+            nupu_hover_txt(maailm.scar, 555, 430, 200, 70, (191,0,255))
+        if maailm.sau.unlocked == True:
+            nupu_hover_txt(maailm.sau, 780, 430, 200, 70, (191,0,255))
         #Riided
         if maailm.kiiver.unlocked == True:
             rõiva_hover_txt(maailm.kiiver, 70, 250, 200, 70, (200,200,200))
