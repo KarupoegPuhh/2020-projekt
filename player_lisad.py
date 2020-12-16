@@ -265,7 +265,7 @@ class NPC_portaal(NPC):
     def teleport(self):
         aeg = pg.time.get_ticks()
         if self.x < (maailm.Tom.x + maailm.Tom.laius / 2) < self.x + self.laius and self.y < (maailm.Tom.y + maailm.Tom.pikkus/2) < self.y + self.kõrgus:
-            if maailm.sandaalid.equipped:
+            if maailm.sandaalid.equipped and maailm.püksid.equipped and maailm.kasukas.equipped and maailm.kiiver.equipped:
                 if self.aeg == 0:
                     self.aeg = aeg
                 if self.aeg + 2000 <= aeg:

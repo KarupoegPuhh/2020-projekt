@@ -193,8 +193,8 @@ def main_loop():
         global screen_y
         global screenid
         global vastased_ekraanis
-        screen = 1
-        screen_y = 1
+        screen = 4
+        screen_y = 3
         screenid = screenide_loomine()
         vastased_ekraanis = vastaste_loomine()
         itemid_ekraanis = itemite_loomine()
@@ -446,6 +446,7 @@ def main_loop():
                                 vastane_valu.play()
                             else:
                                 vastane_valu2.play()
+                            break
 
                 #sein
                 if not pole_sein_v(dt, kuul.vel,kuul.x,kuul.y,3,3,9):
