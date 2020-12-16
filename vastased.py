@@ -2,6 +2,7 @@ import pygame as pg
 from random import randint
 from random import choice
 import maailm
+#from ekraanid import screenide_loomine
 from player_lisad import *
 
 class Vastane:
@@ -43,9 +44,17 @@ class Vastane:
         if self.health >= self.max_health:
             self.health = self.max_health
         if self.health <= 0:
-            for ugu in range(self.raha):
-                vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),self.y+self.pikkus) #viimase argumendi peab ära muutma et raha õhku ei spawniks
-                maailm.rahad.append(vars()["r"+str(len(maailm.rahad))])
+            mkrr = kõrgus
+            for p in maailm.põrandad:
+                if p.x1 < self.x+self.laius and p.x2 > self.x and p.y1 >= self.y+self.pikkus and p.y1 < mkrr:
+                    mkrr = p.y1
+            if mkrr == kõrgus: #SIIA PANNA ET KUKUB JÄRGMISESSE SCREENI. Praefu läheb automaatselt mängijale 3 raha kui sel screenil raha dropi all pole ühtegi platvormi
+                raha_pickup.play()
+                maailm.Tom.raha += 3
+            else:
+                for ugu in range(self.raha):
+                    vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),mkrr)
+                    maailm.rahad.append(vars()["r"+str(len(maailm.rahad))])
             self.elus = False
             vastane_surm.play()
             maailm.vastased.remove(self)

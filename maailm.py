@@ -52,7 +52,7 @@ def võit():
                     quit()
                     
             aken.fill((70,70,70))
-            TextSurf, TextRect = text_objects("Sa said hakkama! Kõik hummid on surnd.", largeText)
+            TextSurf, TextRect = text_objects("Sa said hakkama! Kõik hummid on surnd.", mediumText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
@@ -138,105 +138,109 @@ def rgb():
 
 
 def main_loop():
-    global pood, seljakott, intro
-    from algus import intro
-    from pood_invnet import pood, seljakott
-    
-    #OBJEKTID
-    global pole_sein_p, pole_sein_v
-    global Tom
-    global kuulid, vastased, põrandad, rahad, itemid
-    global hernepüss, kartulikahur, ling, railgun
-    global kasukas, kiiver, püksid, sandaalid
-    global ritaliin, ritaliin_cd
-    global delta_uksed, pood_unlocked
-    
-    #vars
-    kuulid = []
-    kuulide_cd = 0
-    kuulide_maxcount = 500
-    vastased = []
-    põrandad = None
-    rahad = []
-    itemid = None
-    
-    #Relvad
-    ling = Relvad(2, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
-    hernepüss = Relvad(1, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
-    kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
-    railgun = Relvad(0.2, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
-    #Varustus
-    kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
-    kiiver = Varustus(1, 2, False, False, "Näomask")
-    püksid = Varustus(2, 1, False, True, "Viigipüksid")
-    sandaalid = Varustus(5, 0, False, True, "Sandaalid")
-    #UnlockedCheck
-    delta_uksed = Unlockable(False)
-    pood_unlocked = Unlockable(False)
-    
-    #Ritaliin buff
-    ritaliin = False
-    ritaliin_cd = 0
-    global red, green, blue, redc, greenc, bluec
-    red = 250
-    green = 0
-    blue = 0
-    redc = True
-    greenc = False
-    bluec = False
-    
-    #level layout
-    global screen
-    global screen_y
-    global screenid
-    global vastased_ekraanis
-    screen = -1
-    screen_y = 0
-    screenid = screenide_loomine()
-    vastased_ekraanis = vastaste_loomine()
-    itemid_ekraanis = itemite_loomine()
-    
-    def hangi_y(plat):
-        return plat.y1
-    for y in screenid:
-        for x in screenid[y]:
-            screenid[y][x].sort(reverse=True, key=hangi_y)
-    
-    #Et mängjal oleks alguses relv
-    Tom = Player(580, 100, 40, 60, ling)
+    if True: #collapsimiseks
+        global pood, seljakott, intro
+        from algus import intro
+        from pood_invnet import pood, seljakott
+        
+        #OBJEKTID
+        global pole_sein_p, pole_sein_v
+        global Tom
+        global kuulid, vastased, põrandad, rahad, itemid
+        global hernepüss, kartulikahur, ling, railgun
+        global kasukas, kiiver, püksid, sandaalid
+        global ritaliin, ritaliin_cd
+        global delta_uksed, pood_unlocked
+        
+        #vars
+        kuulid = []
+        kuulide_cd = 0
+        kuulide_maxcount = 500
+        vastased = []
+        põrandad = None
+        rahad = []
+        itemid = None
+        
+        #Relvad
+        ling = Relvad(2, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
+        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
+        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+        railgun = Relvad(0.2, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
+        #Varustus
+        kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
+        kiiver = Varustus(1, 2, False, False, "Näomask")
+        püksid = Varustus(2, 1, False, True, "Viigipüksid")
+        sandaalid = Varustus(5, 0, False, True, "Sandaalid")
+        #UnlockedCheck
+        delta_uksed = Unlockable(False)
+        pood_unlocked = Unlockable(True)
+        
+        #Ritaliin buff
+        ritaliin = False
+        ritaliin_cd = 0
+        global red, green, blue, redc, greenc, bluec
+        red = 250
+        green = 0
+        blue = 0
+        redc = True
+        greenc = False
+        bluec = False
+        
+        #level layout
+        global screen
+        global screen_y
+        global screenid
+        global vastased_ekraanis
+        screen = 2
+        screen_y = 3
+        screenid = screenide_loomine()
+        vastased_ekraanis = vastaste_loomine()
+        itemid_ekraanis = itemite_loomine()
+        
+        def hangi_y(plat):
+            return plat.y1
+        for y in screenid:
+            for x in screenid[y]:
+                screenid[y][x].sort(reverse=True, key=hangi_y)
+        
+        #Et mängjal oleks alguses relv
+        Tom = Player(580, 100, 40, 60, ling)
 
-    clock = pg.time.Clock()
-    global dt
-    dt = 1
-    #global mk #maa kõrgus (suurem arv = madalam kõrgus)
-    #mk = 500
-    #global eelmine_mk
-    #eelmine_mk = 500
+        clock = pg.time.Clock()
+        global dt
+        dt = 1
+        #global mk #maa kõrgus (suurem arv = madalam kõrgus)
+        #mk = 500
+        #global eelmine_mk
+        #eelmine_mk = 500
 
-    #taustamuusika
-    pg.mixer.music.load(helidir+"/game.mp3")
-    pg.mixer.music.play(-1)
-    pos = 0
-    global start
-    start = 0
-    ritaliin_music = False
-    
-    #taustad
-    nobg = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/nobg.png")
-    global bg
-    bg = {}
-    for i in range(1):
-        bg[i] = {}
-        for j in range(6):
-            print(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
-            bg[i][j] = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
+        #taustamuusika
+        pg.mixer.music.load(helidir+"/game.mp3")
+        pg.mixer.music.play(-1)
+        pos = 0
+        global start
+        start = 0
+        ritaliin_music = False
+        
+        #taustad
+        nobg = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/nobg.png")
+        global bg
+        bg = {}
+        for i in range(1):
+            bg[i] = {}
+            for j in range(6):
+                print(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
+                bg[i][j] = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
 
     def redrawGameWindow():
         aken.fill((21,85,83))
-        #try:    
+        #try:
         #    aken.blit(bg[screen_y][screen],(0,0))
         #except:
         #    aken.blit(nobg,(0,0))
+        textSurf, textRect = text_objects("KORRUS: "+str(screen_y),mediumText,(100,100,100))
+        textRect.center = (laius/2,kõrgus/2)
+        aken.blit(textSurf, textRect)
 
         for prr in põrandad:
             prr.draw()
@@ -306,12 +310,11 @@ def main_loop():
                 elif abs(targetx - ent.x) <= abs(ent.velx * 2) + 0.01:
                     ent.x = targetx
                         
-            
     def databar():
         databar_nihe = 0
         pildi_nihe = 0
         parabooli_nihe = 0
-        if Tom.y > 520:
+        if Tom.y > kõrgus/2 + 200:
             databar_nihe = 600
             pildi_nihe = 450
             parabooli_nihe = 640
@@ -332,7 +335,9 @@ def main_loop():
         pg.draw.rect(aken, (30,30,30), (340, 630 - databar_nihe, 600, 20))
         if ritaliin:
             pg.draw.rect(aken, (rgb()), (342, 632 - databar_nihe, 596 * ((900 - ritaliin_cd) / 900 ), 16))
-        TextSurf, TextRect = text_objects(("Ritaliin"), databarText)
+            TextSurf, TextRect = text_objects(("Ritaliin"), databarText,(0,0,0))
+        else:
+            TextSurf, TextRect = text_objects(("Ritaliin"), databarText,(100,100,100))
         TextRect.center = ((laius // 2), (640 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         
@@ -364,24 +369,29 @@ def main_loop():
                 y_kõrgus -= 0.5 * a**2
         
     
-        #Displayb tegelase suurused
+        #Displayb tegelase statid
         #Kiirus
-        TextSurf, TextRect = text_objects("Kiirus : " + str(Tom.vel), databarText)
+        TextSurf, TextRect = text_objects("Kiirus : " + str(abs(Tom.vel)), databarText,(200,200,200))
         TextRect.center = ((laius // 2), (660 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Relv
-        TextSurf, TextRect = text_objects("Relv : " + str(Tom.relv.nimi), databarText)
+        TextSurf, TextRect = text_objects("Relv : " + str(Tom.relv.nimi), databarText,(200,200,200))
         TextRect.center = ((laius // 2), (680 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Raha
         raha = databarText.render(str(Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (915, 650 - databar_nihe))
-        if maailm.pood_unlocked.unlocked:
-            nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Turvis
-        TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText)
+        TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText,(200,200,200))
         TextRect.center = ((laius // 2), (700 - databar_nihe))
         aken.blit(TextSurf, TextRect)
+        #Debuff
+        if maailm.Tom.vel_debuff != 0:
+            TextSurf, TextRect = text_objects("OLED NÕIUTUD!", databarText,rgb()) #(230,0,230)
+            TextRect.center = ((laius // 2 + 120), (680 - databar_nihe))
+            aken.blit(TextSurf, TextRect)
+        if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Nupp inventoryle
         nupp(aken, "Seljakott", 260, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), seljakott)
     
@@ -389,9 +399,10 @@ def main_loop():
         global põrandad
         global vastased
         global itemid
-        #RAHA?
+        
         for i in vastased:
             i.player_väljub(Tom)
+        
         #uued platformide objektid
         põrandad = screenid.get(screen_y, {}).get(screen, []) #screenid[screen_y][screen]
         vastased = vastased_ekraanis.get(screen_y,{}).get(screen, [])
@@ -468,13 +479,13 @@ def main_loop():
                 Tom.vh -= 1
                 
                 # TOM HÜPPAMINE
-                if Tom.põrandal:
-                    if keys [pg.K_w] or keys [pg.K_z]:
-                        Tom.vh = Tom.initial_vh
-                        if randint(0,2):
-                            hop.play()
-                        else:
-                            hop2.play()
+                #if Tom.põrandal:
+                if keys [pg.K_w] or keys [pg.K_z]:
+                    Tom.vh = Tom.initial_vh
+                    if randint(0,2):
+                        hop.play()
+                    else:
+                        hop2.play()
                 
                 #F = 1 / 2 * mass * velocity ^ 2
                 if Tom.vh > 0:
@@ -519,9 +530,15 @@ def main_loop():
         if (keys[pg.K_SPACE] or keys[pg.K_x]) and kuulide_cd == 0:
             shoot.play()
             if Tom.vaatab == 1:
-                suund = 1
+                if Tom.vel_debuff == 0:
+                    suund = 1
+                else:
+                    suund = -1
             else:
-                suund = -1
+                if Tom.vel_debuff == 0:
+                    suund = -1
+                else:
+                    suund = 1
 
             if len(kuulid) < kuulide_maxcount:  # This will make sure we cannot exceed 5 bullets on the screen at once
                 kuulid.append(Kuul(round(Tom.x+Tom.laius//2+suund*Tom.laius/2), round(Tom.y + Tom.pikkus//2), suund, Tom.relv))
@@ -558,13 +575,16 @@ def main_loop():
         #print(Tom.vh, Tom.põrandal, Tom.laes, Tom.kb, Tom.kontr, Tom.velx, Tom.vely, Tom.x)
         
         #TOM SAAB PIHTA
-        for kuri in vastased:
-            Tom.põrkub(kuri, dt)
+        #for kuri in vastased:
+        #    Tom.põrkub(kuri, dt)
         
         #vaheta screeni paremale
         if Tom.x+(Tom.laius/2) > laius:
             #tom spawn
             Tom.x = 0-(Tom.laius/2)
+            #raha
+            for raha in rahad:
+                raha.x -= laius
             #kuhu poole
             screen += 1
             vaheta_ekraani()
@@ -573,6 +593,9 @@ def main_loop():
         if Tom.x+(Tom.laius/2) < 0:
             #tom spawn
             Tom.x = laius-(Tom.laius/2)
+            #raha
+            for raha in rahad:
+                raha.x += laius
             #kuhu poole
             screen -= 1
             vaheta_ekraani()
@@ -581,6 +604,9 @@ def main_loop():
         if Tom.y+(Tom.pikkus/2) < 0:
             #tom spawn
             Tom.y = kõrgus-(Tom.pikkus/2)
+            #raha
+            for raha in rahad:
+                raha.x -= kõrgus
             #kuhu poole
             screen_y += 1
             vaheta_ekraani()
@@ -589,6 +615,9 @@ def main_loop():
         if Tom.y+(Tom.pikkus/2) > kõrgus:
             #tom spawn
             Tom.y = 0-(Tom.pikkus/2)
+            #raha
+            for raha in rahad:
+                raha.x += kõrgus
             #kuhu poole
             screen_y -= 1
             vaheta_ekraani()
@@ -639,6 +668,8 @@ def main_loop():
             Tom.vel_debuff -= 1
             if Tom.vel_debuff == 0:
                 Tom.vel *= -1
+        else:
+            Tom.vel_debuff = 0
         
         võit()
         if not Tom.elus and Tom.kontr:

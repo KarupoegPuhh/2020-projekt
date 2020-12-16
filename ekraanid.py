@@ -96,7 +96,7 @@ def itemite_loomine():
         1:{1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None)]
 
         },
-        3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sul on vaja sandaale", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sa ei saa siseneda", 1100, 365)]
+        3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sul on vaja sandaale", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sndaalideta portaali minna ei saa", 1100, 365)]
 
         }
         }
