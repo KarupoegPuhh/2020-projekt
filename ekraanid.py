@@ -43,9 +43,9 @@ def screenide_loomine():
                 Põrand(1153, 1233, 85, 168), Põrand(96, 687, 298, 360), Põrand(371, 405, 0, 298), Põrand(0, 1058, 0, 1)],
         },
         3:{
-            5: [Põrand(-23, 906, 500, 735), Põrand(906, 1054, 667, 720), Põrand(1233, 1280, 0, 720), Põrand(288, 653, 338, 400), Põrand(0, 77, 125, 500), Põrand(653, 720, 0, 400), Põrand(77, 447, 125, 155), Põrand(447, 499, 80, 155), Põrand(582, 653, 193, 238), Põrand(236, 288, 293, 400), Põrand(273, 1280, -1, 0), Põrand(0, 126, -1, 0)],
-            4:[Põrand(-980,343,500,735),Põrand(1126,1280,125,670),Põrand(266,343,125,500),Põrand(948,1025,0,175),Põrand(343,1025,300,350),Põrand(343,1280,670,720),Põrand(458,1126,500,551),Põrand(458,948,125,175),Põrand(0,1280,0,1),Põrand(0,13,-9,362),Põrand(119,266,315,360),Põrand(13,160,153,198)],
-            3:[Põrand(-48,1300,500,735),Põrand(1048,1240,310,360),Põrand(999,1048,310,500),Põrand(-30,40,-9,385),Põrand(40,219,151,200),Põrand(192,820,101,151),Põrand(820,874,101,385),Põrand(141,695,335,385),Põrand(282,323,385,500),Põrand(499,540,233,335),Põrand(40,1280,-54,0),Põrand(1240,1280,1,360)],
+            5: [Põrand(-23, 906, 499, 734), Põrand(906, 1054, 667, 720), Põrand(1233, 1280, 0, 720),Põrand(288, 653, 338, 400), Põrand(0, 77, 125, 500), Põrand(653, 720, 0, 400),Põrand(77, 447, 125, 155), Põrand(447, 499, 80, 155), Põrand(582, 653, 193, 238),Põrand(236, 288, 293, 400), Põrand(273, 1280, -25, -1), Põrand(0, 126, -16, -1)],
+            4: [Põrand(-980, 343, 500, 735), Põrand(1126, 1280, 125, 670), Põrand(266, 343, 125, 500),Põrand(948, 1025, 0, 175), Põrand(343, 1025, 300, 350), Põrand(343, 1280, 670, 720),Põrand(458, 1126, 500, 551), Põrand(458, 948, 125, 175), Põrand(0, 1280, -12, -1),Põrand(0, 13, -9, 362), Põrand(119, 266, 315, 360), Põrand(13, 160, 153, 198)],
+            3: [Põrand(-48, 1300, 500, 735), Põrand(1048, 1240, 310, 360), Põrand(999, 1048, 310, 500),Põrand(-30, 40, -9, 385), Põrand(40, 219, 151, 200), Põrand(192, 820, 101, 151),Põrand(820, 874, 101, 385), Põrand(141, 695, 335, 385), Põrand(282, 323, 385, 500),Põrand(499, 540, 233, 335), Põrand(-10, 1280, -54, -2), Põrand(1240, 1280, 0, 360)],
             2: [Põrand(1125, 1344, 500, 801), Põrand(-73, 133, 500, 784), Põrand(566, 713, 180, 256), Põrand(203, 350, 462, 538), Põrand(350, 434, 0, 325), Põrand(820, 916, 325, 396), Põrand(555, 702, 500, 615), Põrand(0, 1280, -39, -1), Põrand(1259, 1323, 0, 385)],
             1:[Põrand(-23,1329,500,735),Põrand(0,36,-25,500),Põrand(0,1280,-42,-1)]
         },
@@ -91,17 +91,17 @@ def vastaste_loomine():
 def itemite_loomine():
     return {
         0:{#korrus
-            -1: [Item(100, 500, 30, 30, maailm.railgun, "Sa leidsid relva!", (191,0,255)), NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
+            -1: [NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
             1:[NPC_info(394, 500, 162, 62, (200,200,200), [100, 50, 800, 300], ["Tere tulemast Deltasse!", "Liikumiseks vajuta  'A'  ja  'D'   või   '<-'  ja  '->'  klahve", "Hüppamiseks vajuta 'W' või 'Z' klahvi", "Tulistamiseks vajuta 'SPACE' või 'X' klahvi", "Vajuta 'P' ,et hinge tõmmata", "Vajuta 'ENTER' ,kui sa kellegagi räägid ", "---------------------", "Keegi on kohvikus . . ."])],
             5:[Item(500, 800, 20, 20, maailm.sandaalid, "Sa leidsid rõivaid!", (200,200,0)),NPC_inimene(1150, 500, 30, 60, (200,200,0), söökla, ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nii sa neile küll vastu ei saa...", "Mine käi üle tee Konsumis." , "Also, nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },
         1:{
-            1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None), Item(700, 500, 50, 50, maailm.sau, "Sa leidsid relva!", (191,0,255))],
+            1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None)],
             3:[Item(1200, 50, 20, 20, maailm.püksid, "Sa leidsid rõivaid!", (200,200,0))],
-            6:[Item(1100, 450, 50, 50, maailm.scar, "Sa leidsid relva!", (191,0,255))]
+            6:[Item(1100, 450, 50, 50, maailm.sau, "Sa leidsid relva!", (191,0,255))]
         },
         2:{
-            4:[Item(1200, 550, 20, 20, maailm.kiiver, "Sa leidsid rõivaid!", (200,200,0))]
+            1:[Item(67, 312, 30, 30, maailm.railgun, "Sa leidsid relva!", (191,0,255))]
         },
         3:{
             3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sul on vaja kõiki riideid!", 50, 5), NPC_portaal(40, 150, 100, 150, (255,255,255), "Riieteta portaali minna ei saa", 1100, 365)],

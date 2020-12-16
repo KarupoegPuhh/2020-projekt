@@ -164,10 +164,10 @@ def main_loop():
         #Relvad
         ling = Relvad(1, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
         hernepüss = Relvad(3, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
-        kartulikahur = Relvad(30, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+        kartulikahur = Relvad(15, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
         railgun = Relvad(0.5, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
-        scar = Relvad(5, 6, 4, (0,0,0), 20, False, "FN SCAR", "From US and A")
-        sau = Relvad(100, 100, 100, (0,0,255), 100, False, "Gandalgi tokk", "Võluri sau")
+        scar = Relvad(5, 10, 4, (0,0,0), 30, False, "FN SCAR", "FN SCAR")
+        sau = Relvad(100, 300, 100, (0,0,255), 100, False, "Gandalgi sau", "Gandalfi sau")
         #Varustus
         kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
         kiiver = Varustus(1, 2, False, False, "Näomask")

@@ -55,6 +55,9 @@ def pood():
             
         if not maailm.kartulikahur.unlocked:
             nupp(aken, "kartul! – 4₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
+
+        if not maailm.scar.unlocked:
+            nupp(aken, "US and A! – 4₽", 540 , 430, 200, 70, (100,100,100), (15,113,115), scar_ost)
                 
         #Riiete valik
         pg.draw.rect(aken, (148, 82, 74), (867,127,366,486))
@@ -89,6 +92,8 @@ def pood():
             nupu_hover_txt(maailm.hernepüss, 540, 250, 200, 70, (200,200,200))
         if maailm.kartulikahur.unlocked == False:
             nupu_hover_txt(maailm.kartulikahur, 540 , 340, 200, 70, (21,244,238))
+        if maailm.scar.unlocked == False:
+            nupu_hover_txt(maailm.scar, 540 , 430, 200, 70, (21,244,238))
         #riided
         if maailm.kiiver.unlocked == False:
             rõiva_hover_txt(maailm.kiiver,950 , 250, 200, 70, (200,200,200))
@@ -165,6 +170,12 @@ def hernepüss_ost():
 def kartulikahur_ost():
     if maailm.Tom.raha >= 4:
         maailm.kartulikahur.unlocked = True
+        maailm.Tom.raha -= 4
+        ost.play()
+
+def scar_ost():
+    if maailm.Tom.raha >= 4:
+        maailm.scar.unlocked = True
         maailm.Tom.raha -= 4
         ost.play()
         
