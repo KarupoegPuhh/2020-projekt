@@ -33,10 +33,9 @@ def pood():
         TextRect.center = (230, 180)
         aken.blit(TextSurf, TextRect)
         
-        if not maailm.ritaliin:
+        if (not maailm.ritaliin) and maailm.Tom.vel_debuff == 0:
             nupp(aken, "Ritaliini! -1₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
 
-                
         if maailm.Tom.health < maailm.Tom.max_health:
             nupp(aken, "Jõujooki! -1₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
             nupp(aken, "Viineripirukas! -10₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
@@ -92,7 +91,7 @@ def pood():
             eat_hover_txt("Jõujook","Annab sulle", "ühe elupukti", 130, 340, 200, 70, (200,200,200))
             eat_hover_txt("Viineri pirukas", "Kõtu täis", "nämm!", 130, 430, 200, 70, (200, 200, 200))
 
-        if not maailm.ritaliin:
+        if (not maailm.ritaliin) and maailm.Tom.vel_debuff == 0:
             eat_hover_txt("Ritalin","KIIRUS!!!", "JÕUD!!!", 130 , 250, 200, 70, (21,244,238))
 
         eat_hover_txt("Monster", "Max-elud", "+5", 130, 520, 200, 70, (21, 244, 238))

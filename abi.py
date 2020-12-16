@@ -75,8 +75,8 @@ söökla = pg.image.load(piltdir+"/söökla.png")
 
 
 
-def text_objects(text, font):
-    textSurface = font.render(text, True, (0,0,0))
+def text_objects(text, font, värvike=(0,0,0)):
+    textSurface = font.render(text, True, värvike)
     return textSurface, textSurface.get_rect()
 
 hiir_all = False

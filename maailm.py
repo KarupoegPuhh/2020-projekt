@@ -311,7 +311,7 @@ def main_loop():
         databar_nihe = 0
         pildi_nihe = 0
         parabooli_nihe = 0
-        if Tom.y > 520:
+        if Tom.y > kõrgus/2 + 200:
             databar_nihe = 600
             pildi_nihe = 450
             parabooli_nihe = 640
@@ -332,7 +332,9 @@ def main_loop():
         pg.draw.rect(aken, (30,30,30), (340, 630 - databar_nihe, 600, 20))
         if ritaliin:
             pg.draw.rect(aken, (rgb()), (342, 632 - databar_nihe, 596 * ((900 - ritaliin_cd) / 900 ), 16))
-        TextSurf, TextRect = text_objects(("Ritaliin"), databarText)
+            TextSurf, TextRect = text_objects(("Ritaliin"), databarText,(0,0,0))
+        else:
+            TextSurf, TextRect = text_objects(("Ritaliin"), databarText,(100,100,100))
         TextRect.center = ((laius // 2), (640 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         
@@ -364,24 +366,29 @@ def main_loop():
                 y_kõrgus -= 0.5 * a**2
         
     
-        #Displayb tegelase suurused
+        #Displayb tegelase statid
         #Kiirus
-        TextSurf, TextRect = text_objects("Kiirus : " + str(Tom.vel), databarText)
+        TextSurf, TextRect = text_objects("Kiirus : " + str(abs(Tom.vel)), databarText,(200,200,200))
         TextRect.center = ((laius // 2), (660 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Relv
-        TextSurf, TextRect = text_objects("Relv : " + str(Tom.relv.nimi), databarText)
+        TextSurf, TextRect = text_objects("Relv : " + str(Tom.relv.nimi), databarText,(200,200,200))
         TextRect.center = ((laius // 2), (680 - databar_nihe))
         aken.blit(TextSurf, TextRect)
         #Raha
         raha = databarText.render(str(Tom.raha)+" рубль", True, (255,215,0))
         aken.blit(raha, (915, 650 - databar_nihe))
-        if maailm.pood_unlocked.unlocked:
-            nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Turvis
-        TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText)
+        TextSurf, TextRect = text_objects("Turvis : " + str(Tom.armor), databarText,(200,200,200))
         TextRect.center = ((laius // 2), (700 - databar_nihe))
         aken.blit(TextSurf, TextRect)
+        #Debuff
+        if maailm.Tom.vel_debuff != 0:
+            TextSurf, TextRect = text_objects("OLED NÕIUTUD!", databarText,rgb()) #(230,0,230)
+            TextRect.center = ((laius // 2 + 120), (680 - databar_nihe))
+            aken.blit(TextSurf, TextRect)
+        if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Nupp inventoryle
         nupp(aken, "Seljakott", 260, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), seljakott)
     
@@ -520,9 +527,15 @@ def main_loop():
         if (keys[pg.K_SPACE] or keys[pg.K_x]) and kuulide_cd == 0:
             shoot.play()
             if Tom.vaatab == 1:
-                suund = 1
+                if Tom.vel_debuff == 0:
+                    suund = 1
+                else:
+                    suund = -1
             else:
-                suund = -1
+                if Tom.vel_debuff == 0:
+                    suund = -1
+                else:
+                    suund = 1
 
             if len(kuulid) < kuulide_maxcount:  # This will make sure we cannot exceed 5 bullets on the screen at once
                 kuulid.append(Kuul(round(Tom.x+Tom.laius//2+suund*Tom.laius/2), round(Tom.y + Tom.pikkus//2), suund, Tom.relv))
