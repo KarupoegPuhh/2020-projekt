@@ -52,7 +52,7 @@ def võit():
                     quit()
                     
             aken.fill((70,70,70))
-            TextSurf, TextRect = text_objects("Sa said hakkama! Kõik hummid on surnd.", largeText)
+            TextSurf, TextRect = text_objects("Sa said hakkama! Kõik hummid on surnd.", mediumText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
@@ -173,7 +173,7 @@ def main_loop():
         sandaalid = Varustus(5, 0, False, True, "Sandaalid")
         #UnlockedCheck
         delta_uksed = Unlockable(False)
-        pood_unlocked = Unlockable(False)
+        pood_unlocked = Unlockable(True)
         
         #Ritaliin buff
         ritaliin = False
@@ -191,8 +191,8 @@ def main_loop():
         global screen_y
         global screenid
         global vastased_ekraanis
-        screen = 4
-        screen_y = 2
+        screen = 2
+        screen_y = 3
         screenid = screenide_loomine()
         vastased_ekraanis = vastaste_loomine()
         itemid_ekraanis = itemite_loomine()
@@ -231,7 +231,7 @@ def main_loop():
             for j in range(6):
                 print(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
                 bg[i][j] = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
-    
+
     def redrawGameWindow():
         aken.fill((21,85,83))
         #try:    
