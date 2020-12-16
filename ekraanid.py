@@ -89,22 +89,22 @@ def vastaste_loomine():
         }
 
 def itemite_loomine():
-    return {0:{#korrus
-        -1: [Item(100, 500, 30, 30, maailm.railgun, "Sa leidsid relva!", (191,0,255)), NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
+    return {
+        0:{#korrus
+            -1: [Item(100, 500, 30, 30, maailm.railgun, "Sa leidsid relva!", (191,0,255)), NPC_inimene(100, 500, 30, 60, (200,200,0), konsum,["Kuidas ma saan kasulik olla?", "Tere, mina olen klienditeenindaja...", "Minu käest saab osta asju...", "Relvi, rõivaid ja midagi hamba alla..."])],
             1:[NPC_info(394, 500, 162, 62, (200,200,200), [100, 50, 800, 300], ["Tere tulemast Deltasse!", "Liikumiseks vajuta  'A'  ja  'D'   või   '<-'  ja  '->'  klahve", "Hüppamiseks vajuta 'W' või 'Z' klahvi", "Tulistamiseks vajuta 'SPACE' või 'X' klahvi", "Vajuta 'P' ,et hinge tõmmata", "Vajuta 'ENTER' ,kui sa kellegagi räägid ", "---------------------", "Keegi on kohvikus . . ."])],
             5:[Item(500, 800, 20, 20, maailm.sandaalid, "Sa leidsid rõivaid!", (200,200,0)),NPC_inimene(1150, 500, 30, 60, (200,200,0), söökla, ["Parool on '2020'", "Kes seal on?...", "Ohh, see oled sina...", "Hummid on terve maja üle võtnud...", "Sa pead maja neist vabastama...", "teistel korrustel on neid rohkem...", "Nii sa neile küll vastu ei saa...", "Mine käi üle tee Konsumis." , "Also, nad blokeerisid 3. korruse...", "Sa saad selle arvutiga avada...", "Mine teisile korrusele, ruumi 2037..."])]
         },
-        1:{1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None), Item(700, 500, 50, 50, maailm.sau, "Sa leidsid relva!", (191,0,255))],
-           3:[Item(1200, 50, 20, 20, maailm.püksid, "Sa leidsid rõivaid!", (200,200,0))],
-           6:[Item(1100, 450, 50, 50, maailm.scar, "Sa leidsid relva!", (191,0,255))]
-
+        1:{
+            1:[NPC_arvut(100, 500, 100, 100, (200,200,200),None), Item(700, 500, 50, 50, maailm.sau, "Sa leidsid relva!", (191,0,255))],
+            3:[Item(1200, 50, 20, 20, maailm.püksid, "Sa leidsid rõivaid!", (200,200,0))],
+            6:[Item(1100, 450, 50, 50, maailm.scar, "Sa leidsid relva!", (191,0,255))]
         },
-        2:{4:[Item(1200, 550, 20, 20, maailm.kiiver, "Sa leidsid rõivaid!", (200,200,0))]
-
+        2:{
+            4:[Item(1200, 550, 20, 20, maailm.kiiver, "Sa leidsid rõivaid!", (200,200,0))]
         },
-        3:{3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sul on vaja kõiki riideid!", 50, 5), NPC_portaal(40, 150, 100, 150, (0,0,255), "Sndaalideta portaali minna ei saa", 1100, 365)],
-           4:[Item(1050, 600, 40, 40, maailm.kiiver, "Sa leidsid rõivaid!", (200,200,0))]
-
-
+        3:{
+            3:[NPC_portaal(1050, 500, 100, 140, (0,0,255), "Sul on vaja kõiki riideid!", 50, 5), NPC_portaal(40, 150, 100, 150, (255,255,255), "Riieteta portaali minna ei saa", 1100, 365)],
+            4:[Item(1050, 600, 40, 40, maailm.kiiver, "Sa leidsid rõivaid!", (200,200,0))]
         }
-        }
+    }

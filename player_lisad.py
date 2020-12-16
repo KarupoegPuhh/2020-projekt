@@ -255,20 +255,50 @@ class NPC_arvut(NPC):
             aken.blit(inprogress, (90, 170))
             self.access.unlocked = True
 
+#global eelm_lai
+#global eelm_kõr
+#eelm_lai = 0
+#eelm_kõr = 0
 class NPC_portaal(NPC):
     def __init__(self, x, y, laius, kõrgus, värv, tekst, siht_x, siht_y):
         NPC.__init__(self, x, y, laius, kõrgus, värv, tekst)
         self.siht_x = siht_x
         self.siht_y = siht_y
         self.aeg = 0
+        self.raadius = 50 #min(self.laius,self.kõrgus)
+        self.raadius_algne = 50
+
+    global värvu
+    global edasi
+    värvu = 160
+    edasi = True
+    def draw(self):
+        global värvu
+        global edasi
+        if värvu == 160:
+            edasi = True
+        if värvu == 255:
+            edasi = False
+        if edasi:
+            värvu += 1
+        else:
+            värvu -= 1
+        pg.draw.circle(aken, (värvu,värvu,värvu), (self.x+self.laius/2, self.y+self.kõrgus/2), self.raadius)
+        self.NPC_räägib()
 
     def teleport(self):
+        #global eelm_lai
+        #global eelm_kõr
         aeg = pg.time.get_ticks()
         if self.x < (maailm.Tom.x + maailm.Tom.laius / 2) < self.x + self.laius and self.y < (maailm.Tom.y + maailm.Tom.pikkus/2) < self.y + self.kõrgus:
             if maailm.sandaalid.equipped and maailm.püksid.equipped and maailm.kasukas.equipped and maailm.kiiver.equipped:
+                self.raadius += 4
                 if self.aeg == 0:
                     self.aeg = aeg
                 if self.aeg + 2000 <= aeg:
+                    self.raadius = self.raadius_algne
+                    #maailm.Tom.laius = 40
+                    #maailm.Tom.pikkus = 60
                     maailm.Tom.x = self.siht_x
                     maailm.Tom.y = self.siht_y
             else:
@@ -278,6 +308,11 @@ class NPC_portaal(NPC):
                 aken.blit(TextSurf, TextRect)
         else:
             self.aeg = 0
+            self.raadius = self.raadius_algne
+            #for event in pg.event.get():
+                #if event.type == pg.KEYDOWN:
+            #maailm.Tom.laius = 40
+            #maailm.Tom.pikkus = 60
 
     def NPC_räägib(self):
         self.teleport()
