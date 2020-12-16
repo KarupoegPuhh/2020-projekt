@@ -35,30 +35,13 @@ def pood():
         
         if not maailm.ritaliin:
             nupp(aken, "Ritaliini! -1₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
-            if 130 < mouse[0] < 330 and 250 < mouse[1] < 310:
-                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
-                ritaliin_txt = smallText.render("Mmmm... maitsev", True, (200,200,200))
-                ritaliin_txt_kord = ritaliin_txt.get_rect()
-                ritaliin_txt_kord.center = (mouse[0] + 100, mouse[1] + 50)
-                aken.blit(ritaliin_txt, ritaliin_txt_kord)
+
                 
         if maailm.Tom.health < maailm.Tom.max_health:
             nupp(aken, "Jõujooki! -1₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
-            if 130 < mouse[0] < 330 and 340 < mouse[1] < 410:
-                pg.draw.rect(aken, (100,100,100), (mouse[0], mouse[1], 200, 100))
-                JJ = smallText.render("Saad 1 hp juurde", True, (200,200,200))
-                JJ_kord = JJ.get_rect()
-                JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
-                aken.blit(JJ, JJ_kord)
+            nupp(aken, "Viineripirukas! -10₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
 
-            nupp(aken, "Viineripirukas! -10₽", 130, 440, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
-            if 130 < mouse[0] < 330 and 440 < mouse[1] < 510:
-                pg.draw.rect(aken, (100, 100, 100), (mouse[0], mouse[1], 200, 100))
-                JJ = smallText.render("Saad elud täis", True, (200, 200, 200))
-                JJ_kord = JJ.get_rect()
-                JJ_kord.center = (mouse[0] + 100, mouse[1] + 50)
-                aken.blit(JJ, JJ_kord)
-        nupp(aken, "Monster! -10₽", 130, 540, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
+        nupp(aken, "Monster! -10₽", 130, 520, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
                 
         #Relvade valik
         pg.draw.rect(aken, (148, 82, 74), (457,127,366,486))
@@ -107,12 +90,12 @@ def pood():
         #söök
         if maailm.Tom.health < maailm.Tom.max_health:
             eat_hover_txt("Jõujook","Annab sulle", "ühe elupukti", 130, 340, 200, 70, (200,200,200))
-            eat_hover_txt("Viineri pirukas", "Kõtu täis", "nämm!", 130, 440, 200, 70, (200, 200, 200))
+            eat_hover_txt("Viineri pirukas", "Kõtu täis", "nämm!", 130, 430, 200, 70, (200, 200, 200))
 
         if not maailm.ritaliin:
             eat_hover_txt("Ritalin","KIIRUS!!!", "JÕUD!!!", 130 , 250, 200, 70, (21,244,238))
 
-        eat_hover_txt("Monster", "Max-elud", "+5", 130, 540, 200, 70, (21, 244, 238))
+        eat_hover_txt("Monster", "Max-elud", "+5", 130, 520, 200, 70, (21, 244, 238))
         
         pg.display.update()
     
