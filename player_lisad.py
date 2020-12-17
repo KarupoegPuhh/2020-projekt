@@ -56,7 +56,10 @@ class Varustus:
         if not self.equipped:
             self.equipped = True
             Tom.armor += self.armor
-            Tom.vel += self.speed
+            if Tom.vel > 0:
+                Tom.vel += self.speed
+            else:
+                Tom.vel -= self.speed
             
     def unequip(self, Tom):
         if self.equipped:
@@ -233,6 +236,10 @@ class NPC_arvut(NPC):
 
         if 20 > self.loading >= 3:
             pg.draw.rect(aken, (0, 0, 0), (50, 50, 520, 300))
+            #XAXAXA naljakas
+            inprogress = smallText.render("EI KÄPI, EI NÄPI, EI TOPI!", True, (0, 255, 0))
+            aken.blit(inprogress, (190, 300))
+
             if 8 >= self.vilgub >= 5:
                 inprogress = smallText.render("HACKING IN PROGRESS...", True, (0, 255, 0))
                 aken.blit(inprogress, (190, 70))
@@ -287,12 +294,7 @@ class NPC_portaal(NPC):
         #global eelm_kõr
         aeg = pg.time.get_ticks()
         if self.x < (maailm.Tom.x + maailm.Tom.laius / 2) < self.x + self.laius and self.y < (maailm.Tom.y + maailm.Tom.pikkus/2) < self.y + self.kõrgus:
-            if maailm.sandaalid.equipped:
-                #pg.draw.circle(aken, (255, 255, 255), (self.x+self.laius/2, self.y+self.kõrgus/2), self.raadius)
-                #if maailm.Tom.y+maailm.Tom.pikkus/2 > self.y+self.kõrgus/2:
-                #    maailm.Tom.y -= 10
-                #maailm.Tom.laius -= 0.5
-                #maailm.Tom.pikkus -= 1
+            if maailm.sandaalid.equipped and maailm.püksid.equipped and maailm.kasukas.equipped and maailm.kiiver.equipped:
                 self.raadius += 4
                 if self.aeg == 0:
                     self.aeg = aeg

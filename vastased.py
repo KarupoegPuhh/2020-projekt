@@ -88,7 +88,7 @@ class Jälitaja(Vastane):
         Vastane.__init__(self, x, y, laius, pikkus, health, dmg, vel)
         self.jälitab = False
         self.tagane = False
-        self.nägemiskaugus = 300
+        self.nägemiskaugus = 500
         self.oota = 30*5
         self.xspawn = x
         self.yspawn = self.y
@@ -230,17 +230,17 @@ class Preester(Vastane):
         self.y_c = self.y
         self.dbkontroll = False
         self.värv = (200,200,0)
-        self.vel_debuff = 100
+        self.vel_debuff = 50
         
     def player_siseneb(self, Tom):
-        self.vel_debuff = 100
+        self.vel_debuff = 50
 
     def player_väljub(self, Tom):
         self.debuff_off(Tom)
 
         
     def debuff_off(self, Tom):
-        Tom.vel_debuff = 100
+        Tom.vel_debuff = 50
         if self.dbkontroll:
             self.dbkontroll = False
             Tom.armor = Tom.armor / self.armordb
@@ -254,7 +254,7 @@ class Preester(Vastane):
             maailm.sandaalid.armor /= self.armordb
 
     def debuff_on(self, Tom):
-        Tom.vel_debuff = 100
+        Tom.vel_debuff = 50
         if not self.dbkontroll:
             Tom.vel *= -1
             self.dbkontroll = True

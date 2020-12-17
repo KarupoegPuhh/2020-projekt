@@ -6,7 +6,7 @@ from ekraanid import *
 global pole_sein_p, pole_sein_v
 global Tom
 global kuulid, vastased, põrandad, rahad, itemid
-global hernepüss, kartulikahur, ling, railgun
+global hernepüss, kartulikahur, ling, railgun, scar, sau
 global kasukas, kiiver, püksid, sandaalid
 global ritaliin, ritaliin_cd
 
@@ -147,7 +147,7 @@ def main_loop():
         global pole_sein_p, pole_sein_v
         global Tom
         global kuulid, vastased, põrandad, rahad, itemid
-        global hernepüss, kartulikahur, ling, railgun
+        global hernepüss, kartulikahur, ling, railgun, scar, sau
         global kasukas, kiiver, püksid, sandaalid
         global ritaliin, ritaliin_cd
         global delta_uksed, pood_unlocked
@@ -162,15 +162,17 @@ def main_loop():
         itemid = None
         
         #Relvad
-        ling = Relvad(2, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
-        hernepüss = Relvad(1, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
-        kartulikahur = Relvad(20, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
-        railgun = Relvad(0.2, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
+        ling = Relvad(1, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
+        hernepüss = Relvad(3, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
+        kartulikahur = Relvad(15, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+        railgun = Relvad(0.5, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
+        scar = Relvad(5, 10, 4, (0,0,0), 30, False, "FN SCAR", "FN SCAR")
+        sau = Relvad(100, 300, 100, (0,0,255), 100, False, "Gandalgi sau", "Gandalfi sau")
         #Varustus
         kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
         kiiver = Varustus(1, 2, False, False, "Näomask")
-        püksid = Varustus(2, 1, False, True, "Viigipüksid")
-        sandaalid = Varustus(5, 0, False, True, "Sandaalid")
+        püksid = Varustus(2, 1, False, False, "Viigipüksid")
+        sandaalid = Varustus(5, 0, False, False, "Sandaalid")
         #UnlockedCheck
         delta_uksed = Unlockable(False)
         pood_unlocked = Unlockable(True)
@@ -191,10 +193,16 @@ def main_loop():
         global screen_y
         global screenid
         global vastased_ekraanis
-        screen = 3
+        screen = 4
         screen_y = 3
         screenid = screenide_loomine()
         vastased_ekraanis = vastaste_loomine()
+        vastaste_arv = 0
+        for y in vastased_ekraanis:
+            for x in vastased_ekraanis[y]:
+                vastaste_arv += len(vastased_ekraanis[y][x])
+        print("VASTASTE ARV: " + str(vastaste_arv))
+
         itemid_ekraanis = itemite_loomine()
         
         def hangi_y(plat):
@@ -449,6 +457,7 @@ def main_loop():
                                 vastane_valu.play()
                             else:
                                 vastane_valu2.play()
+                            break
 
                 #sein
                 if not pole_sein_v(dt, kuul.vel,kuul.x,kuul.y,3,3,9):
@@ -564,6 +573,7 @@ def main_loop():
         for vastane in vastased:
             if vastane.elus:
                 vastane.move(dt, Tom)
+
                 
         #Collision varustusega
         for item in itemid:
@@ -648,10 +658,14 @@ def main_loop():
             if ritaliin_cd >= 900:
                 ritaliin = False
                 ritaliin_cd = 0
-                Tom.vel -= 7
                 Tom.vh -= 1
                 Tom.initial_vh -= 1
                 Tom.värv = algne_värv
+                if Tom.vel > 0:
+                    Tom.vel -= 7
+                else:
+                    Tom.vel += 7
+
                 
         if ritaliin and not ritaliin_music:
             ritaliin_music = True

@@ -34,13 +34,13 @@ def pood():
         aken.blit(TextSurf, TextRect)
         
         if (not maailm.ritaliin) and maailm.Tom.vel_debuff == 0:
-            nupp(aken, "Ritaliini! -1₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
+            nupp(aken, "Ritaliini! – 5₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
 
         if maailm.Tom.health < maailm.Tom.max_health:
-            nupp(aken, "Jõujooki! -1₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
-            nupp(aken, "Viineripirukas! -10₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
+            nupp(aken, "Jõujooki! – 2₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
+            nupp(aken, "Viineripirukas! – 10₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
 
-        nupp(aken, "Monster! -10₽", 130, 520, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
+        nupp(aken, "Monster! – 10₽", 130, 520, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
                 
         #Relvade valik
         pg.draw.rect(aken, (148, 82, 74), (457,127,366,486))
@@ -51,10 +51,13 @@ def pood():
         aken.blit(TextSurf, TextRect)
                 
         if not maailm.hernepüss.unlocked:    
-            nupp(aken, "Hernepüssi! -3₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)   
+            nupp(aken, "Hernepüssi! – 20₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)
             
         if not maailm.kartulikahur.unlocked:
-            nupp(aken, "kartul! -4₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
+            nupp(aken, "kartul! – 20₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
+
+        if not maailm.scar.unlocked:
+            nupp(aken, "US and A! – 96₽", 540 , 430, 200, 70, (100,100,100), (15,113,115), scar_ost)
                 
         #Riiete valik
         pg.draw.rect(aken, (148, 82, 74), (867,127,366,486))
@@ -65,7 +68,13 @@ def pood():
         aken.blit(TextSurf, TextRect)
         
         if not maailm.kiiver.unlocked:
-            nupp(aken, "Näomask! -4₽", 950 , 340, 200, 70, (100,100,100), (15,113,115), kiiver_ost)
+            nupp(aken, "Näomask! – 20₽", 950 , 250, 200, 70, (100,100,100), (15,113,115), kiiver_ost)
+        if not maailm.kasukas.unlocked:
+            nupp(aken, "Kasukas! – 100₽", 950 , 340, 200, 70, (100,100,100), (15,113,115), kasukas_ost)
+        if not maailm.püksid.unlocked:
+            nupp(aken, "Viigipüksid! – 60₽", 950 , 430, 200, 70, (100,100,100), (15,113,115), püksid_ost)
+        if not maailm.sandaalid.unlocked:
+            nupp(aken, "Sandaalid! – 30₽", 950 , 520, 200, 70, (100,100,100), (15,113,115), sandaalid_ost)
             
         
         #aken rahale ja raha
@@ -83,9 +92,17 @@ def pood():
             nupu_hover_txt(maailm.hernepüss, 540, 250, 200, 70, (200,200,200))
         if maailm.kartulikahur.unlocked == False:
             nupu_hover_txt(maailm.kartulikahur, 540 , 340, 200, 70, (21,244,238))
+        if maailm.scar.unlocked == False:
+            nupu_hover_txt(maailm.scar, 540 , 430, 200, 70, (21,244,238))
         #riided
         if maailm.kiiver.unlocked == False:
-            rõiva_hover_txt(maailm.kiiver,950 , 340, 200, 70, (200,200,200))
+            rõiva_hover_txt(maailm.kiiver,950 , 250, 200, 70, (200,200,200))
+        if maailm.kasukas.unlocked == False:
+            rõiva_hover_txt(maailm.kiiver,950 , 430, 200, 70, (200,200,200))
+        if maailm.püksid.unlocked == False:
+            rõiva_hover_txt(maailm.kiiver,950 , 610, 200, 70, (200,200,200))
+        if maailm.sandaalid.unlocked == False:
+            rõiva_hover_txt(maailm.kiiver,950 , 790, 200, 70, (200,200,200))
         #söök
         if maailm.Tom.health < maailm.Tom.max_health:
             eat_hover_txt("Jõujook","Annab sulle", "ühe elupukti", 130, 340, 200, 70, (200,200,200))
@@ -110,6 +127,12 @@ def kartulikahur_equip():
 def railgun_equip():
     if maailm.railgun.unlocked:
         maailm.Tom.relv = maailm.railgun
+def scar_equip():
+    if maailm.scar.unlocked:
+        maailm.Tom.relv = maailm.scar
+def sau_equip():
+    if maailm.sau.unlocked:
+        maailm.Tom.relv = maailm.sau
                 
 def pood_done():
     global poes
@@ -118,8 +141,8 @@ def pood_done():
     headaega.play()
     
 def jõujook_ost():
-    if maailm.Tom.raha >= 1:
-        maailm.Tom.raha -= 1
+    if maailm.Tom.raha >= 2:
+        maailm.Tom.raha -= 2
         if maailm.Tom.max_health - maailm.Tom.health >= 1:
             maailm.Tom.health += 1
         else:
@@ -139,29 +162,52 @@ def monster_ost():
         ost.play()
         
 def hernepüss_ost():
-    if maailm.Tom.raha >= 3:
+    if maailm.Tom.raha >= 20:
         maailm.hernepüss.unlocked = True
-        maailm.Tom.raha -= 3
+        maailm.Tom.raha -= 20
         ost.play()
 
 def kartulikahur_ost():
-    if maailm.Tom.raha >= 4:
+    if maailm.Tom.raha >= 20:
         maailm.kartulikahur.unlocked = True
-        maailm.Tom.raha -= 4
+        maailm.Tom.raha -= 20
+        ost.play()
+
+def scar_ost():
+    if maailm.Tom.raha >= 96:
+        maailm.scar.unlocked = True
+        maailm.Tom.raha -= 96
         ost.play()
         
 def ritaliin_ost():
     global vh
-    if maailm.Tom.raha >= 1:
+    if maailm.Tom.raha >= 5:
         maailm.ritaliin = True
         maailm.Tom.vel += 7
-        maailm.Tom.vh += 1
         maailm.Tom.initial_vh += 1
-        maailm.Tom.raha -= 1
+        maailm.Tom.raha -= 5
         ost.play()
         
 def kiiver_ost():
-    maailm.kiiver.unlocked = True
+    if maailm.Tom.raha >= 20:
+        maailm.Tom.raha -= 20
+        maailm.kiiver.unlocked = True
+        ost.play()
+def kasukas_ost():
+    if maailm.Tom.raha >= 100:
+        maailm.Tom.raha -= 100
+        maailm.kasukas.unlocked = True
+        ost.play()
+def püksid_ost():
+    if maailm.Tom.raha >= 60:
+        maailm.Tom.raha -= 60
+        maailm.püksid.unlocked = True
+        ost.play()
+def sandaalid_ost():
+    if maailm.Tom.raha >= 30:
+        maailm.Tom.raha -= 30
+        maailm.sandaalid.unlocked = True
+        ost.play()
         
 #Seljakott
 def seljakott():
@@ -247,6 +293,12 @@ def seljakott():
                 
         if maailm.railgun.unlocked:
             nupp(aken, "EMP gun", 1005, 430, 200, 70, (100,100,100), (15,113,115), railgun_equip)
+
+        if maailm.scar.unlocked:
+            nupp(aken, "LF SCAR", 555, 430, 200, 70, (100,100,100), (15,113,115), scar_equip)
+
+        if maailm.sau.unlocked:
+            nupp(aken, "Gandalfi tokk", 780, 430, 200, 70, (100,100,100), (15,113,115), sau_equip)
                
         ###joonistame kasti, et infot lugeda
         #Relvad
@@ -258,6 +310,10 @@ def seljakott():
             nupu_hover_txt(maailm.kartulikahur, 70, 430, 200, 70, (21,244,238))
         if maailm.railgun.unlocked == True:
             nupu_hover_txt(maailm.railgun, 1005, 430, 200, 70, (191,0,255))
+        if maailm.scar.unlocked == True:
+            nupu_hover_txt(maailm.scar, 555, 430, 200, 70, (191,0,255))
+        if maailm.sau.unlocked == True:
+            nupu_hover_txt(maailm.sau, 780, 430, 200, 70, (191,0,255))
         #Riided
         if maailm.kiiver.unlocked == True:
             rõiva_hover_txt(maailm.kiiver, 70, 250, 200, 70, (200,200,200))
