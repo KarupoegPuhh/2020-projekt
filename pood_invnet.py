@@ -307,7 +307,7 @@ def seljakott():
         if maailm.hernepüss.unlocked == True:
             nupu_hover_txt(maailm.hernepüss, 780, 250, 200, 70, (200,200,200))
         if maailm.kartulikahur.unlocked == True:
-            nupu_hover_txt(maailm.kartulikahur, 70, 430, 200, 70, (21,244,238))
+            nupu_hover_txt(maailm.kartulikahur, 1005, 250, 200, 70, (21,244,238))
         if maailm.railgun.unlocked == True:
             nupu_hover_txt(maailm.railgun, 1005, 430, 200, 70, (191,0,255))
         if maailm.scar.unlocked == True:

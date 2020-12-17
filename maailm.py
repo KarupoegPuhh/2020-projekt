@@ -389,6 +389,16 @@ def main_loop():
         aken.blit(TextSurf, TextRect)
         
         #Pilt tegelase jaoks
+        ##raha cheat nupp
+        def motherlode():
+            Tom.raha += 1000
+            aeg = pg.time.get_ticks()
+            if aeg + 2000 >= pg.time.get_ticks():
+                TextSurf, TextRect = text_objects("MOTHERLODE", largeText)
+                TextRect.center = ((laius // 2), 170)
+                aken.blit(TextSurf, TextRect)
+        nupp(aken, "Motherlode", 0, 695 - databar_nihe, 25, 25, (100, 100, 100), (15, 113, 115), motherlode)
+
         pg.draw.rect(aken, (25,25,25), (0, 570 - databar_nihe, 124, 180))
         pg.draw.rect(aken, (50,50,50), (2, 600 - databar_nihe, 120, 120))
         aken.blit(Player.kangelane_pilt, (2,600 - databar_nihe))
