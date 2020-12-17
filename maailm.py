@@ -214,7 +214,7 @@ def main_loop():
         Tom.laes = False
         Tom.initial_vh = 10.5
         Tom.vh = 0 #hüppe vel
-        Tom.health = 7
+        Tom.health = 10
         Tom.kb = 0 #knockback 1-paremale -1-vasakule 0-false
         Tom.kontr = True #kas saab kontrollida
         Tom.elus = True
