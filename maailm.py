@@ -9,8 +9,11 @@ global kuulid, vastased, põrandad, rahad, itemid
 global hernepüss, kartulikahur, ling, railgun, scar, sau
 global kasukas, kiiver, püksid, sandaalid
 global ritaliin, ritaliin_cd
+global esimene_kord
+esimene_kord = True
 
 def surm():
+    global esimene_kord
     psurm.play()
     pg.mixer.music.stop()
     #Väike paus ja ütleb, et surid
@@ -33,7 +36,8 @@ def surm():
         aken.blit(TextSurf, TextRect)
         
         nupp(aken, "Annan alla", 400, 375, 200, 100, (100,0,0), (255,0,0), intro)
-        nupp(aken, "Proovin uuesti", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
+        esimene_kord = False
+        nupp(aken, "tee kunstlikku hingamist", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
         
         pg.display.update()
 
@@ -154,32 +158,70 @@ def main_loop():
         global kasukas, kiiver, püksid, sandaalid
         global ritaliin, ritaliin_cd
         global delta_uksed, pood_unlocked
+        global esimene_kord
+
+        #level layout
+        global screen
+        global screen_y
+        global screenid
+        global vastased_ekraanis
+        global itemid_ekraanis
         
-        #vars
+        if esimene_kord:
+            #vars
+            vastased = []
+            rahad = []
+            itemid = None
+            
+            #Relvad
+            ling = Relvad(1, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
+            hernepüss = Relvad(3, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
+            kartulikahur = Relvad(15, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
+            railgun = Relvad(0.5, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
+            scar = Relvad(5, 10, 4, (0,0,0), 30, False, "FN SCAR", "FN SCAR")
+            sau = Relvad(100, 300, 100, (0,0,255), 100, False, "Gandalgi sau", "Gandalfi sau")
+            #Varustus
+            kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
+            kiiver = Varustus(1, 2, False, False, "Näomask")
+            püksid = Varustus(2, 1, False, False, "Viigipüksid")
+            sandaalid = Varustus(5, 0, False, False, "Sandaalid")
+            #UnlockedCheck
+            delta_uksed = Unlockable(False)
+            pood_unlocked = Unlockable(False)
+
+            vastased_ekraanis = vastaste_loomine()
+            itemid_ekraanis = itemite_loomine()
+
+            #Et mängjal oleks alguses relv
+            Tom = Player(580, 100, 40, 60, ling)
+        
+        screen = 1
+        screen_y = 0
+        screenid = screenide_loomine()
+        
         kuulid = []
         kuulide_cd = 0
         kuulide_maxcount = 500
-        vastased = []
         põrandad = None
-        rahad = []
-        itemid = None
-        
-        #Relvad
-        ling = Relvad(1, 30, 5, (255,255,255), 15, True,"ling", "Walter PPK")
-        hernepüss = Relvad(3, 5, 3, (0,255,0), 20, False,"hernepüss", "AK-47")
-        kartulikahur = Relvad(15, 40, 10, (161,127,27), 13, False,"kartulikaur", "Käsikahur")
-        railgun = Relvad(0.5, 0, 20, (4,217,255), 10, False,"midagi erakordset", "EMP gun")
-        scar = Relvad(5, 10, 4, (0,0,0), 30, False, "FN SCAR", "FN SCAR")
-        sau = Relvad(100, 300, 100, (0,0,255), 100, False, "Gandalgi sau", "Gandalfi sau")
-        #Varustus
-        kasukas = Varustus(0, 5, False, False, "Abramovi vammus")
-        kiiver = Varustus(1, 2, False, False, "Näomask")
-        püksid = Varustus(2, 1, False, False, "Viigipüksid")
-        sandaalid = Varustus(5, 0, False, False, "Sandaalid")
-        #UnlockedCheck
-        delta_uksed = Unlockable(False)
-        pood_unlocked = Unlockable(False)
-        
+
+        Tom.x = 580
+        Tom.y = 100
+        Tom.m = 1
+        Tom.vel = 10
+        Tom.velx = 0
+        Tom.vely = 0
+        Tom.põrandal = False
+        Tom.laes = False
+        Tom.initial_vh = 10.5
+        Tom.vh = 0 #hüppe vel
+        Tom.health = 7
+        Tom.kb = 0 #knockback 1-paremale -1-vasakule 0-false
+        Tom.kontr = True #kas saab kontrollida
+        Tom.elus = True
+        Tom.relv = ling
+        Tom.vel_debuff = 0
+        Tom.värv = Player.kangelane_värv
+
         #Ritaliin buff
         ritaliin = False
         ritaliin_cd = 0
@@ -191,22 +233,13 @@ def main_loop():
         greenc = False
         bluec = False
         
-        #level layout
-        global screen
-        global screen_y
-        global screenid
-        global vastased_ekraanis
-        screen = 1
-        screen_y = 0
-        screenid = screenide_loomine()
-        vastased_ekraanis = vastaste_loomine()
         vastaste_arv = 0
         for y in vastased_ekraanis:
             for x in vastased_ekraanis[y]:
                 vastaste_arv += len(vastased_ekraanis[y][x])
         print("VASTASTE ARV: " + str(vastaste_arv))
 
-        itemid_ekraanis = itemite_loomine()
+        
         
         def hangi_y(plat):
             return plat.y1
@@ -214,8 +247,6 @@ def main_loop():
             for x in screenid[y]:
                 screenid[y][x].sort(reverse=True, key=hangi_y)
         
-        #Et mängjal oleks alguses relv
-        Tom = Player(580, 100, 40, 60, ling)
 
         clock = pg.time.Clock()
         global dt

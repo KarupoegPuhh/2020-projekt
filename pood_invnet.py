@@ -98,11 +98,11 @@ def pood():
         if maailm.kiiver.unlocked == False:
             rõiva_hover_txt(maailm.kiiver,950 , 250, 200, 70, (200,200,200))
         if maailm.kasukas.unlocked == False:
-            rõiva_hover_txt(maailm.kiiver,950 , 430, 200, 70, (200,200,200))
+            rõiva_hover_txt(maailm.kasukas,950 , 340, 200, 70, (200,200,200))
         if maailm.püksid.unlocked == False:
-            rõiva_hover_txt(maailm.kiiver,950 , 610, 200, 70, (200,200,200))
+            rõiva_hover_txt(maailm.püksid,950 , 430, 200, 70, (200,200,200))
         if maailm.sandaalid.unlocked == False:
-            rõiva_hover_txt(maailm.kiiver,950 , 790, 200, 70, (200,200,200))
+            rõiva_hover_txt(maailm.sandaalid,950 , 520, 200, 70, (200,200,200))
         #söök
         if maailm.Tom.health < maailm.Tom.max_health:
             eat_hover_txt("Jõujook","Annab sulle", "ühe elupukti", 130, 340, 200, 70, (200,200,200))
