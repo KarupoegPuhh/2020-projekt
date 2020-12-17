@@ -21,12 +21,12 @@ class Player:
         self.initial_vh = 10.5
         self.vh = 0 #hüppe vel
         self.health = 7
-        self.max_health = 100
+        self.max_health = 10
         self.kb = 0 #knockback 1-paremale -1-vasakule 0-false
         self.kontr = True #kas saab kontrollida
         self.elus = True
         self.elud_värv = (0,255,0)
-        self.raha = 420
+        self.raha = 0
         self.armor = 1
         self.name = "nimi"
         self.relv = relv

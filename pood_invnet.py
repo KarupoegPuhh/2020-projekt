@@ -38,7 +38,7 @@ def pood():
 
         if maailm.Tom.health < maailm.Tom.max_health:
             nupp(aken, "Jõujooki! – 2₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
-            nupp(aken, "Viineripirukas! – 10₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
+            nupp(aken, "Viineripirukas! – 20₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
 
         nupp(aken, "Monster! – 10₽", 130, 520, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
                 
@@ -150,8 +150,8 @@ def jõujook_ost():
         ost.play()
 
 def viineripirukas_ost():
-    if maailm.Tom.raha >= 10 and maailm.Tom.health < maailm.Tom.max_health:
-        maailm.Tom.raha -= 10
+    if maailm.Tom.raha >= 20 and maailm.Tom.health < maailm.Tom.max_health:
+        maailm.Tom.raha -= 20
         maailm.Tom.health = maailm.Tom.max_health
         ost.play()
 

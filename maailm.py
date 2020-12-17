@@ -38,7 +38,10 @@ def surm():
         pg.display.update()
 
 def võit():
-    if len(vastased_ekraanis[1][4]) == 0 and len(rahad) == 0:
+    if screen_y == 3 and screen == 1 and Tom.x < 100:
+        pg.mixer.music.stop()
+        võith.play()
+
         TextSurf, TextRect = text_objects("VÕIT!", largeText)
         TextRect.center = ((laius // 2), (100))
         aken.blit(TextSurf, TextRect)
@@ -175,7 +178,7 @@ def main_loop():
         sandaalid = Varustus(5, 0, False, False, "Sandaalid")
         #UnlockedCheck
         delta_uksed = Unlockable(False)
-        pood_unlocked = Unlockable(True)
+        pood_unlocked = Unlockable(False)
         
         #Ritaliin buff
         ritaliin = False
@@ -193,8 +196,8 @@ def main_loop():
         global screen_y
         global screenid
         global vastased_ekraanis
-        screen = 4
-        screen_y = 3
+        screen = 1
+        screen_y = 0
         screenid = screenide_loomine()
         vastased_ekraanis = vastaste_loomine()
         vastaste_arv = 0
@@ -246,23 +249,28 @@ def main_loop():
         #    aken.blit(bg[screen_y][screen],(0,0))
         #except:
         #    aken.blit(nobg,(0,0))
-        textSurf, textRect = text_objects("KORRUS: "+str(screen_y),mediumText,(100,100,100))
+        textSurf, textRect = text_objects("KORRUS: "+str(screen_y+1),mediumText,(100,100,100))
         textRect.center = (laius/2,kõrgus/2)
         aken.blit(textSurf, textRect)
 
         for prr in põrandad:
             prr.draw()
-
-        for item in itemid:
-            item.draw()
-
-        Tom.draw()
         
         for p1 in vastased:
             p1.draw()
         
+        for item in itemid:
+            item.draw()
+        
+        Tom.draw()
+        
+        #võit bossi asemel hetkel
+        if screen == 1 and screen_y == 3:
+            pg.draw.rect(aken,rgb(), (95, 450, 40, 40))
+        
         for raha in rahad:
             raha.draw()
+        
         for kuul in kuulid:
             kuul.draw()
             
@@ -451,7 +459,8 @@ def main_loop():
                 for p in vastased:
                     if kuul.y - kuul.raadius < p.hitbox[1] + p.hitbox[3] and kuul.y + kuul.raadius > p.hitbox[1] and p.elus:
                         if kuul.x - kuul.raadius < p.hitbox[0] + p.hitbox[2] and kuul.x + kuul.raadius > p.hitbox[0]:
-                            kuulid.pop(kuulid.index(kuul))
+                            if kuul in kuulid:
+                                kuulid.pop(kuulid.index(kuul))
                             p.hit(kuul) 
                             if randint(0,2):
                                 vastane_valu.play()
@@ -493,13 +502,13 @@ def main_loop():
                 Tom.vh -= 1
                 
                 # TOM HÜPPAMINE
-                #if Tom.põrandal:
-                if keys [pg.K_w] or keys [pg.K_z]:
-                    Tom.vh = Tom.initial_vh
-                    if randint(0,2):
-                        hop.play()
-                    else:
-                        hop2.play()
+                if Tom.põrandal:
+                    if keys [pg.K_w] or keys [pg.K_z]:
+                        Tom.vh = Tom.initial_vh
+                        if randint(0,2):
+                            hop.play()
+                        else:
+                            hop2.play()
                 
                 #F = 1 / 2 * mass * velocity ^ 2
                 if Tom.vh > 0:
@@ -590,8 +599,8 @@ def main_loop():
         #print(Tom.vh, Tom.põrandal, Tom.laes, Tom.kb, Tom.kontr, Tom.velx, Tom.vely, Tom.x)
         
         #TOM SAAB PIHTA
-        #for kuri in vastased:
-        #    Tom.põrkub(kuri, dt)
+        for kuri in vastased:
+            Tom.põrkub(kuri, dt)
         
         #vaheta screeni paremale
         if Tom.x+(Tom.laius/2) > laius:
