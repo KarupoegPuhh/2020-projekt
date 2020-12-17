@@ -34,10 +34,10 @@ def pood():
         aken.blit(TextSurf, TextRect)
         
         if (not maailm.ritaliin) and maailm.Tom.vel_debuff == 0:
-            nupp(aken, "Ritaliini! – 1₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
+            nupp(aken, "Ritaliini! – 5₽", 130 , 250, 200, 70, (100,100,100), (15,113,115), ritaliin_ost)
 
         if maailm.Tom.health < maailm.Tom.max_health:
-            nupp(aken, "Jõujooki! – 1₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
+            nupp(aken, "Jõujooki! – 2₽", 130, 340, 200, 70, (100,100,100), (15,113,115), jõujook_ost)
             nupp(aken, "Viineripirukas! – 10₽", 130, 430, 200, 70, (100, 100, 100), (15, 113, 115), viineripirukas_ost)
 
         nupp(aken, "Monster! – 10₽", 130, 520, 200, 70, (100, 100, 100), (15, 113, 115), monster_ost)
@@ -51,13 +51,13 @@ def pood():
         aken.blit(TextSurf, TextRect)
                 
         if not maailm.hernepüss.unlocked:    
-            nupp(aken, "Hernepüssi! – 3₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)
+            nupp(aken, "Hernepüssi! – 20₽", 540, 250, 200, 70, (100,100,100), (15,113,115), hernepüss_ost)
             
         if not maailm.kartulikahur.unlocked:
-            nupp(aken, "kartul! – 4₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
+            nupp(aken, "kartul! – 20₽", 540 , 340, 200, 70, (100,100,100), (15,113,115), kartulikahur_ost)
 
         if not maailm.scar.unlocked:
-            nupp(aken, "US and A! – 4₽", 540 , 430, 200, 70, (100,100,100), (15,113,115), scar_ost)
+            nupp(aken, "US and A! – 96₽", 540 , 430, 200, 70, (100,100,100), (15,113,115), scar_ost)
                 
         #Riiete valik
         pg.draw.rect(aken, (148, 82, 74), (867,127,366,486))
@@ -141,8 +141,8 @@ def pood_done():
     headaega.play()
     
 def jõujook_ost():
-    if maailm.Tom.raha >= 1:
-        maailm.Tom.raha -= 1
+    if maailm.Tom.raha >= 2:
+        maailm.Tom.raha -= 2
         if maailm.Tom.max_health - maailm.Tom.health >= 1:
             maailm.Tom.health += 1
         else:
@@ -162,31 +162,30 @@ def monster_ost():
         ost.play()
         
 def hernepüss_ost():
-    if maailm.Tom.raha >= 3:
+    if maailm.Tom.raha >= 20:
         maailm.hernepüss.unlocked = True
-        maailm.Tom.raha -= 3
+        maailm.Tom.raha -= 20
         ost.play()
 
 def kartulikahur_ost():
-    if maailm.Tom.raha >= 4:
+    if maailm.Tom.raha >= 20:
         maailm.kartulikahur.unlocked = True
-        maailm.Tom.raha -= 4
+        maailm.Tom.raha -= 20
         ost.play()
 
 def scar_ost():
-    if maailm.Tom.raha >= 4:
+    if maailm.Tom.raha >= 96:
         maailm.scar.unlocked = True
-        maailm.Tom.raha -= 4
+        maailm.Tom.raha -= 96
         ost.play()
         
 def ritaliin_ost():
     global vh
-    if maailm.Tom.raha >= 1:
+    if maailm.Tom.raha >= 5:
         maailm.ritaliin = True
         maailm.Tom.vel += 7
-        maailm.Tom.vh += 1
         maailm.Tom.initial_vh += 1
-        maailm.Tom.raha -= 1
+        maailm.Tom.raha -= 5
         ost.play()
         
 def kiiver_ost():

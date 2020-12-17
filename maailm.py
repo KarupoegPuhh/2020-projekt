@@ -197,6 +197,12 @@ def main_loop():
         screen_y = 3
         screenid = screenide_loomine()
         vastased_ekraanis = vastaste_loomine()
+        vastaste_arv = 0
+        for y in vastased_ekraanis:
+            for x in vastased_ekraanis[y]:
+                vastaste_arv += len(vastased_ekraanis[y][x])
+        print("VASTASTE ARV: " + str(vastaste_arv))
+
         itemid_ekraanis = itemite_loomine()
         
         def hangi_y(plat):
@@ -567,6 +573,7 @@ def main_loop():
         for vastane in vastased:
             if vastane.elus:
                 vastane.move(dt, Tom)
+
                 
         #Collision varustusega
         for item in itemid:
@@ -651,10 +658,14 @@ def main_loop():
             if ritaliin_cd >= 900:
                 ritaliin = False
                 ritaliin_cd = 0
-                Tom.vel -= 7
                 Tom.vh -= 1
                 Tom.initial_vh -= 1
                 Tom.värv = algne_värv
+                if Tom.vel > 0:
+                    Tom.vel -= 7
+                else:
+                    Tom.vel += 7
+
                 
         if ritaliin and not ritaliin_music:
             ritaliin_music = True

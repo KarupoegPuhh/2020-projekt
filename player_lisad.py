@@ -56,7 +56,10 @@ class Varustus:
         if not self.equipped:
             self.equipped = True
             Tom.armor += self.armor
-            Tom.vel += self.speed
+            if Tom.vel > 0:
+                Tom.vel += self.speed
+            else:
+                Tom.vel -= self.speed
             
     def unequip(self, Tom):
         if self.equipped:

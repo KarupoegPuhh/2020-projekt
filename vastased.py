@@ -88,7 +88,7 @@ class Jälitaja(Vastane):
         Vastane.__init__(self, x, y, laius, pikkus, health, dmg, vel)
         self.jälitab = False
         self.tagane = False
-        self.nägemiskaugus = 300
+        self.nägemiskaugus = 500
         self.oota = 30*5
         self.xspawn = x
         self.yspawn = self.y
