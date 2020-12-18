@@ -4,6 +4,7 @@ from random import choice
 import maailm
 #from ekraanid import screenide_loomine
 from player_lisad import *
+from math import *
 
 class Vastane:
     def __init__(self, x, y, laius, pikkus, health, dmg, vel):
@@ -53,8 +54,7 @@ class Vastane:
                 maailm.Tom.raha += 3
             else:
                 for ugu in range(self.raha):
-                    vars()["r"+str(len(maailm.rahad))] = Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),mkrr)
-                    maailm.rahad.append(vars()["r"+str(len(maailm.rahad))])
+                    maailm.rahad.append(Raha(self.x,self.y,choice([-1,1]),5/randint(1,10),4/randint(1,10),mkrr))
             self.elus = False
             vastane_surm.play()
             maailm.vastased.remove(self)
@@ -280,5 +280,128 @@ class Preester(Vastane):
             self.debuff_on(Tom)
     
 class Boss(Vastane):
-    def __init__(self):
-        Vastane.__init__(self)
+    def __init__(self, x, y, laius, pikkus, health, dmg, vel):
+        Vastane.__init__(self, x, y, laius, pikkus, health, dmg, vel)
+        self.state = 0
+        self.x_c = x
+        self.y_c = y
+        self.l_c = laius
+        self.p_c = pikkus
+        self.rage = False
+        self.paremal = False
+        self.vel_hingamine = vel
+        self.vel_x = vel
+        self.vel_y = vel
+        self.kuulide_vel_c = vel * 2
+        self.lendab_aeg = 0
+        self.tomi_kohal = False
+        self.health_rg = 0.1
+
+    PUHKAB = 0
+    TULISTAB = 1
+    JOOKSEB = 2
+    LENDAB = 3
+
+
+    def move(self, dt, Tom):
+        if self.health < self.max_health * 0.5 and not self.rage:
+            self.rage = True
+            self.vel_hingamine *= 10
+            self.vel *= 3
+            self.värv = (200, 0, 0)
+
+        if self.state == Boss.PUHKAB:
+            if self.health < self.max_health:
+                self.health += self.health_rg
+            puhkamine_done = randint(0, 100)
+            if 97 < puhkamine_done < 100:
+                self.state = Boss.JOOKSEB
+            if 94 < puhkamine_done < 97:
+                self.state = Boss.TULISTAB
+            if 90 < puhkamine_done < 94:
+                self.state = Boss.LENDAB
+            aeg = pg.time.get_ticks() * 0.005
+            self.pikkus = sin(aeg) * self.vel_hingamine + self.p_c
+            self.y = self.y_c - self.pikkus
+
+        elif self.state == Boss.TULISTAB:
+            if self.paremal:
+                kuulide_vel = self.kuulide_vel_c * -1
+            else:
+                kuulide_vel = self.kuulide_vel_c
+            kogus = randint(3, 7)
+            for i in range(kogus):
+                y = randint(self.y_c - self.p_c, self.y_c)
+                maailm.vastased.append(KuulBoss(self.x, y, 7, 5, kuulide_vel))
+            self.state = Boss.PUHKAB
+
+        elif self.state == Boss.JOOKSEB:
+            if self.paremal:
+                self.x -= self.vel
+                if self.x + self.laius / 2 <= 100:
+                    self.paremal = False
+                    self.state = Boss.PUHKAB
+            else:
+                self.x += self.vel
+                if self.x + self.laius / 2 >= 1200:
+                    self.paremal = True
+                    self.state = Boss.PUHKAB
+
+        elif self.state == Boss.LENDAB:
+            if self.x + self.laius < maailm.Tom.x + maailm.Tom.laius / 2 < self.x:
+                print("kohal")
+                self.tomi_kohal = True
+            else:
+                self.tomi_kohal = False
+            if not self.tomi_kohal:
+                if self.lendab_aeg < 150:
+                    self.lendab_aeg += 1
+                    self.x += self.vel_x
+                    self.y += self.vel_y
+                    if self.x + self.laius >= laius or self.x <= 0:
+                        self.vel_x *= -1
+                    if self.y + self.pikkus > 500 or self.y <= 0:
+                        self.vel_y *= -1
+            else:
+                self.y += abs(self.vel_y)
+            if self.lendab_aeg >= 150:
+                self.y += abs(self.vel_y)
+                if self.y + self.pikkus > 500:
+                    self.lendab_aeg = 0
+                    self.state = Boss.PUHKAB
+
+    def player_väljub(self, Tom):
+        if self.health <= 0:
+            maailm.itemid.append(Võit(self.x, self.y))
+
+class KuulBoss():
+    def __init__(self, x, y, raadius, dmg, vel):
+        self.x = x
+        self.y = y
+        self.raadius = raadius
+        self.raadius2 = raadius * 0.6
+        self.dmg = dmg
+        self.vel = vel
+        self.värv = (200, 0, 0)
+        self.värv2 = (200, 200, 0)
+        self.elus = True
+        self.pikkus = raadius
+        self.laius = raadius
+        self.hitbox = (0,0,0,0)
+
+    def draw(self):
+        pg.draw.circle(aken, self.värv, (self.x + self.raadius, self.y + self.raadius), self.raadius)
+        pg.draw.circle(aken, self.värv2, (self.x + self.raadius, self.y + self.raadius), self.raadius2)
+
+    def move(self, dt, Tom):
+        self.x += self.vel
+        if self.x > laius or self.x < 0:
+            maailm.vastased.remove(self)
+
+    def hit(self):
+        pass
+
+    def player_väljub(self):
+        pass
+    def player_siseneb(self):
+        pass

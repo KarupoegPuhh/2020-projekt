@@ -42,7 +42,7 @@ def surm():
         pg.display.update()
 
 def võit():
-    if screen_y == 3 and screen == 1 and Tom.x < 100:
+    if True:
         pg.mixer.music.stop()
         võith.play()
 
@@ -295,10 +295,6 @@ def main_loop():
         
         Tom.draw()
         
-        #võit bossi asemel hetkel
-        if screen == 1 and screen_y == 3:
-            pg.draw.rect(aken,rgb(), (95, 450, 40, 40))
-        
         for raha in rahad:
             raha.draw()
         
@@ -392,6 +388,7 @@ def main_loop():
         ##raha cheat nupp
         def motherlode():
             Tom.raha += 1000
+            maailm.pood_unlocked.unlocked = True
             aeg = pg.time.get_ticks()
             if aeg + 2000 >= pg.time.get_ticks():
                 TextSurf, TextRect = text_objects("MOTHERLODE", largeText)
@@ -739,8 +736,7 @@ def main_loop():
                 Tom.vel *= -1
         else:
             Tom.vel_debuff = 0
-        
-        võit()
-        if not Tom.elus and Tom.kontr:
+
+        if not Tom.elus and Tom.kontr or screen_y < 0:
             surm()
         redrawGameWindow()

@@ -1,5 +1,6 @@
 import maailm
 from abi import *
+from math import *
 
 class Kuul:
     def __init__(self, x, y, suund, relv):
@@ -350,4 +351,23 @@ class NPC_info(NPC):
                     self.tekst_y += 30
                     i += 1
 
+class Võit():
+    def __init__(self, x, y,):
+        self.x = x
+        self.y = y
+        self.collision = False
+        self.r = 40
+        self.punktid = []
+        self.kõrgus = self.r
+        self.laius = self.r
+        nurk = 0
+        for i in range(8):
+            x = self.x + self.r * cos(nurk)
+            y = self.y + self.r * sin(nurk)
+            self.punktid.append((x,y))
+            nurk += pi/4
 
+    def draw(self):
+        pg.draw.polygon(aken, maailm.rgb(), self.punktid)
+        if self.collision:
+            maailm.võit()

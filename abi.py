@@ -1,9 +1,13 @@
 import os
 import pygame as pg
 from pygame_init import *
+from sys import exit as quit
 
-
-dirr = os.path.dirname(os.path.abspath(__file__))
+try:
+    dirr = sys._MEIPASS
+except:
+    dirr = os.path.dirname(os.path.abspath(__file__))
+print(dirr)
 helidir = dirr+"/helid"
 fontdir = dirr+"/fontid"
 piltdir = dirr+"/pildid"
