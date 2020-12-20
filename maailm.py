@@ -30,15 +30,15 @@ def surm():
             if event.type == pg.QUIT:
                 pg.quit()
                 quit()
-        aken.fill((70,70,70))
+        aken.fill((21,85,83))
         
         TextSurf, TextRect = text_objects("Hummid tampisid su ära...", mediumText)
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
         
-        nupp(aken, "Annan alla", 400, 375, 200, 100, (100,0,0), (255,0,0), intro)
+        nupp(aken, "Annan alla", 660, 375, 200, 100, (148, 82, 74), (168, 102, 94), intro)
         esimene_kord = False
-        nupp(aken, "tee kunstlikku hingamist", 400, 250, 200, 100, (0,100,0), (0,255,0), main_loop)
+        nupp(aken, "RESURECTUM", 420, 375, 200, 100, (148, 82, 74), (168, 102, 94), main_loop)
         
         pg.display.update()
 
@@ -59,14 +59,14 @@ def võit():
                     pg.quit()
                     quit()
                     
-            aken.fill((70,70,70))
-            TextSurf, TextRect = text_objects("Sa said hakkama! Kõik hummid on surnd.", mediumText)
+            aken.fill((21,85,83))
+            TextSurf, TextRect = text_objects("Sa said hakkama!", mediumText)
             TextRect.center = ((laius // 2), (170))
             aken.blit(TextSurf, TextRect)
             
         
             
-            nupp(aken, "Aitab kah...", laius/2-100 , 500 , 200, 100, (100,100,0), (255,255,0), intro)
+            nupp(aken, "Aitab kah...", laius/2-100 , 500 , 200, 100, (148, 82, 74), (168, 102, 94), intro)
             
             pg.display.update()
             
@@ -199,7 +199,7 @@ def main_loop():
             Tom = Player(580, 100, 40, 60, ling)
         
         screen = 1
-        screen_y = 0
+        screen_y = 3
         eelmine_screen_y = 0
         liftis = False
         screenid = screenide_loomine()

@@ -297,6 +297,9 @@ class Boss(Vastane):
         self.lendab_aeg = 0
         self.tomi_kohal = False
         self.health_rg = 0.1
+        self.sound = False
+        self.vihane_buff = True
+        self.rage_buff = True
 
     PUHKAB = 0
     TULISTAB = 1
@@ -307,22 +310,32 @@ class Boss(Vastane):
     def move(self, dt, Tom):
         if self.max_health * 0.7 < self.health:
             self.värv = (200,100,0)
-        if self.health < self.max_health * 0.7 and not self.vihane:
+            self.vihane = False
+            self.rage = False
+        if self.max_health * 0.4 < self.health < self.max_health * 0.7 and not self.vihane:
             self.vihane = True
-            self.vel_hingamine *= 5
-            self.vel *= 2
-            self.vel_x *= 1.5
-            self.vel_y *= 1.5
-            self.värv = (200, 0, 0)
+            self.rage = False
+            if self.vihane_buff:
+                self.vihane_buff = False
+                self.vel_hingamine *= 5
+                self.vel *= 2
+                self.vel_x *= 1.5
+                self.vel_y *= 1.5
+                self.värv = (200, 0, 0)
         if self.health < self.max_health * 0.4 and not self.rage:
+            self.vihane = False
             self.rage = True
-            self.vel_hingamine *= 2
-            self.vel *= 2
-            self.vel_x *= 2
-            self.vel_y *= 2
-            self.värv = (0, 0, 0)
+            if self.rage_buff:
+                self.rage_buff = False
+                self.vel_hingamine *= 2
+                self.vel *= 2
+                self.vel_x *= 2
+                self.vel_y *= 2
+                self.värv = (0, 0, 0)
+                Boss_rage.play()
 
         if self.state == Boss.PUHKAB:
+            self.sound = True
             if self.health < self.max_health:
                 self.health += self.health_rg
             puhkamine_done = randint(0, 100)
@@ -337,6 +350,9 @@ class Boss(Vastane):
             self.y = self.y_c - self.pikkus
 
         elif self.state == Boss.TULISTAB:
+            if self.sound:
+                Boss_tulistab.play()
+                self.sound = False
             if self.paremal:
                 kuulide_vel = self.kuulide_vel_c * -1
             else:
@@ -348,6 +364,9 @@ class Boss(Vastane):
             self.state = Boss.PUHKAB
 
         elif self.state == Boss.JOOKSEB:
+            if self.sound:
+                Boss_jookseb.play()
+                self.sound = False
             if self.paremal:
                 self.x -= self.vel
                 if self.x + self.laius / 2 <= 100:
@@ -360,6 +379,9 @@ class Boss(Vastane):
                     self.state = Boss.PUHKAB
 
         elif self.state == Boss.LENDAB:
+            if self.sound:
+                Boss_lendab.play()
+                self.sound = False
             if self.x + self.laius < maailm.Tom.x + maailm.Tom.laius / 2 < self.x:
                 print("kohal")
                 self.tomi_kohal = True

@@ -35,7 +35,10 @@ tere = pg.mixer.Sound(helidir+"/shop_e.mp3")
 ritaliin = pg.mixer.Sound(helidir+"/ritaliin.mp3")
 ritaliin1 = pg.mixer.Sound(helidir+"/ritaliin1.mp3")
 võith = pg.mixer.Sound(helidir+"/victory.mp3")
-
+Boss_rage = pg.mixer.Sound(helidir+"/Boss_rage.mp3")
+Boss_tulistab = pg.mixer.Sound(helidir+"/Boss_tulistab.mp3")
+Boss_lendab = pg.mixer.Sound(helidir+"/Boss_lendab.mp3")
+Boss_jookseb = pg.mixer.Sound(helidir+"/Boss_jookseb.mp3")
 #Teksdid
 largeText = pg.font.Font(fontdir+"/RL.ttf", 150)
 mediumText = pg.font.Font(fontdir+"/RM.ttf", 70)
