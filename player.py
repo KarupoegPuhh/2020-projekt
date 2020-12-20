@@ -57,7 +57,8 @@ class Player:
                 self.health = int(self.health)
         #elud
         pg.draw.rect(aken, (50,50,50),(self.x, self.y-15, self.laius, 10))
-        pg.draw.rect(aken, self.elud_värv,(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
+        if self.health >= 0:
+            pg.draw.rect(aken, self.elud_värv,(self.x, self.y-15, self.health * (self.laius / self.max_health) , 10))
         #player
         self.hitbox = (self.x-1, self.y-1, self.laius+2, self.pikkus+2)
         pg.draw.rect(aken, (255,0,0), self.hitbox, 1)

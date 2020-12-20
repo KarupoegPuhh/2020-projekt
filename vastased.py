@@ -287,6 +287,7 @@ class Boss(Vastane):
         self.y_c = y
         self.l_c = laius
         self.p_c = pikkus
+        self.vihane = False
         self.rage = False
         self.paremal = False
         self.vel_hingamine = vel
@@ -304,11 +305,22 @@ class Boss(Vastane):
 
 
     def move(self, dt, Tom):
-        if self.health < self.max_health * 0.5 and not self.rage:
-            self.rage = True
-            self.vel_hingamine *= 10
-            self.vel *= 3
+        if self.max_health * 0.7 < self.health:
+            self.värv = (200,100,0)
+        if self.health < self.max_health * 0.7 and not self.vihane:
+            self.vihane = True
+            self.vel_hingamine *= 5
+            self.vel *= 2
+            self.vel_x *= 1.5
+            self.vel_y *= 1.5
             self.värv = (200, 0, 0)
+        if self.health < self.max_health * 0.4 and not self.rage:
+            self.rage = True
+            self.vel_hingamine *= 2
+            self.vel *= 2
+            self.vel_x *= 2
+            self.vel_y *= 2
+            self.värv = (0, 0, 0)
 
         if self.state == Boss.PUHKAB:
             if self.health < self.max_health:
@@ -373,6 +385,19 @@ class Boss(Vastane):
     def player_väljub(self, Tom):
         if self.health <= 0:
             maailm.itemid.append(Võit(self.x, self.y))
+
+    def hit(self, kuul):
+        if kuul.dmg > 15:
+            self.health -= 15
+        else:
+            self.health -= kuul.dmg
+        if self.health >= self.max_health:
+            self.health = self.max_health
+        if self.health <= 0:
+            self.elus = False
+            vastane_surm.play()
+            maailm.vastased.remove(self)
+            self.player_väljub(maailm.Tom)
 
 class KuulBoss():
     def __init__(self, x, y, raadius, dmg, vel):

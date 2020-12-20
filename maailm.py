@@ -3,6 +3,7 @@ from põrand import *
 from player import *
 from vastased import *
 from ekraanid import *
+from player_lisad import *
 global pole_sein_p, pole_sein_v
 global Tom
 global kuulid, vastased, põrandad, rahad, itemid
@@ -155,7 +156,7 @@ def main_loop():
         global Tom
         global kuulid, vastased, põrandad, rahad, itemid
         global hernepüss, kartulikahur, ling, railgun, scar, sau
-        global kasukas, kiiver, püksid, sandaalid
+        global kasukas, kiiver, püksid, sandaalid, lifti_kaart
         global ritaliin, ritaliin_cd
         global delta_uksed, pood_unlocked
         global esimene_kord
@@ -166,6 +167,7 @@ def main_loop():
         global screenid
         global vastased_ekraanis
         global itemid_ekraanis
+        global liftis
         
         if esimene_kord:
             #vars
@@ -185,6 +187,7 @@ def main_loop():
             kiiver = Varustus(1, 2, False, False, "Näomask")
             püksid = Varustus(2, 1, False, False, "Viigipüksid")
             sandaalid = Varustus(5, 0, False, False, "Sandaalid")
+            lifti_kaart = Varustus(0,0,True,False, "Magnetkiip")
             #UnlockedCheck
             delta_uksed = Unlockable(False)
             pood_unlocked = Unlockable(False)
@@ -197,6 +200,8 @@ def main_loop():
         
         screen = 1
         screen_y = 0
+        eelmine_screen_y = 0
+        liftis = False
         screenid = screenide_loomine()
         
         kuulid = []
@@ -389,6 +394,12 @@ def main_loop():
         def motherlode():
             Tom.raha += 1000
             maailm.pood_unlocked.unlocked = True
+            hernepüss.unlocked = True
+            kartulikahur.unlocked = True
+            sau.unlocked = True
+            railgun.unlocked = True
+            scar.unlocked = True
+            lifti_kaart.unlocked = True
             aeg = pg.time.get_ticks()
             if aeg + 2000 >= pg.time.get_ticks():
                 TextSurf, TextRect = text_objects("MOTHERLODE", largeText)
@@ -448,7 +459,8 @@ def main_loop():
             nupp(aken, "Konsumisse", 875, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), pood)
         #Nupp inventoryle
         nupp(aken, "Seljakott", 260, 675 - databar_nihe, 150, 25, (100,100,100), (200,200,200), seljakott)
-    
+
+    global vaheta_ekraani
     def vaheta_ekraani():
         global põrandad
         global vastased
@@ -739,4 +751,12 @@ def main_loop():
 
         if not Tom.elus and Tom.kontr or screen_y < 0:
             surm()
+
+        if screen_y != eelmine_screen_y and liftis:
+            print("maailm")
+            liftis = False
+            lift_animatsioon()
+        eelmine_screen_y = screen_y
+
+
         redrawGameWindow()

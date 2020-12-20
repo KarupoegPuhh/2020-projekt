@@ -351,6 +351,104 @@ class NPC_info(NPC):
                     self.tekst_y += 30
                     i += 1
 
+class Lift(NPC):
+    def __init__(self, x, y, laius, kõrgus, värv, tekst):
+        NPC.__init__(self, x, y, laius, kõrgus, värv, tekst)
+        self.pilet = True
+
+    def NPC_räägib(self):
+        pg.draw.rect(aken, (100, 100, 100), (self.x, self.y - 30, self.laius, 30))
+        TextSurf, TextRect = text_objects("LIFT", smallText, (255, 255, 255))
+        TextRect.center = (self.x + self.laius / 2, self.y - 15)
+        aken.blit(TextSurf, TextRect)
+        if self.x + self.laius > (maailm.Tom.x + maailm.Tom.laius / 2) > self.x and self.y < maailm.Tom.y + maailm.Tom.pikkus / 2 < self.y + self.kõrgus:
+            if not maailm.lifti_kaart.unlocked:
+                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 300, 0, 600, 220))
+                TextSurf, TextRect = text_objects("Sul ei ole magnetkaarti!", menu_head2Text, (255, 255, 255))
+                TextRect.center = (laius / 2, 100)
+                aken.blit(TextSurf, TextRect)
+            else:
+                pg.draw.rect(aken, (50, 50, 50), (laius / 2 - 300, 0, 600, 220))
+                TextSurf, TextRect = text_objects("Mis korrusele tahad minna?", menu_head2Text, (255, 255, 255))
+                TextRect.center = (laius / 2, 50)
+                aken.blit(TextSurf, TextRect)
+                nupp(aken, "1. Korrus", 365, 130, 100, 70, (148, 82, 74), (168, 102, 94), esimesele)
+                nupp(aken, "2. Korrus", 515, 130, 100, 70, (148, 82, 74), (168, 102, 94), teisele)
+                nupp(aken, "3. Korrus", 665, 130, 100, 70, (148, 82, 74), (168, 102, 94), kolmandale)
+                nupp(aken, "4. Korrus", 815, 130, 100, 70, (148, 82, 74), (168, 102, 94), neljandale)
+
+global lift_animatsioon
+
+def lift_animatsioon():
+    print("jookseb")
+    siseneb = True
+    väljub = False
+    uksed = 0
+    def lift():
+        põrand_laius = 800
+        põrand_y = 600
+        lagi_y = 100
+        põrand_x = laius / 2 - 400
+        sein_y = 100
+        sein_kõrgus = 502
+        vasak_x = laius / 2 - 400
+        parem_x = laius / 2 + 400
+        for i in range(150):
+            pg.draw.rect(aken,(123, 144, 149), (põrand_x, põrand_y, põrand_laius, 2))
+            pg.draw.rect(aken, (123, 144, 149), (põrand_x, lagi_y, põrand_laius, 2))
+            põrand_y += 2
+            põrand_x -= 2
+            põrand_laius += 4
+            lagi_y -= 2
+        for i in range(300):
+            pg.draw.rect(aken,(123, 127, 128), (vasak_x, sein_y, 2, sein_kõrgus))
+            pg.draw.rect(aken, (123, 127, 128), (parem_x, sein_y, 2, sein_kõrgus))
+            sein_kõrgus += 4
+            sein_y -= 2
+            parem_x += 2
+            vasak_x -= 2
+    lift()
+    while siseneb:
+        pg.draw.rect(aken, (50, 50, 50), (laius/2 - 400, 100, uksed, 500))
+        pg.draw.rect(aken, (50, 50, 50), (laius/2 + 400 - uksed, 100, uksed, 500))
+        pg.display.update()
+        uksed += 0.35
+        if uksed >= 405:
+            pg.time.wait(1400)
+            siseneb = False
+            väljub = True
+    maailm.vaheta_ekraani()
+    while väljub:
+        aken.fill((21, 85, 83))
+        for prr in maailm.põrandad:
+            prr.draw()
+        for p1 in maailm.vastased:
+            p1.draw()
+        for item in maailm.itemid:
+            item.draw()
+        lift()
+        uksed -= 0.35
+        pg.draw.rect(aken, (50, 50, 50), (laius/2 - 400, 100, uksed, 500))
+        pg.draw.rect(aken, (50, 50, 50), (laius/2 + 400 - uksed, 100, uksed, 500))
+        pg.display.update()
+        if uksed <= 0:
+            väljub = False
+def esimesele():
+    maailm.screen_y = 0
+    maailm.liftis = True
+def teisele():
+    maailm.screen_y = 1
+    maailm.liftis = True
+def kolmandale():
+    maailm.screen_y = 2
+    maailm.liftis = True
+def neljandale():
+    maailm.screen_y = 3
+    maailm.liftis = True
+
+
+
+
 class Võit():
     def __init__(self, x, y,):
         self.x = x
