@@ -454,7 +454,7 @@ class KuulBoss():
     def hit(self):
         pass
 
-    def player_väljub(self):
+    def player_väljub(self,Tom):
         pass
-    def player_siseneb(self):
+    def player_siseneb(self,Tom):
         pass

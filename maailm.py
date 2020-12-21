@@ -36,9 +36,10 @@ def surm():
         TextRect.center = ((laius // 2), (170))
         aken.blit(TextSurf, TextRect)
         
-        nupp(aken, "Annan alla", 660, 375, 200, 100, (148, 82, 74), (168, 102, 94), intro)
         esimene_kord = False
         nupp(aken, "RESURECTUM", 420, 375, 200, 100, (148, 82, 74), (168, 102, 94), main_loop)
+        esimene_kord = True
+        nupp(aken, "Annan alla", 660, 375, 200, 100, (148, 82, 74), (168, 102, 94), intro)
         
         pg.display.update()
 
@@ -65,7 +66,7 @@ def võit():
             aken.blit(TextSurf, TextRect)
             
         
-            
+            esimene_kord = True
             nupp(aken, "Aitab kah...", laius/2-100 , 500 , 200, 100, (148, 82, 74), (168, 102, 94), intro)
             
             pg.display.update()
@@ -99,7 +100,9 @@ def paused():
         nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
         """if maailm.pood_unlocked.unlocked:
             nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)"""
+        esimene_kord = True
         nupp(aken, "Annan alla", 1050, 600, 200, 100, (100,100,100), (15,113,115), intro)
+        esimene_kord = False
         nupp(aken, "Seaded", 1050, 450, 200, 100, (100, 100, 100), (15, 113, 115), seaded)
         
         aken.blit(sleep, (100,225))
@@ -396,6 +399,7 @@ def main_loop():
         aken.blit(TextSurf, TextRect)
         
         #Pilt tegelase jaoks
+        
         ##raha cheat nupp
         def motherlode():
             Tom.raha += 1000
@@ -411,7 +415,7 @@ def main_loop():
                 TextSurf, TextRect = text_objects("MOTHERLODE", largeText)
                 TextRect.center = ((laius // 2), 170)
                 aken.blit(TextSurf, TextRect)
-        nupp(aken, "Motherlode", 0, 695 - databar_nihe, 25, 25, (100, 100, 100), (15, 113, 115), motherlode)
+        #nupp(aken, "Motherlode", 0, 695 - databar_nihe, 25, 25, (100, 100, 100), (15, 113, 115), motherlode)
 
         pg.draw.rect(aken, (25,25,25), (0, 570 - databar_nihe, 124, 180))
         pg.draw.rect(aken, (50,50,50), (2, 600 - databar_nihe, 120, 120))

@@ -1,4 +1,4 @@
-from random import randint
+from random import choice
 
 import pygame as pg
 import maailm
@@ -394,7 +394,8 @@ def seaded():
         TextRect.center = ((laius // 2), 380)
         aken.blit(TextSurf, TextRect)
 
-        nupp(aken, "Kurt mode", laius/2 - 225, 500, 200, 50, (100, 100, 100), (15, 113, 115), mute)
+        nupp(aken, "muusika kinni", laius/2 - 225, 500, 200, 50, (100, 100, 100), (15, 113, 115), mute)
+        #nupp(aken, "kurt", laius/2 - 225, 300, 200, 50, (100, 100, 100), (15, 113, 115), mute_fx)
         nupp(aken, "Vaheta laul", laius / 2 + 25, 500, 200, 50, (100, 100, 100), (15, 113, 115), vaheta_laul)
         nupp(aken, "Tagasi", laius/2 - 100, 600, 200, 50, (100, 100, 100), (15, 113, 115), settings_done)
         print(pg.mixer.music.get_volume())
@@ -412,8 +413,34 @@ def heli_kõvem():
         pg.mixer.music.set_volume(1)
 def mute():
     pg.mixer.music.set_volume(0)
+
+#def helifx_vaiksem():
+#    heli = pg.mixer.music.get_volume()
+#    pg.mixer.music.set_volume((round(heli, 1) - 0.1))
+#    if heli <= 0.09:
+#        pg.mixer.music.set_volume(0)
+#def helifx_kõvem():
+#    for sound in sounds: #mai viitsi seda listi teha
+#        vol = sound.get_volume()
+#        sound.set_volume(min(vol*mult,1.0))
+#    
+#    heli = pg.mixer.music.get_volume()
+#    pg.mixer.music.set_volume((round(heli, 1) + 0.1))
+#    if heli >= 0.95:
+#        pg.mixer.music.set_volume(1)
+#helisees = True
+#def mute_fx():
+#    global helisees
+#    if helisees:
+#        pg.mixer.pause()
+#        helisees = False
+#    else:
+#        pg.mixer.unpause()
+#        helisees = True
+global laul
+laul = 0
 def vaheta_laul():
-    laul = randint(0, 4)
+    global laul
     if laul == 0:
         pg.mixer.music.load(helidir + "/game.mp3")
     elif laul == 1:
@@ -423,6 +450,10 @@ def vaheta_laul():
     else:
         pg.mixer.music.load(helidir + "/game4.mp3")
     pg.mixer.music.play()
+    if laul == 3:
+        laul = 0
+    else:
+        laul += 1
 def settings_done():
     global setting
     setting = False

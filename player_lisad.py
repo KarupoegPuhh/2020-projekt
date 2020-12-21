@@ -191,16 +191,16 @@ class NPC_arvut(NPC):
             pg.draw.rect(aken, self.värv, (255, 275, 100, 40))
             #Parooli display
             parool_ekraanil = "* " * len(self.kasutaja_parool)
-            TextSurf, TextRect = text_objects(parool_ekraanil, menu_head2Text)
+            TextSurf, TextRect = text_objects(parool_ekraanil, menu_head2Text,(255,255,255))
             TextRect.center = (310, 300)
             aken.blit(TextSurf, TextRect)
-            TextSurf, TextRect = text_objects(self.tekst, menu_head2Text)
+            TextSurf, TextRect = text_objects(self.tekst, menu_head2Text,(255,255,255))
             TextRect.center = (310, 100)
             aken.blit(TextSurf, TextRect)
-            TextSurf, TextRect = text_objects("Lohistage kursor parooli aknale," , smallText)
+            TextSurf, TextRect = text_objects("Lohistage kursor parooli aknale," , smallText,(255,255,255))
             TextRect.center = (310, 200)
             aken.blit(TextSurf, TextRect)
-            TextSurf, TextRect = text_objects("et tuvastada klahve", smallText)
+            TextSurf, TextRect = text_objects("et tuvastada klahve", smallText,(255,255,255))
             TextRect.center = (310, 225)
             aken.blit(TextSurf, TextRect)
 
@@ -212,22 +212,22 @@ class NPC_arvut(NPC):
         if self.värv == (0, 255, 0) and self.loading < 3:
             pg.draw.rect(aken, (50, 50, 50), (50, 50, 520, 300))
             if 0 <= self.vilgub < 10:
-                TextSurf, TextRect = text_objects("LOADING", menu_head2Text)
+                TextSurf, TextRect = text_objects("LOADING", menu_head2Text,(255,255,255))
                 TextRect.center = (310, 100)
                 aken.blit(TextSurf, TextRect)
                 self.vilgub += 1
             elif 10 <= self.vilgub < 20:
-                TextSurf, TextRect = text_objects("LOADING.", menu_head2Text)
+                TextSurf, TextRect = text_objects("LOADING.", menu_head2Text,(255,255,255))
                 TextRect.center = (310, 100)
                 aken.blit(TextSurf, TextRect)
                 self.vilgub += 1
             elif 20 <= self.vilgub < 30:
-                TextSurf, TextRect = text_objects("LOADING..", menu_head2Text)
+                TextSurf, TextRect = text_objects("LOADING..", menu_head2Text,(255,255,255))
                 TextRect.center = (310, 100)
                 aken.blit(TextSurf, TextRect)
                 self.vilgub += 1
             elif 30 <= self.vilgub <= 40:
-                TextSurf, TextRect = text_objects("LOADING...", menu_head2Text)
+                TextSurf, TextRect = text_objects("LOADING...", menu_head2Text,(255,255,255))
                 TextRect.center = (310, 100)
                 aken.blit(TextSurf, TextRect)
                 self.vilgub += 1

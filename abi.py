@@ -3,10 +3,11 @@ import pygame as pg
 from pygame_init import *
 from sys import exit as quit
 
-try:
-    dirr = sys._MEIPASS
-except:
-    dirr = os.path.dirname(os.path.abspath(__file__))
+#try:
+#    dirr = sys._MEIPASS
+#except:
+dirr = os.path.dirname(os.path.abspath(__file__))
+
 print(dirr)
 helidir = dirr+"/helid"
 fontdir = dirr+"/fontid"
@@ -39,10 +40,7 @@ Boss_rage = pg.mixer.Sound(helidir+"/Boss_rage.mp3")
 Boss_tulistab = pg.mixer.Sound(helidir+"/Boss_tulistab.mp3")
 Boss_lendab = pg.mixer.Sound(helidir+"/Boss_lendab.mp3")
 Boss_jookseb = pg.mixer.Sound(helidir+"/Boss_jookseb.mp3")
-taust1 = pg.mixer.music.load(helidir+"/game.mp3")
-taust2 = pg.mixer.music.load(helidir+"/game2.mp3")
-taust3 = pg.mixer.music.load(helidir+"/game3.mp3")
-taust4 = pg.mixer.music.load(helidir+"/game4.mp3")
+
 #Teksdid
 largeText = pg.font.Font(fontdir+"/RL.ttf", 150)
 mediumText = pg.font.Font(fontdir+"/RM.ttf", 70)
