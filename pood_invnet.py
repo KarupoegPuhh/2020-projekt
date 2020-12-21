@@ -1,8 +1,11 @@
+from random import randint
+
 import pygame as pg
 import maailm
 from abi import *
 from player import *
 from player_lisad import *
+from math import *
 
 #pood
 def pood():
@@ -361,3 +364,65 @@ def sandaalid_equip_fun():
     
 def sandaalid_unequip_fun():
     maailm.sandaalid.unequip(maailm.Tom)
+
+global setting
+global seaded
+
+def seaded():
+    global setting
+    setting = True
+    while setting:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+        aken.fill((42, 45, 67))
+        pg.draw.rect(aken, (148, 82, 74), (466, 0, 348, 104))
+        pg.draw.rect(aken, (162, 126, 111), (470, 0, 340, 100))
+        TextSurf, TextRect = text_objects("Seaded", mediumText)
+        TextRect.center = ((laius // 2), (50))
+        aken.blit(TextSurf, TextRect)
+
+        nupp(aken, "<", laius/2 - 275, 402, 50, 50, (100,100,100), (15,113,115), heli_vaiksem)
+        nupp(aken, ">", laius/2 + 225, 402, 50, 50, (100, 100, 100), (15, 113, 115), heli_kõvem)
+        pg.draw.rect(aken, (50, 50, 50), (laius/2 - 200, 400, 400, 46))
+        pg.draw.rect(aken, (100, 100, 100), (laius/2 - 200, 400, 400 * pg.mixer.music.get_volume(), 46))
+        TextSurf, TextRect = text_objects(str(int(round(pg.mixer.music.get_volume(), 1)*100)) + "%", smallText)
+        TextRect.center = ((laius // 2), 423)
+        aken.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects("Muusika", smallText)
+        TextRect.center = ((laius // 2), 380)
+        aken.blit(TextSurf, TextRect)
+
+        nupp(aken, "Kurt mode", laius/2 - 225, 500, 200, 50, (100, 100, 100), (15, 113, 115), mute)
+        nupp(aken, "Vaheta laul", laius / 2 + 25, 500, 200, 50, (100, 100, 100), (15, 113, 115), vaheta_laul)
+        nupp(aken, "Tagasi", laius/2 - 100, 600, 200, 50, (100, 100, 100), (15, 113, 115), settings_done)
+        print(pg.mixer.music.get_volume())
+        pg.display.update()
+
+def heli_vaiksem():
+    heli = pg.mixer.music.get_volume()
+    pg.mixer.music.set_volume((round(heli, 1) - 0.1))
+    if heli <= 0.09:
+        pg.mixer.music.set_volume(0)
+def heli_kõvem():
+    heli = pg.mixer.music.get_volume()
+    pg.mixer.music.set_volume((round(heli, 1) + 0.1))
+    if heli >= 0.95:
+        pg.mixer.music.set_volume(1)
+def mute():
+    pg.mixer.music.set_volume(0)
+def vaheta_laul():
+    laul = randint(0, 4)
+    if laul == 0:
+        pg.mixer.music.load(helidir + "/game.mp3")
+    elif laul == 1:
+        pg.mixer.music.load(helidir + "/game2.mp3")
+    elif laul == 2:
+        pg.mixer.music.load(helidir + "/game3.mp3")
+    else:
+        pg.mixer.music.load(helidir + "/game4.mp3")
+    pg.mixer.music.play()
+def settings_done():
+    global setting
+    setting = False

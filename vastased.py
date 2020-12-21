@@ -339,11 +339,11 @@ class Boss(Vastane):
             if self.health < self.max_health:
                 self.health += self.health_rg
             puhkamine_done = randint(0, 100)
-            if 97 < puhkamine_done < 100:
+            if 70 < puhkamine_done < 75:
                 self.state = Boss.JOOKSEB
-            if 94 < puhkamine_done < 97:
+            if 90 < puhkamine_done < 100:
                 self.state = Boss.TULISTAB
-            if 90 < puhkamine_done < 94:
+            if 80 < puhkamine_done < 85:
                 self.state = Boss.LENDAB
             aeg = pg.time.get_ticks() * 0.005
             self.pikkus = sin(aeg) * self.vel_hingamine + self.p_c
@@ -357,10 +357,16 @@ class Boss(Vastane):
                 kuulide_vel = self.kuulide_vel_c * -1
             else:
                 kuulide_vel = self.kuulide_vel_c
-            kogus = randint(3, 7)
-            for i in range(kogus):
-                y = randint(self.y_c - self.p_c, self.y_c)
-                maailm.vastased.append(KuulBoss(self.x, y, 7, 5, kuulide_vel))
+            kogus = randint(1, 6)
+            crit = randint(0, 10)
+            if crit == 10:
+                for i in range(kogus):
+                    y = randint(self.y_c - self.p_c, self.y_c + round(self.pikkus))
+                    maailm.vastased.append(KuulBoss(self.x, y, 10, 120, kuulide_vel + 5, (0,255,0)))
+            else:
+                for i in range(kogus):
+                    y = randint(self.y_c - self.p_c, self.y_c)
+                    maailm.vastased.append(KuulBoss(self.x, y, 7, 40, kuulide_vel, (200,0,0)))
             self.state = Boss.PUHKAB
 
         elif self.state == Boss.JOOKSEB:
@@ -422,14 +428,14 @@ class Boss(Vastane):
             self.player_väljub(maailm.Tom)
 
 class KuulBoss():
-    def __init__(self, x, y, raadius, dmg, vel):
+    def __init__(self, x, y, raadius, dmg, vel, värv):
         self.x = x
         self.y = y
         self.raadius = raadius
         self.raadius2 = raadius * 0.6
         self.dmg = dmg
         self.vel = vel
-        self.värv = (200, 0, 0)
+        self.värv = värv
         self.värv2 = (200, 200, 0)
         self.elus = True
         self.pikkus = raadius

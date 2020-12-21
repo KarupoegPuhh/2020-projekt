@@ -74,11 +74,6 @@ def unpause():
     global pause
     global start
     pause = False
-    pos = pg.mixer.music.get_pos()
-    pg.mixer.music.stop()
-    pg.mixer.music.load(helidir+"/game.mp3")
-    start = start + pos/1000.0
-    pg.mixer.music.play(-1, start)
 
 def paused():
     global pause
@@ -102,9 +97,10 @@ def paused():
 
         nupp(aken, "Jätkan!", 1050, 150, 200, 100, (100,100,100), (15,113,115), unpause)
         nupp(aken, "Varustuse juurde", 1050, 300, 200, 100, (100,100,100), (15,113,115), seljakott)
-        if maailm.pood_unlocked.unlocked:
-            nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)
+        """if maailm.pood_unlocked.unlocked:
+            nupp(aken, "Konsum", 1050, 450, 200, 100, (100,100,100), (15,113,115), pood)"""
         nupp(aken, "Annan alla", 1050, 600, 200, 100, (100,100,100), (15,113,115), intro)
+        nupp(aken, "Seaded", 1050, 450, 200, 100, (100, 100, 100), (15, 113, 115), seaded)
         
         aken.blit(sleep, (100,225))
         
@@ -147,9 +143,9 @@ def rgb():
 
 def main_loop():
     if True: #collapsimiseks
-        global pood, seljakott, intro
+        global pood, seljakott, intro, seaded
         from algus import intro
-        from pood_invnet import pood, seljakott
+        from pood_invnet import pood, seljakott, seaded
         
         #OBJEKTID
         global pole_sein_p, pole_sein_v
@@ -199,7 +195,7 @@ def main_loop():
             Tom = Player(580, 100, 40, 60, ling)
         
         screen = 1
-        screen_y = 3
+        screen_y = 0
         eelmine_screen_y = 0
         liftis = False
         screenid = screenide_loomine()
@@ -262,7 +258,16 @@ def main_loop():
         #eelmine_mk = 500
 
         #taustamuusika
-        pg.mixer.music.load(helidir+"/game.mp3")
+        laul = randint(0, 4)
+        if laul == 0:
+            pg.mixer.music.load(helidir + "/game.mp3")
+        elif laul == 1:
+            pg.mixer.music.load(helidir + "/game2.mp3")
+        elif laul == 2:
+            pg.mixer.music.load(helidir + "/game3.mp3")
+        else:
+            pg.mixer.music.load(helidir + "/game4.mp3")
+        pg.mixer.music.play()
         pg.mixer.music.play(-1)
         pos = 0
         global start
@@ -280,7 +285,8 @@ def main_loop():
                 bg[i][j] = pg.image.load(os.path.dirname(os.path.abspath(__file__))+"/pildid"+"/bg"+str(i)+str(j)+".png")
 
     def redrawGameWindow():
-        aken.fill((21,85,83))
+        aken.fill((21, 85, 83))
+
         #try:
         #    aken.blit(bg[screen_y][screen],(0,0))
         #except:
@@ -488,7 +494,7 @@ def main_loop():
     global klahv
 
     #main loop
-    while True:       
+    while True:
         #exit
         klahv = None
         for event in pg.event.get():
@@ -699,11 +705,6 @@ def main_loop():
         #PAUSE MENU
         if keys[pg.K_p]: #or keys[pg.K_ESCAPE]:
             pause = True
-            pos = pg.mixer.music.get_pos()
-            pg.mixer.music.stop()
-            pg.mixer.music.load(helidir+"/game_filt.mp3")
-            start = start + pos/1000.0
-            pg.mixer.music.play(-1, start)
             paused()
         
         #Ritaliin
@@ -757,6 +758,5 @@ def main_loop():
             liftis = False
             lift_animatsioon()
         eelmine_screen_y = screen_y
-
 
         redrawGameWindow()

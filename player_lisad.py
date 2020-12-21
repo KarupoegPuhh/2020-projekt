@@ -357,6 +357,12 @@ class Lift(NPC):
         self.pilet = True
 
     def NPC_räägib(self):
+        pg.draw.rect(aken, (30, 30, 30), (self.x - 2, self.y - 32, self.laius + 4, self.kõrgus  + 32))
+        if maailm.liftis == False:
+            pg.draw.rect(aken, (70, 70, 70), (self.x , self.y, self.laius, self.kõrgus))
+            pg.draw.rect(aken, (10, 10, 10), (self.x + self.laius / 2, self.y, 1, self.kõrgus))
+        else:
+            pg.draw.rect(aken, (130, 130, 130), (self.x, self.y, self.laius, self.kõrgus))
         pg.draw.rect(aken, (100, 100, 100), (self.x, self.y - 30, self.laius, 30))
         TextSurf, TextRect = text_objects("LIFT", smallText, (255, 255, 255))
         TextRect.center = (self.x + self.laius / 2, self.y - 15)
@@ -445,9 +451,6 @@ def kolmandale():
 def neljandale():
     maailm.screen_y = 3
     maailm.liftis = True
-
-
-
 
 class Võit():
     def __init__(self, x, y,):
